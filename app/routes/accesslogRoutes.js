@@ -7,8 +7,6 @@ router.get('/accesslog', (req, res) => {
   else findAll(req, res)
 })
 
-router.get('/card_touch', (req, res) => {
-  cardTouched(req, res)
-})
+router.get('/card_touch', cardTouched)
 
 module.exports = { routes: router }

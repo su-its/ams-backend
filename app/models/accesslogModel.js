@@ -18,19 +18,11 @@ const searchWithFilter = async (req) => {
   }
 }
 
-// const findById = (studentId) => {
-//   mysql.query('SELECT * FROM access_log WHERE student_id = ?', studentId)
-//   .then(function fullfilled(rows, fileds) {
-//     console.log(rows.affectedRows)
-//     if (rows.affectedRows === 0) {
-//       return 'err'
-//     } else return rows
-//   }, function rejected(reason) {console.log(reason)})
-// }
-
 const getAll = async () => {
   try {
-    const [rows, _] = await mysql.query('SELECT * FROM access_log')
+    const [rows, _] = await mysql.query(
+      'SELECT * FROM access_log ' +
+      'ORDER BY entered_at DESC')
     console.log('accesslog: ', rows)
     return rows
   } catch (err) {
@@ -40,8 +32,6 @@ const getAll = async () => {
 }
 
 const judgeAction = async (studentId) => {
-  let answer = ''
-  console.log(studentId)
   try {
     // Uncomment lines below for safety. (??)
     // const [rows, _] = await mysql.query(
@@ -51,30 +41,25 @@ const judgeAction = async (studentId) => {
     const [rows, _] = await mysql.query(
       'SELECT entered_at FROM access_log ' +
       'WHERE student_id = ? AND exited_at IS NULL', [studentId])
-    console.log(rows.length)
 
     if (rows.length) {
-      answer = 'exit'
       // console.log(`entered_at: ${rows[0].entered_at}`)
       await mysql.execute(
         'UPDATE access_log SET exited_at=NOW() ' +
         'WHERE student_id = ? AND entered_at = ?',
         [studentId, rows[0].entered_at])
+      return 'exit'
     } else {
-      answer = 'error'
       // Wait for Promise<boolean> is resolved by using then() or await!
-      isMember(studentId)
-      .then(async (result) => {
-        console.log(result)
-        if (result) {
-          answer = 'enter'
-          console.log('enter section')
-          await mysql.execute(
-            'INSERT INTO access_log (student_id) VALUES (?)', [studentId])
-        }
-      }).catch(console.error)
+      const result = await isMember(studentId)
+      if (result) {
+        await mysql.execute(
+          'INSERT INTO access_log (student_id) VALUES (?)', [studentId])
+        return 'enter'
+      } else {
+        return 'error'
+      }
     }
-    return answer
   } catch (err) {
     console.error(err)
     return 'error1'
