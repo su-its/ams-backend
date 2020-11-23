@@ -1,0 +1,16 @@
+{
+  "name": "ams-backend-nodejs",
+  "version": "1.0.0",
+  "main": "ams-backend-server.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "node ams-backend-server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mysql2": "^2.2.5"
+  }
+}
