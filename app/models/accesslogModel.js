@@ -24,7 +24,7 @@ const getAll = async () => {
     const [rows, _] = await mysql.query(
       'SELECT * FROM access_log ' +
       'ORDER BY entered_at DESC')
-    console.log('accesslog: ', rows)
+    // console.log('accesslog: ', rows)
     return { data: rows, error: null }
   } catch (e) {
     console.error('error: ', e)
@@ -34,11 +34,6 @@ const getAll = async () => {
 
 const judgeAction = async (student_id) => {
   try {
-    /* Uncomment lines below for safety. (??) */
-    // const [rows, _] = await mysql.query(
-    //   'SELECT student_id,entered_at FROM access_log ' +
-    //   'WHERE student_id = ? AND exited_at IS NULL ' +
-    //   'ORDER BY entered_at DESC LIMIT 1', [student_id])
     const [rows, _] = await mysql.query(
       'SELECT entered_at FROM access_log ' +
       'WHERE student_id = ? AND exited_at IS NULL', [student_id])
@@ -82,7 +77,7 @@ async function isMember(student_id) {
   }
 }
 
-const countNinzu = async () => {
+const countNumOfPeople = async () => {
   try {
     const [rows, _] = await mysql.query(
       'SELECT COUNT(*) AS num FROM access_log ' +
@@ -95,4 +90,5 @@ const countNinzu = async () => {
     return -1
   }
 }
-module.exports = { getAll, searchWithFilter, judgeAction, countNinzu }
+
+module.exports = { getAll, searchWithFilter, judgeAction, countNumOfPeople }

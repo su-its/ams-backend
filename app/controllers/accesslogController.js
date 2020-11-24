@@ -1,4 +1,4 @@
-const { searchWithFilter, getAll, judgeAction, countNinzu } = require('../models/accesslogModel')
+const { searchWithFilter, getAll, judgeAction, countNumOfPeople } = require('../models/accesslogModel')
 const chat = require('../slack/notifyToSlack')
 
 // Retrieve all accesslogs from the database.
@@ -33,7 +33,7 @@ const findWithQuery = (req, res) => {
   })
 }
 
-const cardTouched = (req, res) => {
+const cardTouched = async (req, res) => {
   if (req.query.student_id === undefined) {
     res.status(400).send({
       message: 'student_id was not set in the request query.'
@@ -42,24 +42,22 @@ const cardTouched = (req, res) => {
   }
 
   // enter, exit or error
-  judgeAction(req.query.student_id)
-  .then(answer => {
-    res.send({action: answer}).end() // default
-    if (answer === 'error') return
-    else return countNinzu() /* point1 `return someFunction()` which returns Promise<something> */
-  })
-  .then(num => { /* point2 handle success(resolve) of someFunction() (callback of someFunction()) */
-    if (num < 0) { console.error('Error in count number of people.') }
-    chat.postMessage(num)
+  try {
+    const answer = await judgeAction(req.query.student_id)
+    res.send({action: ans}).end()
+    if (answer !== 'error') {
+      const num = await countNumOfPeople()
+      if (num < 0) { console.error('Error occured while counting number of people.') }
+      chat.postMessage(num)
+    }
     return
-  })
-  .catch(e => {
+  } catch (e) {
     console.error(e)
     res.status(500).send({
       message: e.message || 'Some error occured.'
     }).end()
     return
-  })
+  }
 }
 
 module.exports = { findWithQuery, findAll, cardTouched }

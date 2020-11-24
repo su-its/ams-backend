@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const accesslogRoutes = require('./app/routes/accesslogRoutes')
 const memberRoutes = require('./app/routes/membersRoutes')
+require('dotenv').config(require('path').resolve(process.cwd(), '.env'))
 
 const app = express()
 // app.set('query parser', 'extended') // default value: 'extended'

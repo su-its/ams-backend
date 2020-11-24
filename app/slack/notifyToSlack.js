@@ -1,4 +1,3 @@
-// user environment variable
 require('dotenv').config(require('path').resolve(process.cwd(), '.env'))
 const https = require('https')
 
@@ -14,8 +13,8 @@ const options = {
 const chat = {}
 chat.postMessage = (num) => {
   const message = {
-    channel: process.env.ITS19_BOTTEST_CH_ID,
-    text: new Date().toString() + ` なう\n いま ${num} 人:+1:`
+    channel: process.env.SLACK_CH_ID,
+    text: new Date().toLocaleString() + ` なう\n いま ${num} 人:+1:`
   }
   const req = https.request(options)
 
