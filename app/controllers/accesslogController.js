@@ -41,14 +41,17 @@ const cardTouched = async (req, res) => {
     return
   }
 
-  // enter, exit or error
   try {
-    const answer = await judgeAction(req.query.student_id)
+    const answer = await judgeAction(req.query.student_id) // 'exit' | 'enter' | 'Not a member' | 'syserror'
     res.send({action: answer}).end()
     if (answer !== 'error') {
       const num = await countNumOfPeople()
-      if (num < 0) { console.error('Error occured while counting number of people.') }
-      chat.postMessage(num)
+      if (num < 0) {
+        console.error('Error occured while counting number of people.')
+      } else {
+        if (num == 0) chat.postMessage('Locked (No one in the room):lock:', new Date().toLocaleTimeString())
+        else if (num >= 1) chat.postMessage('Opened :wink:', new Date().toLocaleTimeString())
+      }
     }
     return
   } catch (e) {

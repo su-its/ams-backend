@@ -11,10 +11,10 @@ const options = {
   }
 }
 const chat = {}
-chat.postMessage = (num) => {
+chat.postMessage = (...args) => {
   const message = {
     channel: process.env.SLACK_CH_ID,
-    text: new Date().toLocaleString() + ` なう\n いま ${num} 人:+1:`
+    text: args.join(' ')
   }
   const req = https.request(options)
 

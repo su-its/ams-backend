@@ -55,7 +55,7 @@ const judgeAction = async (student_id) => {
           'INSERT INTO access_log (student_id) VALUES (?)', [student_id])
         return 'enter'
       } else {
-        return 'error'
+        return 'Not a member'
       }
     }
   } catch (e) {
@@ -82,7 +82,7 @@ const countNumOfPeople = async () => {
     const [rows, _] = await mysql.query(
       'SELECT COUNT(*) AS num FROM access_log ' +
       'WHERE exited_at IS NULL')
-    console.log(`Now ${rows[0].num} in the room.`)
+    // console.log(`Now ${rows[0].num} in the room.`)
     if (rows[0].num !== undefined) return rows[0].num
     else return -1
   } catch (e) {
