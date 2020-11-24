@@ -17,17 +17,6 @@ chat.postMessage = (num) => {
     channel: process.env.ITS19_BOTTEST_CH_ID,
     text: new Date().toString() + ` なう\n いま ${num} 人:+1:`
   }
-  // const req = https.request(options, res => {
-  //   console.log(`STATUS: ${res.statusCode}`)
-  //   console.log(`HEADERS: ${JSON.stringify(res.headers)}`)
-  //   res.setEncoding('utf8')
-  //   res.on('data', (chunk) => {
-  //     console.log(`BODY: ${chunk}`);
-  //   })
-  //   res.on('end', () => {
-  //     console.log('No more data in response.');
-  //   })
-  // })
   const req = https.request(options)
 
   req.write(JSON.stringify(message))

@@ -2,19 +2,25 @@ const { searchWithFilter, getAll, judgeAction, countNinzu } = require('../models
 const chat = require('../slack/notifyToSlack')
 
 // Retrieve all accesslogs from the database.
-const findAll = (req, res) => {
-  getAll()
-  .then((data) => {
-    res.send(data).end()
-  })
-  .catch(err =>
-    res.status(500).send({
-      message: err.message || 'Some error occurred while retrieving logs.'
-    }).end()
-  )
+const findAll = async (req, res) => {
+  try {
+    const all = await getAll()
+    if (all.data) {
+      res.send(all.data).end()
+      return
+    } else {
+      res.status(500).send({
+        message: all.error.message || 'Some error occurred while retrieving logs.'
+      }).end()
+      return
+    }
+  } catch (e) {
+    console.error(e)
+    return
+  }
 }
 
-// Find accesslogs of single Member with a memberId
+// Find accesslogs of single Member with a member id
 //TODO
 const findWithQuery = (req, res) => {
   searchWithFilter(req.query)
@@ -40,16 +46,19 @@ const cardTouched = (req, res) => {
   .then(answer => {
     res.send({action: answer}).end() // default
     if (answer === 'error') return
-    else return countNinzu() /* point1 return function() which returns Promise<something> countNinzu() */
+    else return countNinzu() /* point1 `return someFunction()` which returns Promise<something> */
   })
-  .then(num => { /* point2 handle success of countNinzu() (callback of countNinzu()) */
+  .then(num => { /* point2 handle success(resolve) of someFunction() (callback of someFunction()) */
+    if (num < 0) { console.error('Error in count number of people.') }
     chat.postMessage(num)
+    return
   })
   .catch(e => {
     console.error(e)
     res.status(500).send({
       message: e.message || 'Some error occured.'
     }).end()
+    return
   })
 }
 
