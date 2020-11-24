@@ -44,7 +44,7 @@ const cardTouched = async (req, res) => {
   // enter, exit or error
   try {
     const answer = await judgeAction(req.query.student_id)
-    res.send({action: ans}).end()
+    res.send({action: answer}).end()
     if (answer !== 'error') {
       const num = await countNumOfPeople()
       if (num < 0) { console.error('Error occured while counting number of people.') }
