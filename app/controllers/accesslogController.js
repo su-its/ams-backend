@@ -44,13 +44,13 @@ const cardTouched = async (req, res) => {
   try {
     const answer = await judgeAction(req.query.student_id) // 'exit' | 'enter' | 'Not a member' | 'syserror'
     res.send({action: answer}).end()
-    if (answer !== 'error') {
+    if (answer == 'enter' || answer == 'exit') {
       const num = await countNumOfPeople()
       if (num < 0) {
         console.error('Error occured while counting number of people.')
       } else {
-        if (num == 0) chat.postMessage('Locked (No one in the room):lock:', new Date().toLocaleTimeString())
-        else if (num >= 1) chat.postMessage('Opened :wink:', new Date().toLocaleTimeString())
+        if (num == 0) chat.postMessage('Status : Locked :lock: (No one in the room)', new Date().toLocaleTimeString())
+        else if (num >= 1) chat.postMessage('Status : Open :wink:', new Date().toLocaleTimeString())
       }
     }
     return
