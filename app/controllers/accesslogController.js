@@ -1,4 +1,5 @@
-const { searchWithFilter, getAll, judgeAction } = require('../models/accesslogModel')
+const { searchWithFilter, getAll, judgeAction, countNinzu } = require('../models/accesslogModel')
+const chat = require('../slack/notifyToSlack')
 
 // Retrieve all accesslogs from the database.
 const findAll = (req, res) => {
@@ -36,7 +37,14 @@ const cardTouched = (req, res) => {
 
   // enter, exit or error
   judgeAction(req.query.student_id)
-  .then(answer => res.send({action: answer}).end()) // default
+  .then(answer => {
+    res.send({action: answer}).end() // default
+    if (answer === 'error') return
+    else return countNinzu() /* point1 return function() which returns Promise<something> countNinzu() */
+  })
+  .then(num => { /* point2 handle success of countNinzu() (callback of countNinzu()) */
+    chat.postMessage(num)
+  })
   .catch(e => {
     console.error(e)
     res.status(500).send({
