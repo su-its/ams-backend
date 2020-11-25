@@ -1,4 +1,5 @@
 const sql = require('../database/db') // Connection
+const mysql = require('../database/db').promise()
 
 // constructor
 const Member = function(member) {
@@ -8,17 +9,43 @@ const Member = function(member) {
   this.is_holder = member.is_holder
 }
 
-Member.create = (newMember, result) => {
-  sql.query('INSERT INTO member_list SET ?', newMember, (err, res) => {
-    console.log('affectedRows: ', res.affectedRows)
-    if (err) {
-      console.log('error: ', err)
-      result(err, null)
-      return
+Member.create = async (newMember) => {
+  try {
+    const [res, _] = await mysql.execute(
+      'INSERT INTO member_list (id,name,grade,is_holder) VALUES (?,?,?,?)',
+      [
+        newMember.id, newMember.name, newMember.grade, newMember.is_holder
+      ])
+    console.log('==RawDatapacket[][]==')
+    for (const key in res) {
+      if (res.hasOwnProperty(key)) {
+        console.log(res[key])
+      }
     }
-    console.log('created member: ', { id: res.insertId, ...newMember })
-    result(null, { id: res.insertId, ...newMember })
-  })
+    console.log('==FieldPacket[]==')
+    for (const key in _) {
+      if (_.hasOwnProperty(key)) {
+        console.log(_[key])
+      }
+    }
+    return {data: res, error: null}
+    console.log(typeof newMember)
+    sql.query('INSERT INTO member_list SET ?', newMember, (err, res) => {
+      //console.log('affectedRows: ', res.affectedRows)
+      if (err) {
+        //console.log('error: ', err)
+        //result(err, null)
+        //return
+        return {data: null, error: err}
+      }
+      console.log('created member: ', { id: res.insertId, ...newMember })
+      return {data: res, error: null}
+      result(null, { id: res.insertId, ...newMember })
+    })
+  } catch (e) {
+    console.error(e)
+    return {data: null, error: e}
+  }
 }
 
 Member.findById = (memberId, result) => {

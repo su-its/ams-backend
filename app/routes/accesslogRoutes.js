@@ -3,7 +3,7 @@ const {cardTouched, findAll, findWithQuery} = require('../controllers/accesslogC
 
 // Retrieve AccessLog
 router.get('/accesslog', (req, res) => {
-  if (req.query.studentId) findWithQuery(req, res)
+  if (req.query.student_id) findWithQuery(req, res)
   else findAll(req, res)
 })
 

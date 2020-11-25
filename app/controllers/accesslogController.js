@@ -34,9 +34,9 @@ const findWithQuery = (req, res) => {
 }
 
 const cardTouched = async (req, res) => {
-  if (req.query.student_id === undefined) {
+  if (!req.query.hasOwnProperty('student_id') || req.query.student_id.length === 0) {
     res.status(400).send({
-      message: 'student_id was not set in the request query.'
+      message: 'student_id was empty.'
     }).end()
     return
   }

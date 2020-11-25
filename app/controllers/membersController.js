@@ -1,13 +1,15 @@
 const Member = require('../models/membersModel')
 
 // Create and Save a new Member
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({
       message: 'Content can not be empty!'
     })
   }
+  console.log(!{})
+  return
 
   // Create a Member
   const member = new Member({
@@ -18,14 +20,25 @@ exports.create = (req, res) => {
   })
 
   // Save Member in the database
-  Member.create(member, (err, data) => {
-    if (err)
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating the Member.'
-      })
-    else res.send(data)
-  })
+  try {
+  const result = await Member.create(member)
+  if (result.error) {
+    res.status(500).send({
+      message:
+        result.error.sqlMessage || 'Some error occurred while creating the Member.'
+    })
+  } else { res.send(result.data) }
+  // Member.create(member, (err, data) => {
+  //   if (err)
+  //     res.status(500).send({
+  //       message:
+  //         err.message || 'Some error occurred while creating the Member.'
+  //     })
+  //   else res.send(data)
+  // })
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 // Retrieve all Members from the database.
