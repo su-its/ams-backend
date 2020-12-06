@@ -35,16 +35,16 @@ const findWithQuery = (req: Request, res: Response) => {
 }
 
 const cardTouched = async (req: Request, res: Response) => {
-  // if (!req.query.hasOwnProperty('student_id') || req.query.student_id.length === 0) {
-  if (!req.query.hasOwnProperty('student_id')) {
+  // if (!req.query.hasOwnProperty('memberId') || req.query.memberId.length === 0) {
+  if (!req.query.hasOwnProperty('memberId')) {
     res.status(400).send({
-      message: 'student_id was empty.'
+      message: 'memberId was empty.'
     }).end()
     return
   }
 
   try {
-    const answer = await judgeAction(req.query.student_id) // 'exit' | 'enter' | 'Not a member' | 'syserror'
+    const answer = await judgeAction(req.query.memberId) // 'exit' | 'enter' | 'Not a member' | 'syserror'
     res.send({action: answer}).end()
     if (answer == 'enter' || answer == 'exit') {
       const num = await countNumOfPeople()

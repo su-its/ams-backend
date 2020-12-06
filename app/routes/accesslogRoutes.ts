@@ -5,7 +5,7 @@ const router = Router()
 
 // Retrieve AccessLog
 router.get('/accesslog', (req, res) => {
-  if (req.query.student_id) findWithQuery(req, res)
+  if (req.query.memberId) findWithQuery(req, res)
   else findAll(req, res)
 })
 

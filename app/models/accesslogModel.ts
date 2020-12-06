@@ -1,9 +1,9 @@
 import mysql from '../database/db'
 
-const searchWithFilter = async (req: {studentId: number}) => {
+const searchWithFilter = async (req: {memberId: number}) => {
   try {
     const [rows, _] = await mysql.query(
-      'SELECT * FROM access_log WHERE student_id = ?', [req.studentId])
+      'SELECT * FROM access_log WHERE member_id = ?', [req.memberId])
     // console.log(rows.info) // danger !!!!!
     // if (rows.info === 0) {
     //   /* not found Member with the id */
@@ -11,7 +11,7 @@ const searchWithFilter = async (req: {studentId: number}) => {
     //   console.log('no affectedRows was found')
     //   return rows
     // }
-    // console.log(`accesslogs of ${student_id}: `, rows)
+    // console.log(`accesslogs of ${member_id}: `, rows)
     return rows
   } catch (e) {
     console.error(e)
@@ -32,11 +32,11 @@ const getAll = async () => {
   }
 }
 
-const judgeAction = async (studentId: number) => {
+const judgeAction = async (memberId: number) => {
   try {
     const [rows, _] = await mysql.query(
       'SELECT entered_at FROM access_log ' +
-      'WHERE student_id = ? AND exited_at IS NULL', [studentId])
+      'WHERE member_id = ? AND exited_at IS NULL', [memberId])
 
     /* rows[0] means a set of { 'entered_at': 'yyyy-mm-dd hh-mm-dd' }
        rows.length is expected to be 0 or 1 */
@@ -44,15 +44,15 @@ const judgeAction = async (studentId: number) => {
       // console.log(`entered_at: ${rows[0].entered_at}`)
       await mysql.execute(
         'UPDATE access_log SET exited_at=NOW() ' +
-        'WHERE student_id = ? AND entered_at = ?',
-        [studentId, (rows as any)[0]])
+        'WHERE member_id = ? AND entered_at = ?',
+        [memberId, (rows as any)[0]])
       return 'exit'
     } else {
       /* Wait for Promise<boolean> is resolved by using `then()` or `await`! */
-      const result = await isMember(studentId)
+      const result = await isMember(memberId)
       if (result) {
         await mysql.execute(
-          'INSERT INTO access_log (student_id) VALUES (?)', [studentId])
+          'INSERT INTO access_log (member_id) VALUES (?)', [memberId])
         return 'enter'
       } else {
         return 'Not a member'
@@ -64,11 +64,11 @@ const judgeAction = async (studentId: number) => {
   }
 }
 
-async function isMember(studentId: number) {
+async function isMember(memberId: number) {
   try {
     const [rows, _] = await mysql.query(
       'SELECT * FROM member_list ' +
-      'WHERE id = ?', [studentId])
+      'WHERE id = ?', [memberId])
     if ((rows as any).length) { return true }
     else { return false }
   } catch (e) {
@@ -80,10 +80,10 @@ async function isMember(studentId: number) {
 const countNumOfPeople = async () => {
   try {
     const [rows, _] = await mysql.query(
-      'SELECT COUNT(*) AS num FROM access_log ' +
+      'SELECT COUNT(1) AS num FROM access_log ' +
       'WHERE exited_at IS NULL')
     // console.log(`Now ${rows[0].num} in the room.`)
-    if ((rows as any)[0].fieldCount !== undefined) return parseInt((rows as any)[0].fieldCount)
+    if ((rows as any)[0].num !== undefined) return parseInt((rows as any)[0].num)
     else return -1
   } catch (e) {
     console.error(e)

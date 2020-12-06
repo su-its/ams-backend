@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import Member from '../models/membersModel'
 import mysql from '../database/db'
+import { RowDataPacket } from 'mysql2'
 
 // Create and Save a new Member
 export async function createMember(req: Request, res: Response) {
@@ -9,17 +10,20 @@ export async function createMember(req: Request, res: Response) {
     res.status(400).send({
       message: 'Content can not be empty!'
     })
+    return
   }
 
   // Create a Member
   const newMember: Member = req.body
+  console.log(newMember)
   try {
     const [result, _] = await mysql.execute(
-      'INSERT INTO member_list (id,name,grade,is_holder) VALUES (?,?,?,?)',
+      'INSERT INTO member_list (id,name) VALUES (?,?)',
       [
-        newMember.id, newMember.name, newMember.grade, newMember.is_holder
+        newMember.id, newMember.name
       ])
-    res.status(201).send(result)
+    res.status(201).send((result as any)[0])
+    return
   } catch (e) {
     console.error(e)
     res.status(500).json({
@@ -100,8 +104,8 @@ export async function updateMember(req: Request, res: Response) {
 // Delete a Member with the specified memberId in the request
 export async function deleteMember(req: Request, res: Response) {
   try {
-    const [result, _] = await mysql.query('DELETE FROM member_list WHERE id = ?', [req.params.student_id])
-    console.log('deleted member with id: ', req.params.student_id)
+    const [result, _] = await mysql.query('DELETE FROM member_list WHERE id = ?', [req.params.memberId])
+    console.log('deleted member with id: ', req.params.memberId)
     if((result as any).affectedRows == 0) {
       // not found Member with the id
       res.status(404).send({
