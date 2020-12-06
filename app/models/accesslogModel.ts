@@ -1,9 +1,9 @@
 import mysql from '../database/db'
 
-const searchWithFilter = async (req: {memberId: number}) => {
+const searchWithFilter = async (req: {member_id: number}) => {
   try {
     const [rows, _] = await mysql.query(
-      'SELECT * FROM access_log WHERE member_id = ?', [req.memberId])
+      'SELECT * FROM access_log WHERE member_id = ?', [req.member_id])
     // console.log(rows.info) // danger !!!!!
     // if (rows.info === 0) {
     //   /* not found Member with the id */
@@ -32,27 +32,27 @@ const getAll = async () => {
   }
 }
 
-const judgeAction = async (memberId: number) => {
+const judgeAction = async (member_id: number) => {
   try {
     const [rows, _] = await mysql.query(
       'SELECT entered_at FROM access_log ' +
-      'WHERE member_id = ? AND exited_at IS NULL', [memberId])
+      'WHERE member_id = ? AND exited_at IS NULL', [member_id])
 
     /* rows[0] means a set of { 'entered_at': 'yyyy-mm-dd hh-mm-dd' }
        rows.length is expected to be 0 or 1 */
-    if (rows) {
+    if ((rows as any).length) {
       // console.log(`entered_at: ${rows[0].entered_at}`)
       await mysql.execute(
         'UPDATE access_log SET exited_at=NOW() ' +
         'WHERE member_id = ? AND entered_at = ?',
-        [memberId, (rows as any)[0]])
+        [member_id, (rows as any)[0].entered_at])
       return 'exit'
     } else {
       /* Wait for Promise<boolean> is resolved by using `then()` or `await`! */
-      const result = await isMember(memberId)
+      const result = await isMember(member_id)
       if (result) {
         await mysql.execute(
-          'INSERT INTO access_log (member_id) VALUES (?)', [memberId])
+          'INSERT INTO access_log (member_id) VALUES (?)', [member_id])
         return 'enter'
       } else {
         return 'Not a member'
@@ -64,11 +64,11 @@ const judgeAction = async (memberId: number) => {
   }
 }
 
-async function isMember(memberId: number) {
+async function isMember(member_id: number) {
   try {
     const [rows, _] = await mysql.query(
       'SELECT * FROM member_list ' +
-      'WHERE id = ?', [memberId])
+      'WHERE id = ?', [member_id])
     if ((rows as any).length) { return true }
     else { return false }
   } catch (e) {

@@ -7,7 +7,7 @@ import { RowDataPacket } from 'mysql2'
 export async function createMember(req: Request, res: Response) {
   // Validate request
   if (!req.body) {
-    res.status(400).send({
+    res.status(400).json({
       message: 'Content can not be empty!'
     })
     return
@@ -15,7 +15,13 @@ export async function createMember(req: Request, res: Response) {
 
   // Create a Member
   const newMember: Member = req.body
-  console.log(newMember)
+  if (newMember.id === undefined || newMember.name === undefined) {
+    res.status(400).json({
+      message: 'id or name is empty.'
+    })
+    return
+  }
+
   try {
     const [result, _] = await mysql.execute(
       'INSERT INTO member_list (id,name) VALUES (?,?)',
@@ -49,13 +55,13 @@ export async function getAllMembers(req: Request, res: Response) {
   }
 }
 
-// Find a single Member with a memberId
+// Find a single Member with a member_id
 export async function getMember(req: Request, res: Response) {
   try {
-    const [result, _] = await mysql.execute('SELECT * FROM member_list WHERE id = ?',[req.params.memberId])
+    const [result, _] = await mysql.execute('SELECT * FROM member_list WHERE id = ?',[req.params.member_id])
     if (!(result as any).length) {
       res.status(400).json({
-        message: `Not found Member with id ${req.params.memberId}.`
+        message: `Not found Member with id ${req.params.member_id}.`
       })
       return
     }
@@ -65,13 +71,13 @@ export async function getMember(req: Request, res: Response) {
   } catch (e) {
     console.error(e)
     res.status(500).json({
-      message: 'Error retrieving Member with id ' + req.params.memberId
+      message: 'Error retrieving Member with id ' + req.params.member_id
     })
     return
   }
 }
 
-// Update a Member identified by the memberId in the request
+// Update a Member identified by the member_id in the request
 export async function updateMember(req: Request, res: Response) {
   // Validate Request
   if (!req.body) {
@@ -84,11 +90,11 @@ export async function updateMember(req: Request, res: Response) {
     const updatedMember: Member = req.body
     const [result, _] = await mysql.execute('UPDATE member_list SET ? WHERE id = ?',
       [
-        updatedMember, req.params.memberId
+        updatedMember, req.params.member_id
       ])
     if ((result as any).affectedRows == 0) {
       res.status(404).json({
-        message: `Not found Member with id ${req.params.memberId}.`
+        message: `Not found Member with id ${req.params.member_id}.`
       })
     }
     console.log('updated member:', result)
@@ -96,29 +102,29 @@ export async function updateMember(req: Request, res: Response) {
   } catch (e) {
     console.error(e)
     res.status(500).json({
-      message: 'Error updating Member with id ' + req.params.memberId
+      message: 'Error updating Member with id ' + req.params.member_id
     })
   }
 }
 
-// Delete a Member with the specified memberId in the request
+// Delete a Member with the specified member_id in the request
 export async function deleteMember(req: Request, res: Response) {
   try {
-    const [result, _] = await mysql.query('DELETE FROM member_list WHERE id = ?', [req.params.memberId])
-    console.log('deleted member with id: ', req.params.memberId)
+    const [result, _] = await mysql.query('DELETE FROM member_list WHERE id = ?', [req.params.member_id])
+    console.log('deleted member with id: ', req.params.member_id)
     if((result as any).affectedRows == 0) {
       // not found Member with the id
       res.status(404).send({
-        message: `Not found Member with id ${req.params.memberId}.`
+        message: `Not found Member with id ${req.params.member_id}.`
       })
       return
     }
-    res.status(200).json({ message: `Member(id: ${req.params.memberId}) was deleted successfully!` })
+    res.status(200).json({ message: `Member(id: ${req.params.member_id}) was deleted successfully!` })
     return
   } catch (e) {
     console.error(e)
     res.status(500).send({
-      message: 'Could not delete Member with id ' + req.params.memberId
+      message: 'Could not delete Member with id ' + req.params.member_id
     })
   }
 }
