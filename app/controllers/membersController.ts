@@ -15,9 +15,9 @@ export async function createMember(req: Request, res: Response) {
 
   // Create a Member
   const newMember: Member = req.body
-  if (newMember.id === undefined || newMember.name === undefined) {
+  if (newMember.name === "") {
     res.status(400).json({
-      message: 'id or name is empty.'
+      message: 'name is empty.'
     })
     return
   }
@@ -58,7 +58,7 @@ export async function getAllMembers(req: Request, res: Response) {
 // Find a single Member with a member_id
 export async function getMember(req: Request, res: Response) {
   try {
-    const [result, _] = await mysql.execute('SELECT * FROM member_list WHERE id = ?',[req.params.member_id])
+    const [result, _] = await mysql.execute('SELECT * FROM member_list WHERE id = ?', [req.params.member_id])
     if (!(result as any).length) {
       res.status(400).json({
         message: `Not found Member with id ${req.params.member_id}.`
@@ -85,9 +85,16 @@ export async function updateMember(req: Request, res: Response) {
       message: 'Content can not be empty!'
     })
   }
-  console.log(req.body)
+
+  const updatedMember: Member = req.body
+  if (updateMember.name === "") {
+    res.status(400).json({
+      message: 'name is empty.'
+    })
+    return
+  }
+
   try {
-    const updatedMember: Member = req.body
     const [result, _] = await mysql.execute('UPDATE member_list SET ? WHERE id = ?',
       [
         updatedMember, req.params.member_id
@@ -141,7 +148,7 @@ export async function deleteAllMembers(req: Request, res: Response) {
     console.error(e)
     res.status(500).json({
       message:
-        e.message || 'Some error occurred while removing all members.'
+        e.sqlMessage || 'Some error occurred while removing all members.'
     })
   }
 }
