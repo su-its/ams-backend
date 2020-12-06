@@ -1,7 +1,7 @@
 require('dotenv').config(require('path').resolve(process.cwd(), '.env'))
 import https from 'https'
 
-export function postMessage(...args: string[] | number[]) {
+export function postMessage(...args: string[]) {
   const options = {
     hostname: 'slack.com',
     path: '/api/chat.postMessage',
