@@ -1,24 +1,5 @@
 import mysql from '../database/db'
 
-const searchWithFilter = async (req: {member_id: number}) => {
-  try {
-    const [rows, _] = await mysql.query(
-      'SELECT * FROM access_log WHERE member_id = ?', [req.member_id])
-    // console.log(rows.info) // danger !!!!!
-    // if (rows.info === 0) {
-    //   /* not found Member with the id */
-    //   // return {err: 'not_found', data: null}
-    //   console.log('no affectedRows was found')
-    //   return rows
-    // }
-    // console.log(`accesslogs of ${member_id}: `, rows)
-    return rows
-  } catch (e) {
-    console.error(e)
-    return Promise.reject(new Error('fail'))
-  }
-}
-
 const getAll = async () => {
   try {
     const [rows, _] = await mysql.query(
@@ -91,4 +72,4 @@ const countNumOfPeople = async () => {
   }
 }
 
-export { getAll, searchWithFilter, judgeAction, countNumOfPeople }
+export { getAll, judgeAction, countNumOfPeople }

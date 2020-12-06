@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-const { searchWithFilter, getAll, judgeAction, countNumOfPeople } = require('../models/accesslogModel')
+import { getAll, judgeAction, countNumOfPeople } from '../models/accesslogModel'
 import { postMessage } from '../slack/notifyToSlack'
 
 // Retrieve all accesslogs from the database.
@@ -21,30 +21,17 @@ const findAll = async (req: Request, res: Response) => {
   }
 }
 
-// Find accesslogs of single Member with a member id
-//TODO
-const findWithQuery = (req: Request, res: Response) => {
-  searchWithFilter(req.query)
-  .then((data: any) => res.send(data).end())
-  .catch((e: any) => {
-    console.error(e)
-    res.status(404).send({
-      message: e.message || 'Not found.'
-    }).end()
-  })
-}
-
 const cardTouched = async (req: Request, res: Response) => {
-  // if (!req.query.hasOwnProperty('member_id') || req.query.member_id.length === 0) {
-  if (!req.query.hasOwnProperty('member_id')) {
+  if (!req.query.hasOwnProperty('member_id') || (req.query.member_id as string).length === 0) {
     res.status(400).send({
       message: 'member_id was empty.'
     }).end()
     return
   }
 
+  const member_id: number = parseInt(req.query.member_id as string)
   try {
-    const answer = await judgeAction(req.query.member_id) // 'exit' | 'enter' | 'Not a member' | 'syserror'
+    const answer = await judgeAction(member_id) // 'exit' | 'enter' | 'Not a member' | 'syserror'
     res.send({action: answer}).end()
     if (answer == 'enter' || answer == 'exit') {
       const num = await countNumOfPeople()
@@ -65,4 +52,4 @@ const cardTouched = async (req: Request, res: Response) => {
   }
 }
 
-export  { findWithQuery, findAll, cardTouched }
+export  { findAll, cardTouched }

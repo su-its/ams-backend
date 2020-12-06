@@ -1,13 +1,10 @@
 import { Router } from 'express'
-import { cardTouched, findAll, findWithQuery } from '../controllers/accesslogController'
+import { cardTouched, findAll } from '../controllers/accesslogController'
 
 const router = Router()
 
 // Retrieve AccessLog
-router.get('/accesslog', (req, res) => {
-  if (req.query.memberId) findWithQuery(req, res)
-  else findAll(req, res)
-})
+router.get('/accesslog', findAll)
 
 router.get('/card_touch', cardTouched)
 
