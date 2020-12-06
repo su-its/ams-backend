@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 import Member from '../models/membersModel'
+import mysql from '../database/db'
 
 // Create and Save a new Member
-exports.create = async (req: Request, res: Response) => {
+export async function createMember(req: Request, res: Response) {
   // Validate request
   if (!req.body) {
     res.status(400).send({
@@ -11,119 +12,126 @@ exports.create = async (req: Request, res: Response) => {
   }
 
   // Create a Member
-  const member = new Member(
-    req.body.id,
-    req.body.name,
-    req.body.grade,
-    req.body.is_holder
-  )
-
-  // Save Member in the database
+  const newMember: Member = req.body
   try {
-  const result = await member.create(member)
-  if (result.error) {
-    res.status(500).send({
-      message:
-        result.error.sqlMessage || 'Some error occurred while creating the Member.'
-    })
-  } else { res.send(result.data) }
-  // Member.create(member, (err, data) => {
-  //   if (err)
-  //     res.status(500).send({
-  //       message:
-  //         err.message || 'Some error occurred while creating the Member.'
-  //     })
-  //   else res.send(data)
-  // })
+    const [result, _] = await mysql.execute(
+      'INSERT INTO member_list (id,name,grade,is_holder) VALUES (?,?,?,?)',
+      [
+        newMember.id, newMember.name, newMember.grade, newMember.is_holder
+      ])
+    res.status(201).send(result)
   } catch (e) {
     console.error(e)
+    res.status(500).json({
+      message:
+        e.sqlMessage || 'Some error occurred while creating the Member.'
+    })
+    return
   }
 }
 
 // Retrieve all Members from the database.
-exports.findAll = (req, res) => {
-  Member.getAll((err, data) => {
-    if (err)
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while retrieving members.'
-      })
-    else res.send(data)
-  })
+export async function getAllMembers(req: Request, res: Response) {
+  try {
+    const [result, _] = await mysql.query('SELECT * FROM member_list')
+    res.send(result)
+    return
+  } catch (e) {
+    console.error('error: ', e)
+    res.status(500).json({
+      message: e.message || 'Some error occurred while retrieving members.'
+    })
+    return
+  }
 }
 
 // Find a single Member with a memberId
-exports.findOne = (req, res) => {
-  Member.findById(req.params.memberId, (err, data) => {
-    if (err) {
-      if (err.kind === 'not_found') {
-        res.status(404).send({
-          message: `Not found Member with id ${req.params.memberId}.`
-        })
-      } else {
-        res.status(500).send({
-          message: 'Error retrieving Member with id ' + req.params.memberId
-        })
-      }
-    } else res.send(data)
-  })
+export async function getMember(req: Request, res: Response) {
+  try {
+    const [result, _] = await mysql.execute('SELECT * FROM member_list WHERE id = ?',[req.params.memberId])
+    if (!(result as any).length) {
+      res.status(400).json({
+        message: `Not found Member with id ${req.params.memberId}.`
+      })
+      return
+    }
+    console.log('found member: ', (result as any)[0])
+    res.status(200).send(result)
+    return
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({
+      message: 'Error retrieving Member with id ' + req.params.memberId
+    })
+    return
+  }
 }
 
 // Update a Member identified by the memberId in the request
-exports.update = (req, res) => {
+export async function updateMember(req: Request, res: Response) {
   // Validate Request
   if (!req.body) {
     res.status(400).send({
       message: 'Content can not be empty!'
     })
   }
-
   console.log(req.body)
-
-  Member.updateById(
-    req.params.memberId,
-    new Member(req.body),
-    (err, data) => {
-      if (err) {
-        if (err.kind === 'not_found') {
-          res.status(404).send({
-            message: `Not found Member with id ${req.params.memberId}.`
-          })
-        } else {
-          res.status(500).send({
-            message: 'Error updating Member with id ' + req.params.memberId
-          })
-        }
-      } else res.send(data)
+  try {
+    const updatedMember: Member = req.body
+    const [result, _] = await mysql.execute('UPDATE member_list SET ? WHERE id = ?',
+      [
+        updatedMember, req.params.memberId
+      ])
+    if ((result as any).affectedRows == 0) {
+      res.status(404).json({
+        message: `Not found Member with id ${req.params.memberId}.`
+      })
     }
-  )
+    console.log('updated member:', result)
+    res.send(result)
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({
+      message: 'Error updating Member with id ' + req.params.memberId
+    })
+  }
 }
 
 // Delete a Member with the specified memberId in the request
-exports.delete = (req, res) => {
-  Member.remove(req.params.memberId, (err, data) => {
-    if (err) {
-      if (err.kind === 'not_found') {
-        res.status(404).send({
-          message: `Not found Member with id ${req.params.memberId}.`
-        })
-      } else {
-        res.status(500).send({
-          message: 'Could not delete Member with id ' + req.params.memberId
-        })
-      }
-    } else res.send({ message: `Member was deleted successfully!` })
-  })
+export async function deleteMember(req: Request, res: Response) {
+  try {
+    const [result, _] = await mysql.query('DELETE FROM member_list WHERE id = ?', [req.params.student_id])
+    console.log('deleted member with id: ', req.params.student_id)
+    if((result as any).affectedRows == 0) {
+      // not found Member with the id
+      res.status(404).send({
+        message: `Not found Member with id ${req.params.memberId}.`
+      })
+      return
+    }
+    res.status(200).json({ message: `Member(id: ${req.params.memberId}) was deleted successfully!` })
+    return
+  } catch (e) {
+    console.error(e)
+    res.status(500).send({
+      message: 'Could not delete Member with id ' + req.params.memberId
+    })
+  }
 }
 
 // Delete all Members from the database.
-exports.deleteAll = (req, res) => {
-  Member.removeAll((err, data) => {
-    if (err)
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while removing all members.'
-      })
-    else res.send({ message: `All Members were deleted successfully!` })
-  })
+export async function deleteAllMembers(req: Request, res: Response) {
+  try {
+    const [result, _] = await mysql.execute('TRUNCATE TABLE member_list')
+    console.log(`Deleted ${(result as any).affectedRows} members`)
+    res.status(200).json({
+      message: 'All Members were deleted successfully!'
+    })
+  } catch (e) {
+    console.error(e)
+    res.status(500).json({
+      message:
+        e.message || 'Some error occurred while removing all members.'
+    })
+  }
 }

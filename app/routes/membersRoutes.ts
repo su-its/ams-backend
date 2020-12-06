@@ -1,24 +1,26 @@
 import { Router } from 'express'
-import members from '../controllers/membersController'
+import {
+  createMember, deleteAllMembers, deleteMember, getAllMembers, getMember, updateMember
+} from '../controllers/membersController'
 
 const router = Router()
 
 // Create a new Member
-router.post('/members', members.create)
+router.post('/members', createMember)
 
 // Retrieve all Members
-router.get('/members', members.findAll)
+router.get('/members', getAllMembers)
 
 // Retrieve a single Member with memberId
-router.get('/members/:memberId', members.findOne)
+router.get('/members/:memberId', getMember)
 
 // Update a Member with memberId
-router.put('/members/:memberId', members.update)
+router.put('/members/:memberId', updateMember)
 
 // Delete a Member with memberId
-router.delete('/members/:memberId', members.delete)
+router.delete('/members/:memberId', deleteMember)
 
 // Create a new Member
-router.delete('/members', members.deleteAll)
+router.delete('/members', deleteAllMembers)
 
 export default router

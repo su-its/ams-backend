@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // user environment variable
-var path_1 = require("path");
-var dotenv_1 = require("dotenv");
+require('dotenv').config({ path: require('path').resolve(process.cwd(), '.env') });
 var mysql2_1 = require("mysql2");
-dotenv_1.config({ path: path_1.resolve(process.cwd(), '.env') });
 var connection = mysql2_1.createConnection({
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT || '3306', 10),

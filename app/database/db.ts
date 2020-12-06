@@ -1,9 +1,6 @@
 // user environment variable
-import { resolve } from 'path'
-import { config } from 'dotenv'
+require('dotenv').config({ path: require('path').resolve(process.cwd(), '.env')})
 import { createConnection } from 'mysql2'
-
-config({ path: resolve(process.cwd(), '.env')})
 
 const connection = createConnection({
   host: process.env.DB_HOST,

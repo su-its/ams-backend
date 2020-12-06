@@ -47,7 +47,7 @@ var searchWithFilter = function (req) { return __awaiter(void 0, void 0, void 0,
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, db_1.default.query('SELECT * FROM access_log WHERE student_id = ?', [req.student_id])
+                return [4 /*yield*/, db_1.default.query('SELECT * FROM access_log WHERE student_id = ?', [req.studentId])
                     // console.log(rows.info) // danger !!!!!
                     // if (rows.info === 0) {
                     //   /* not found Member with the id */
@@ -100,14 +100,14 @@ var getAll = function () { return __awaiter(void 0, void 0, void 0, function () 
     });
 }); };
 exports.getAll = getAll;
-var judgeAction = function (student_id) { return __awaiter(void 0, void 0, void 0, function () {
+var judgeAction = function (studentId) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, rows, _, result, e_3;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 8, , 9]);
                 return [4 /*yield*/, db_1.default.query('SELECT entered_at FROM access_log ' +
-                        'WHERE student_id = ? AND exited_at IS NULL', [student_id])
+                        'WHERE student_id = ? AND exited_at IS NULL', [studentId])
                     /* rows[0] means a set of { 'entered_at': 'yyyy-mm-dd hh-mm-dd' }
                        rows.length is expected to be 0 or 1 */
                 ];
@@ -116,16 +116,16 @@ var judgeAction = function (student_id) { return __awaiter(void 0, void 0, void 
                 if (!rows) return [3 /*break*/, 3];
                 // console.log(`entered_at: ${rows[0].entered_at}`)
                 return [4 /*yield*/, db_1.default.execute('UPDATE access_log SET exited_at=NOW() ' +
-                        'WHERE student_id = ? AND entered_at = ?', [student_id, rows[0]])];
+                        'WHERE student_id = ? AND entered_at = ?', [studentId, rows[0]])];
             case 2:
                 // console.log(`entered_at: ${rows[0].entered_at}`)
                 _b.sent();
                 return [2 /*return*/, 'exit'];
-            case 3: return [4 /*yield*/, isMember(student_id)];
+            case 3: return [4 /*yield*/, isMember(studentId)];
             case 4:
                 result = _b.sent();
                 if (!result) return [3 /*break*/, 6];
-                return [4 /*yield*/, db_1.default.execute('INSERT INTO access_log (student_id) VALUES (?)', [student_id])];
+                return [4 /*yield*/, db_1.default.execute('INSERT INTO access_log (student_id) VALUES (?)', [studentId])];
             case 5:
                 _b.sent();
                 return [2 /*return*/, 'enter'];
@@ -140,7 +140,7 @@ var judgeAction = function (student_id) { return __awaiter(void 0, void 0, void 
     });
 }); };
 exports.judgeAction = judgeAction;
-function isMember(student_id) {
+function isMember(studentId) {
     return __awaiter(this, void 0, void 0, function () {
         var _a, rows, _, e_4;
         return __generator(this, function (_b) {
@@ -148,7 +148,7 @@ function isMember(student_id) {
                 case 0:
                     _b.trys.push([0, 2, , 3]);
                     return [4 /*yield*/, db_1.default.query('SELECT * FROM member_list ' +
-                            'WHERE id = ?', [student_id])];
+                            'WHERE id = ?', [studentId])];
                 case 1:
                     _a = _b.sent(), rows = _a[0], _ = _a[1];
                     if (rows.length) {

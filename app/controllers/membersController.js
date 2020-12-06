@@ -39,131 +39,208 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var membersModel_1 = __importDefault(require("../models/membersModel"));
+exports.deleteAllMembers = exports.deleteMember = exports.updateMember = exports.getMember = exports.getAllMembers = exports.createMember = void 0;
+var db_1 = __importDefault(require("../database/db"));
 // Create and Save a new Member
-exports.create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var member, result, e_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                // Validate request
-                if (!req.body) {
-                    res.status(400).send({
-                        message: 'Content can not be empty!'
+function createMember(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var newMember, _a, result, _, e_1;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    // Validate request
+                    if (!req.body) {
+                        res.status(400).send({
+                            message: 'Content can not be empty!'
+                        });
+                    }
+                    newMember = req.body;
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, db_1.default.execute('INSERT INTO member_list (id,name,grade,is_holder) VALUES (?,?,?,?)', [
+                            newMember.id, newMember.name, newMember.grade, newMember.is_holder
+                        ])];
+                case 2:
+                    _a = _b.sent(), result = _a[0], _ = _a[1];
+                    res.status(201).send(result);
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_1 = _b.sent();
+                    console.error(e_1);
+                    res.status(500).json({
+                        message: e_1.sqlMessage || 'Some error occurred while creating the Member.'
                     });
-                }
-                member = new membersModel_1.default({
-                    id: req.body.id,
-                    name: req.body.name,
-                    grade: req.body.grade,
-                    is_holder: req.body.is_holder
-                });
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, membersModel_1.default.create(member)];
-            case 2:
-                result = _a.sent();
-                if (result.error) {
-                    res.status(500).send({
-                        message: result.error.sqlMessage || 'Some error occurred while creating the Member.'
-                    });
-                }
-                else {
-                    res.send(result.data);
-                }
-                return [3 /*break*/, 4];
-            case 3:
-                e_1 = _a.sent();
-                console.error(e_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); };
-// Retrieve all Members from the database.
-exports.findAll = function (req, res) {
-    membersModel_1.default.getAll(function (err, data) {
-        if (err)
-            res.status(500).send({
-                message: err.message || 'Some error occurred while retrieving members.'
-            });
-        else
-            res.send(data);
-    });
-};
-// Find a single Member with a memberId
-exports.findOne = function (req, res) {
-    membersModel_1.default.findById(req.params.memberId, function (err, data) {
-        if (err) {
-            if (err.kind === 'not_found') {
-                res.status(404).send({
-                    message: "Not found Member with id " + req.params.memberId + "."
-                });
+                    return [2 /*return*/];
+                case 4: return [2 /*return*/];
             }
-            else {
-                res.status(500).send({
-                    message: 'Error retrieving Member with id ' + req.params.memberId
-                });
-            }
-        }
-        else
-            res.send(data);
-    });
-};
-// Update a Member identified by the memberId in the request
-exports.update = function (req, res) {
-    // Validate Request
-    if (!req.body) {
-        res.status(400).send({
-            message: 'Content can not be empty!'
         });
-    }
-    console.log(req.body);
-    membersModel_1.default.updateById(req.params.memberId, new membersModel_1.default(req.body), function (err, data) {
-        if (err) {
-            if (err.kind === 'not_found') {
-                res.status(404).send({
-                    message: "Not found Member with id " + req.params.memberId + "."
-                });
-            }
-            else {
-                res.status(500).send({
-                    message: 'Error updating Member with id ' + req.params.memberId
-                });
-            }
-        }
-        else
-            res.send(data);
     });
-};
+}
+exports.createMember = createMember;
+// Retrieve all Members from the database.
+function getAllMembers(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, result, _, e_2;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, db_1.default.query('SELECT * FROM member_list')];
+                case 1:
+                    _a = _b.sent(), result = _a[0], _ = _a[1];
+                    res.send(result);
+                    return [2 /*return*/];
+                case 2:
+                    e_2 = _b.sent();
+                    console.error('error: ', e_2);
+                    res.status(500).json({
+                        message: e_2.message || 'Some error occurred while retrieving members.'
+                    });
+                    return [2 /*return*/];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getAllMembers = getAllMembers;
+// Find a single Member with a memberId
+function getMember(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, result, _, e_3;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, db_1.default.execute('SELECT * FROM member_list WHERE id = ?', [req.params.memberId])];
+                case 1:
+                    _a = _b.sent(), result = _a[0], _ = _a[1];
+                    if (!result.length) {
+                        res.status(400).json({
+                            message: "Not found Member with id " + req.params.memberId + "."
+                        });
+                        return [2 /*return*/];
+                    }
+                    console.log('found member: ', result[0]);
+                    res.status(200).send(result);
+                    return [2 /*return*/];
+                case 2:
+                    e_3 = _b.sent();
+                    console.error(e_3);
+                    res.status(500).json({
+                        message: 'Error retrieving Member with id ' + req.params.memberId
+                    });
+                    return [2 /*return*/];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getMember = getMember;
+// Update a Member identified by the memberId in the request
+function updateMember(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var updatedMember, _a, result, _, e_4;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    // Validate Request
+                    if (!req.body) {
+                        res.status(400).send({
+                            message: 'Content can not be empty!'
+                        });
+                    }
+                    console.log(req.body);
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 3, , 4]);
+                    updatedMember = req.body;
+                    return [4 /*yield*/, db_1.default.execute('UPDATE member_list SET ? WHERE id = ?', [
+                            updatedMember, req.params.memberId
+                        ])];
+                case 2:
+                    _a = _b.sent(), result = _a[0], _ = _a[1];
+                    if (result.affectedRows == 0) {
+                        res.status(404).json({
+                            message: "Not found Member with id " + req.params.memberId + "."
+                        });
+                    }
+                    console.log('updated member:', result);
+                    res.send(result);
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_4 = _b.sent();
+                    console.error(e_4);
+                    res.status(500).json({
+                        message: 'Error updating Member with id ' + req.params.memberId
+                    });
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.updateMember = updateMember;
 // Delete a Member with the specified memberId in the request
-exports.delete = function (req, res) {
-    membersModel_1.default.remove(req.params.memberId, function (err, data) {
-        if (err) {
-            if (err.kind === 'not_found') {
-                res.status(404).send({
-                    message: "Not found Member with id " + req.params.memberId + "."
-                });
+function deleteMember(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, result, _, e_5;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, db_1.default.query('DELETE FROM member_list WHERE id = ?', [req.params.student_id])];
+                case 1:
+                    _a = _b.sent(), result = _a[0], _ = _a[1];
+                    console.log('deleted member with id: ', req.params.student_id);
+                    if (result.affectedRows == 0) {
+                        // not found Member with the id
+                        res.status(404).send({
+                            message: "Not found Member with id " + req.params.memberId + "."
+                        });
+                        return [2 /*return*/];
+                    }
+                    res.status(200).json({ message: "Member(id: " + req.params.memberId + ") was deleted successfully!" });
+                    return [2 /*return*/];
+                case 2:
+                    e_5 = _b.sent();
+                    console.error(e_5);
+                    res.status(500).send({
+                        message: 'Could not delete Member with id ' + req.params.memberId
+                    });
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
-            else {
-                res.status(500).send({
-                    message: 'Could not delete Member with id ' + req.params.memberId
-                });
-            }
-        }
-        else
-            res.send({ message: "Member was deleted successfully!" });
+        });
     });
-};
+}
+exports.deleteMember = deleteMember;
 // Delete all Members from the database.
-exports.deleteAll = function (req, res) {
-    membersModel_1.default.removeAll(function (err, data) {
-        if (err)
-            res.status(500).send({
-                message: err.message || 'Some error occurred while removing all members.'
-            });
-        else
-            res.send({ message: "All Members were deleted successfully!" });
+function deleteAllMembers(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, result, _, e_6;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, db_1.default.execute('TRUNCATE TABLE member_list')];
+                case 1:
+                    _a = _b.sent(), result = _a[0], _ = _a[1];
+                    console.log("Deleted " + result.affectedRows + " members");
+                    res.status(200).json({
+                        message: 'All Members were deleted successfully!'
+                    });
+                    return [3 /*break*/, 3];
+                case 2:
+                    e_6 = _b.sent();
+                    console.error(e_6);
+                    res.status(500).json({
+                        message: e_6.message || 'Some error occurred while removing all members.'
+                    });
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
     });
-};
+}
+exports.deleteAllMembers = deleteAllMembers;
