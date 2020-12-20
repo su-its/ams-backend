@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
-import { getAll, judgeAction, countNumOfPeople } from '../models/accesslogModel'
-import { postMessage } from '../slack/notifyToSlack'
+import { getAll, judgeActionAndSetRecord } from '../models/accesslogModel'
 
 // Retrieve all accesslogs from the database.
 const findAll = async (req: Request, res: Response) => {
@@ -22,26 +21,17 @@ const findAll = async (req: Request, res: Response) => {
 }
 
 const cardTouched = async (req: Request, res: Response) => {
-  if (!req.query.hasOwnProperty('member_id') || (req.query.member_id as string).length === 0) {
+  if (!req.query.hasOwnProperty('student_id') || (req.query.student_id as string).length === 0) {
     res.status(400).send({
-      message: 'member_id was empty.'
+      message: 'student_id was empty.'
     }).end()
     return
   }
 
-  const member_id: number = parseInt(req.query.member_id as string)
+  const student_id = parseInt(req.query.student_id as string)
   try {
-    const answer = await judgeAction(member_id) // 'exit' | 'enter' | 'Not a member' | 'syserror'
+    const answer = await judgeActionAndSetRecord(student_id) // 'exit' | 'enter' | 'Not a member' | 'syserror'
     res.send({action: answer}).end()
-    if (answer == 'enter' || answer == 'exit') {
-      const num = await countNumOfPeople()
-      if (num < 0) {
-        console.error('Error occured while counting number of people.')
-      } else {
-        if (num == 0) postMessage('Status : Locked :lock: (No one in the room)', new Date().toLocaleTimeString())
-        else if (num >= 1) postMessage('Status : Open :wink:', new Date().toLocaleTimeString())
-      }
-    }
     return
   } catch (e) {
     console.error(e)
