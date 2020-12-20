@@ -17,7 +17,8 @@ const judgeActionAndSetRecord = async (student_id: number) => {
   try {
     const [rows, _] = await mysql.query(
       'SELECT entered_at FROM access_log ' +
-      'WHERE student_id = ? AND exited_at IS NULL', [student_id])
+      'WHERE student_id = ? AND exited_at IS NULL ' +
+      'ORDER BY entered_at DESC', [student_id])
 
     /* rows[0] means a set of { 'entered_at': 'yyyy-mm-dd hh-mm-dd' }
        rows.length is expected to be 0 or 1 */
@@ -27,13 +28,13 @@ const judgeActionAndSetRecord = async (student_id: number) => {
       return 'exit'
     } else {
       /* Wait for Promise<boolean> is resolved by using `then()` or `await`! */
-      const result = await isMember(student_id)
-      if (result) {
+      // const result = await isMember(student_id)
+      // if (result) {
         insertLog(student_id)
         return 'enter'
-      } else {
-        return 'Not a member'
-      }
+      // } else {
+      //   return 'Not a member'
+      // }
     }
   } catch (e) {
     console.error(e)
