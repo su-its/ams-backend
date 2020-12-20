@@ -27,7 +27,7 @@ const judgeActionAndSetRecord = async (student_id: number) => {
       await updateLog(student_id, (rows as any)[0].entered_at)
       return 'exit'
     } else {
-      /* Wait for Promise<boolean> is resolved by using `then()` or `await`! */
+      /* Wait for Promise<boolean> is resolved by using `await`! */
       // const result = await isMember(student_id)
       // if (result) {
         insertLog(student_id)
