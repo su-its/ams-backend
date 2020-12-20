@@ -13,27 +13,23 @@ const getAll = async () => {
   }
 }
 
-const judgeAction = async (member_id: number) => {
+const judgeActionAndSetRecord = async (student_id: number) => {
   try {
     const [rows, _] = await mysql.query(
       'SELECT entered_at FROM access_log ' +
-      'WHERE member_id = ? AND exited_at IS NULL', [member_id])
+      'WHERE student_id = ? AND exited_at IS NULL', [student_id])
 
     /* rows[0] means a set of { 'entered_at': 'yyyy-mm-dd hh-mm-dd' }
        rows.length is expected to be 0 or 1 */
     if ((rows as any).length) {
       // console.log(`entered_at: ${rows[0].entered_at}`)
-      await mysql.execute(
-        'UPDATE access_log SET exited_at=NOW() ' +
-        'WHERE member_id = ? AND entered_at = ?',
-        [member_id, (rows as any)[0].entered_at])
+      await updateLog(student_id, (rows as any)[0].entered_at)
       return 'exit'
     } else {
       /* Wait for Promise<boolean> is resolved by using `then()` or `await`! */
-      const result = await isMember(member_id)
+      const result = await isMember(student_id)
       if (result) {
-        await mysql.execute(
-          'INSERT INTO access_log (member_id) VALUES (?)', [member_id])
+        insertLog(student_id)
         return 'enter'
       } else {
         return 'Not a member'
@@ -45,11 +41,32 @@ const judgeAction = async (member_id: number) => {
   }
 }
 
-async function isMember(member_id: number) {
+const insertLog = async (student_id: number) => {
+  try {
+    await mysql.execute(
+      'INSERT INTO access_log (student_id) VALUES (?)',
+      [student_id])
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+const updateLog = async (student_id: number, entered_at: string) => {
+  try {
+    await mysql.execute(
+      'UPDATE access_log SET exited_at=NOW() ' +
+      'WHERE student_id = ? AND entered_at = ?',
+      [student_id, entered_at])
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+const isMember = async (student_id: number) => {
   try {
     const [rows, _] = await mysql.query(
       'SELECT * FROM member_list ' +
-      'WHERE id = ?', [member_id])
+      'WHERE id = ?', [student_id])
     if ((rows as any).length) { return true }
     else { return false }
   } catch (e) {
@@ -72,4 +89,4 @@ const countNumOfPeople = async () => {
   }
 }
 
-export { getAll, judgeAction, countNumOfPeople }
+export { countNumOfPeople, getAll, judgeActionAndSetRecord }
