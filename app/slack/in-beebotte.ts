@@ -81,10 +81,10 @@ const setupResponce = async (reaction: SlackPostMessageFactory) => {
     reaction.setFooter(BoushitsuStatus.toString(BoushitsuStatus.Error), hhmm)
   } else {
     if (num === 0) {
-      reaction.setText('No one in the room.')
+      reaction.setText('No one is currently in the room.')
       reaction.setFooter(BoushitsuStatus.toString(BoushitsuStatus.Closed), hhmm)
     } else {
-      let text = 'In the room '
+      let text = 'Currently in the room '
       for (let i = 0; i < num; i++) { text += ':bust_in_silhouette:' }
       reaction.setText(text)
       reaction.setFooter(BoushitsuStatus.toString(BoushitsuStatus.Open), hhmm)
