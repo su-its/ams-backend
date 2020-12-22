@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import Member from '../models/membersModel'
 import mysql from '../database/db'
-import { RowDataPacket } from 'mysql2'
 
 // Create and Save a new Member
 export async function createMember(req: Request, res: Response) {
