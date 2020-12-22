@@ -13,28 +13,29 @@ const getAll = async () => {
   }
 }
 
-const judgeActionAndSetRecord = async (student_id: number) => {
+const judgeActionAndSetRecord = async (student_id: number, allow_guest: string) => {
   try {
     const [rows, _] = await mysql.query(
       'SELECT entered_at FROM access_log ' +
       'WHERE student_id = ? AND exited_at IS NULL ' +
       'ORDER BY entered_at DESC', [student_id])
 
-    /* rows[0] means a set of { 'entered_at': 'yyyy-mm-dd hh-mm-dd' }
-       rows.length is expected to be 0 or 1 */
+    /*
+     * rows[0] means a set of { 'entered_at': 'yyyy-mm-dd hh-mm-dd' }
+     * rows.length is expected to be 0 or 1
+     */
     if ((rows as any).length) {
       // console.log(`entered_at: ${rows[0].entered_at}`)
       await updateLog(student_id, (rows as any)[0].entered_at)
       return 'exit'
     } else {
-      /* Wait for Promise<boolean> is resolved by using `await`! */
-      // const result = await isMember(student_id)
-      // if (result) {
-        insertLog(student_id)
-        return 'enter'
-      // } else {
-      //   return 'Not a member'
-      // }
+      if (allow_guest !== 'on') {
+        /* Wait for Promise<boolean> is resolved by using `await`! */
+        const result = await isMember(student_id)
+        if (!result) return 'Not a member'
+      }
+      insertLog(student_id)
+      return 'enter'
     }
   } catch (e) {
     console.error(e)

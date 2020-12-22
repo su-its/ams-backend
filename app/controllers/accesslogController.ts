@@ -27,10 +27,10 @@ const cardTouched = async (req: Request, res: Response) => {
     }).end()
     return
   }
-
-  const student_id = parseInt(req.query.student_id as string)
+  const student_id = parseInt(req.query.student_id as string, 10)
+  const ag = process.env.ALLOW_GUEST ? process.env.ALLOW_GUEST : 'on'
   try {
-    const answer = await judgeActionAndSetRecord(student_id) // 'exit' | 'enter' | 'Not a member' | 'syserror'
+    const answer = await judgeActionAndSetRecord(student_id, ag) // 'exit' | 'enter' | 'Not a member' | 'syserror'
     res.send({action: answer}).end()
     return
   } catch (e) {
