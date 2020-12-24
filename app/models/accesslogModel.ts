@@ -26,7 +26,7 @@ const judgeActionAndSetRecord = async (student_id: number, allow_guest: string) 
      */
     if ((rows as any).length) {
       // console.log(`entered_at: ${rows[0].entered_at}`)
-      await updateLog(student_id, (rows as any)[0].entered_at)
+      await updateRecord(student_id, (rows as any)[0].entered_at)
       return 'exit'
     } else {
       if (allow_guest !== 'on') {
@@ -34,7 +34,7 @@ const judgeActionAndSetRecord = async (student_id: number, allow_guest: string) 
         const result = await isMember(student_id)
         if (!result) return 'Not a member'
       }
-      insertLog(student_id)
+      await insertRecord(student_id)
       return 'enter'
     }
   } catch (e) {
@@ -43,7 +43,7 @@ const judgeActionAndSetRecord = async (student_id: number, allow_guest: string) 
   }
 }
 
-const insertLog = async (student_id: number) => {
+const insertRecord = async (student_id: number) => {
   try {
     await mysql.execute(
       'INSERT INTO access_log (student_id) VALUES (?)',
@@ -53,7 +53,7 @@ const insertLog = async (student_id: number) => {
   }
 }
 
-const updateLog = async (student_id: number, entered_at: string) => {
+const updateRecord = async (student_id: number, entered_at: string) => {
   try {
     await mysql.execute(
       'UPDATE access_log SET exited_at=NOW() ' +
