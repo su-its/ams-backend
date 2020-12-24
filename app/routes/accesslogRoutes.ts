@@ -4,8 +4,8 @@ import { cardTouched, findAll } from '../controllers/accesslogController'
 const router = Router()
 
 // Retrieve AccessLog
-router.get('/accesslog', findAll)
+router.get('/access_log', findAll)
 
-router.get('/card_touch', cardTouched)
+router.post('/access_log', cardTouched)
 
 export default router
