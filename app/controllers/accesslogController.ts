@@ -21,13 +21,19 @@ const findAll = async (req: Request, res: Response) => {
 }
 
 const cardTouched = async (req: Request, res: Response) => {
-  if (!req.query.hasOwnProperty('student_id') || (req.query.student_id as string).length === 0) {
+  const student_id = req.body.student_id
+  if (student_id === undefined) {
     res.status(400).send({
-      message: 'student_id was empty.'
-    }).end()
+      message: 'student_id was empty'
+    })
+    return
+  } else if (typeof student_id !== 'number') {
+    res.status(400).send({
+      message: 'student_id was not a number'
+    })
     return
   }
-  const student_id = parseInt(req.query.student_id as string, 10)
+
   const ag = process.env.ALLOW_GUEST ? process.env.ALLOW_GUEST : 'on'
   try {
     const answer = await judgeActionAndSetRecord(student_id, ag) // 'exit' | 'enter' | 'Not a member' | 'syserror'
