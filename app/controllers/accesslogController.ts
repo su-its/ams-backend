@@ -21,13 +21,13 @@ const findAll = async (req: Request, res: Response) => {
 }
 
 const cardTouched = async (req: Request, res: Response) => {
-  const student_id = req.body.student_id
-  if (student_id === undefined) {
+  const studentId = req.body.student_id
+  if (studentId === undefined) {
     res.status(400).send({
       message: 'student_id was empty'
     })
     return
-  } else if (typeof student_id !== 'number') {
+  } else if (typeof studentId !== 'number') {
     res.status(400).send({
       message: 'student_id was not a number'
     })
@@ -36,7 +36,7 @@ const cardTouched = async (req: Request, res: Response) => {
 
   const ag = process.env.ALLOW_GUEST ? process.env.ALLOW_GUEST : 'on'
   try {
-    const answer = await judgeActionAndSetRecord(student_id, ag) // 'exit' | 'enter' | 'Not a member' | 'syserror'
+    const answer = await judgeActionAndSetRecord(studentId, ag) // 'exit' | 'enter' | 'Not a member' | 'syserror'
     res.send({action: answer}).end()
     return
   } catch (e) {
