@@ -1,5 +1,5 @@
-import express from 'express' // avoiding TS1259
-import * as bodyParser from 'body-parser'
+import express from 'express'
+// import express = require('express') // avoiding TS1259
 import accesslogRoutes from './app/routes/accesslogRoutes'
 import memberRoutes from './app/routes/membersRoutes'
 import { setupBeebotte } from './app/slack/in-beebotte'
@@ -8,13 +8,12 @@ import { config } from 'dotenv'
 config()
 
 const app: express.Express = express()
-// app.set('query parser', 'extended') // default value: 'extended'
 
 // parse requests of content-type - application/json
-app.use(bodyParser.json())
+app.use(express.json())
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }))
 
 // simple route
 app.get('/', (req, res) => {
@@ -25,7 +24,7 @@ app.get('/', (req, res) => {
 app.use('/v1', accesslogRoutes, memberRoutes)
 
 // set port, listen for requests
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`)
 })

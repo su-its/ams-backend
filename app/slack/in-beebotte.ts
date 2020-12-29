@@ -29,13 +29,13 @@ export function setupBeebotte() {
    * ref1. https://github.com/beebotte/bbt_node/blob/master/lib/stream.js
    * ref2. https://github.com/beebotte/bbt_node/blob/master/lib/mqtt.js
   */
-  const mqtt_auth = {
+  const mqttAuth = {
     username: 'token:' + process.env.BEEBOTTE_CHANNEL_TOKEN || '',
     password: '',
     ca: [readFileSync('./mqtt.beebotte.com.pem')] // I'm not sure if 'ca' is needed or not.
   }
-  const mqtt_url = 'mqtts://mqtt.beebotte.com:8883'
-  const beebotteClient = mqtt.connect(mqtt_url, mqtt_auth)
+  const mqttUrl = 'mqtts://mqtt.beebotte.com:8883'
+  const beebotteClient = mqtt.connect(mqttUrl, mqttAuth)
 
   const channel = process.env.BEEBOTTE_CHANNEL || 'test'
   const res = process.env.BEEBOTTE_RESOURCE || 'res'
