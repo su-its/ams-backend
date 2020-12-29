@@ -41,7 +41,7 @@ export function setupBeebotte() {
   const res = process.env.BEEBOTTE_RESOURCE || 'res'
 
   beebotteClient.on('connect', () => {
-    beebotteClient.subscribe(channel + '/' + res, (_err, granted) => {
+    beebotteClient.subscribe(channel + '/' + res, {qos: 1}, (_err, granted) => {
       const t = granted[0].topic.split('/')
       if (t.length === 2) {
         console.log('Subscribed to')
