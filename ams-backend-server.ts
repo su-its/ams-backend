@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 })
 
 // set middlewares
-app.use('/api', accesslogRoutes, memberRoutes)
+app.use('/v1', accesslogRoutes, memberRoutes)
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3000
