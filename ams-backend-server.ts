@@ -29,5 +29,9 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`)
 })
 
-// subscribe the beebotte channel, and wait for message.
-setupBeebotte()
+const boushitsu_bot = process.env.BOUSHITSU ? process.env.BOUSHITSU : 'off' // default off
+// .env => BOUSHITSU=on
+if (boushitsu_bot == 'on') {
+  // subscribe the beebotte channel, and wait for message.
+  setupBeebotte()
+}
