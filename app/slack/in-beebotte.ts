@@ -41,7 +41,8 @@ export function setupBeebotte() {
   const res = process.env.BEEBOTTE_RESOURCE || 'res'
 
   beebotteClient.on('connect', () => {
-    beebotteClient.subscribe(channel + '/' + res, {qos: 1}, (_err, granted) => {
+    // Set QoS 0 or 1 (2 unavailable) if too many messages are posted.
+    beebotteClient.subscribe(channel + '/' + res, {qos: 0}, (_err, granted) => {
       const t = granted[0].topic.split('/')
       if (t.length === 2) {
         console.log('Subscribed to')
@@ -51,7 +52,8 @@ export function setupBeebotte() {
     })
     .on('message', async (_topic, message, _packet) => {
       const receivedMessage = JSON.parse(message.toString())
-      console.log(receivedMessage)
+      /* debug */
+      // console.log(receivedMessage)
       if (receivedMessage.data.channel === undefined) return // cancel due to missing of channel
 
       /* Set up responce message */

@@ -33,7 +33,6 @@ export class SlackPostMessageFactory {
     const payload = {
       channel: this.channel,
       text: 'from boushitsu',
-      icon_url: 'https://avatars.slack-edge.com/2017-04-21/172510263652_25951d12c20f18b77184_88.png',
       blocks: [
         {
           type: 'section',
@@ -64,10 +63,11 @@ export class SlackPostMessageFactory {
       }
     })
 
-    req.on('error', err => console.error(err))
-    req.on('close', () => console.log('CLOSE'))
-    req.on('finish', () => console.log('FINISH'))
-    req.on('response', res => console.log('STATUS', res.statusCode))
+    /* debug */
+    // req.on('error', err => console.error(err))
+    // req.on('close', () => console.log('CLOSE'))
+    // req.on('finish', () => console.log('FINISH'))
+    // req.on('response', res => console.log('STATUS', res.statusCode))
     req.write(JSON.stringify(payload))
     req.end()
   }
