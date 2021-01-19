@@ -1,9 +1,10 @@
 import https from 'https'
 
-export class SlackPostMessageFactory {
+export class SlackPostEphemeral {
   private channel = ''
   private footer = ''
   private text = ''
+  private user = ''
   private token: string
 
   constructor(token: string | undefined) {
@@ -29,10 +30,16 @@ export class SlackPostMessageFactory {
     this.text = rest.join(' ')
   }
 
-  postMessage() {
+  setUser(user: string) {
+    this.user = user
+  }
+
+  postEphemeral() {
     const payload = {
       channel: this.channel,
       text: 'from boushitsu',
+      attachments: [],
+      user: this.user,
       blocks: [
         {
           type: 'section',

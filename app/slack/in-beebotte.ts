@@ -1,6 +1,6 @@
 import mqtt from 'mqtt'
 import { readFileSync } from 'fs'
-import { SlackPostMessageFactory } from './out-slack'
+import { SlackPostEphemeral } from './out-slack'
 import { countNumOfPeople } from '../models/accesslogModel'
 import { config } from 'dotenv'
 
@@ -57,14 +57,15 @@ export function setupBeebotte() {
       if (receivedMessage.data.channel === undefined) return // cancel due to missing of channel
 
       /* Set up responce message */
-      const reaction = await setupResponce(new SlackPostMessageFactory(process.env.SLACK_BEARER_TOKEN))
+      const reaction = await setupResponce(new SlackPostEphemeral(process.env.SLACK_BEARER_TOKEN))
       /**
        * Existance of 'channel' property depends on
        * the structure of 'receivedMessage'.(defined by boushitsu BOT)
        * So this is bad pattern...
        */
+      reaction.setUser(receivedMessage.data.user)
       reaction.setChannel(receivedMessage.data.channel)
-      reaction.postMessage()
+      reaction.postEphemeral()
     })
   })
 }
@@ -75,7 +76,7 @@ const fmt = (now: Date) => {
   return h.substr(h.length - 2, 2) + ':' + m.substr(m.length - 2, 2)
 }
 
-const setupResponce = async (reaction: SlackPostMessageFactory) => {
+const setupResponce = async (reaction: SlackPostEphemeral) => {
   const num = await countNumOfPeople()
   const hhmm = fmt(new Date())
   if (num < 0) {
