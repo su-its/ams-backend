@@ -62,7 +62,7 @@ export class SlackPostEphemeral {
 
     const req = https.request({
       hostname: 'slack.com',
-      path: '/api/chat.postMessage',
+      path: '/api/chat.postEphemeral',
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
