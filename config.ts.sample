@@ -39,6 +39,7 @@ interface AmsOptions {
   beebotte_resource?: string
 }
 
+// settings for this backend server and boushitsu Slackbot
 const amsOptions: AmsOptions = {
   port: 3000,
   accept_guest: true,
@@ -49,13 +50,14 @@ const amsOptions: AmsOptions = {
   beebotte_resource: ''
 }
 
+// settings for connection to MySQL database
 const dbOptions: ConnectionOptions = {
   host: 'localhost',
   port: 3306,
   user: '',
   password: '',
   database: '',
-  waitForConnections: true
+  waitForConnections: true // set true
 }
 
 export { amsOptions, dbOptions }

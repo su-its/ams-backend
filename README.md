@@ -3,7 +3,7 @@ The back-end server of our [Access management system](https://github.com/su-its/
 
 ## Setup
 
-:memo: Make sure you are not logged in as the root user. Check `whoami`.
+:memo: Before you start, make sure you are not logged in as the root user. Check `whoami`.
 
 ```bash
 cd ~
@@ -36,14 +36,14 @@ node ams-backend-server.js
 
 ### Optional (Slackbot)
 
-To use Slackbot, "CA certificate" is required to establish TLS connection with *MQTT broker*(Beebotte).
+To use Slackbot, download *CA certificate*. It is required to establish TLS connection with *MQTT broker(Beebotte)*. About MQTT, see [here](https://beebotte.com/docs/mqtt).
 
 ```bash
 curl "https://beebotte.com/certs/mqtt.beebotte.com.pem" -o ./mqtt.beebotte.com.pem
 ```
 
 - You have to sign up for Beebotte and create channel to subscribe. More detail, see [Beebotte documentation](https://beebotte.com/overview).
-- You also have to have the right to install bot to your Slack workspace. There is a great guide for designing Slack app [here](https://api.slack.com/start/overview#apps).
+- You also have to have the right to install bot to your Slack workspace. There is a great guide for designing Slack app, [here](https://api.slack.com/start/overview#apps).
 
 ---
 
@@ -51,7 +51,7 @@ curl "https://beebotte.com/certs/mqtt.beebotte.com.pem" -o ./mqtt.beebotte.com.p
 
 More detail, see `config.ts`.
 
-:loudspeaker: If you don't use the slackbot, *comment out* all `slack_` and `beebotte_` properties of `amsOptions` (and set `enable_boushitsu` false).
+:loudspeaker: If you don't use the Slackbot, set `enable_boushitsu` false, and *comment out* all of properties `slack_` and `beebotte_` of `amsOptions`.
 
 - **Database**
   - See [here](https://github.com/mysqljs/mysql#connection-options)
