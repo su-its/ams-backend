@@ -24,7 +24,7 @@ app.use('/v1', accesslogRoutes, memberRoutes)
 // set port, listen for requests
 const PORT = amsOptions.port
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`)
+  console.log(`[*] Server is running on port ${PORT}.`)
 })
 
 const boushitsu_bot = amsOptions.enable_boushitsu ?? false // default off
@@ -36,6 +36,6 @@ if (boushitsu_bot) {
     // subscribe the beebotte channel, and wait for message.
     setupBeebotte()
   } else {
-    console.error('Boushitsu Slackbot falied to start due to lack of properties.')
+    console.error('[!] Boushitsu Slackbot falied to start due to lack of properties.')
   }
 }
