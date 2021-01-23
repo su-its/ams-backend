@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { getAll, judgeActionAndSetRecord } from '../models/accesslogModel'
+import { amsOptions } from '../../config'
 
 // Retrieve all accesslogs from the database.
 const findAll = async (req: Request, res: Response) => {
@@ -34,9 +35,8 @@ const cardTouched = async (req: Request, res: Response) => {
     return
   }
 
-  const ag = process.env.ALLOW_GUEST ? process.env.ALLOW_GUEST : 'on'
   try {
-    const answer = await judgeActionAndSetRecord(studentId, ag) // 'exit' | 'enter' | 'Not a member' | 'syserror'
+    const answer = await judgeActionAndSetRecord(studentId, amsOptions.accept_guest) // 'exit' | 'enter' | 'Not a member' | 'syserror'
     res.send({action: answer}).end()
     return
   } catch (e) {
