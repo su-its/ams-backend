@@ -1,16 +1,6 @@
-// user environment variable
-import { config } from 'dotenv'
+import { dbOptions } from '../../config'
 import { createConnection } from 'mysql2'
 
-config()
-
-const connection = createConnection({
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '3306', 10),
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB,
-  waitForConnections: true
-}).promise()
+const connection = createConnection(dbOptions).promise()
 
 export default connection
