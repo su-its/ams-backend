@@ -14,7 +14,7 @@ cd ams-backend-nodejs
 ### Basic
 
 ```bash
-mv src/config.ts.sample src/config.ts
+cp src/config.ts.sample src/config.ts
 ```
 
 **Then you have to edit `config.ts`** See [here](#Configuration-Guide)
