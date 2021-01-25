@@ -2,7 +2,7 @@ import mqtt from 'mqtt'
 import { readFileSync } from 'fs'
 import { SlackPostEphemeral } from './out-slack'
 import { countNumOfPeople } from '../models/accesslogModel'
-import { config } from 'dotenv'
+import { amsOptions } from '../../config'
 
 enum BoushitsuStatus {
   Closed,
@@ -24,21 +24,20 @@ namespace BoushitsuStatus {
 }
 
 export function setupBeebotte() {
-  config()
   /**
    * ref1. https://github.com/beebotte/bbt_node/blob/master/lib/stream.js
    * ref2. https://github.com/beebotte/bbt_node/blob/master/lib/mqtt.js
   */
   const mqttAuth = {
-    username: 'token:' + process.env.BEEBOTTE_CHANNEL_TOKEN || '',
+    username: 'token:' + amsOptions.beebotte_channel_token,
     password: '',
     ca: [readFileSync('./mqtt.beebotte.com.pem')] // I'm not sure if 'ca' is needed or not.
   }
   const mqttUrl = 'mqtts://mqtt.beebotte.com:8883'
   const beebotteClient = mqtt.connect(mqttUrl, mqttAuth)
 
-  const channel = process.env.BEEBOTTE_CHANNEL || 'test'
-  const res = process.env.BEEBOTTE_RESOURCE || 'res'
+  const channel = amsOptions.beebotte_channel
+  const res = amsOptions.beebotte_resource
 
   beebotteClient.on('connect', () => {
     // Set QoS 0 or 1 (2 unavailable) if too many messages are posted.
@@ -57,7 +56,7 @@ export function setupBeebotte() {
       if (receivedMessage.data.channel === undefined) return // cancel due to missing of channel
 
       /* Set up responce message */
-      const reaction = await setupResponce(new SlackPostEphemeral(process.env.SLACK_BEARER_TOKEN))
+      const reaction = await setupResponce(new SlackPostEphemeral(amsOptions.slack_bearer_token))
       /**
        * Existance of 'channel' property depends on
        * the structure of 'receivedMessage'.(defined by boushitsu BOT)

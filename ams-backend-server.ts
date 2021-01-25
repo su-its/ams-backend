@@ -3,9 +3,7 @@ import express from 'express'
 import accesslogRoutes from './app/routes/accesslogRoutes'
 import memberRoutes from './app/routes/membersRoutes'
 import { setupBeebotte } from './app/slack/in-beebotte'
-import { config } from 'dotenv'
-
-config()
+import { amsOptions } from './config'
 
 const app: express.Express = express()
 
@@ -24,14 +22,20 @@ app.get('/', (req, res) => {
 app.use('/v1', accesslogRoutes, memberRoutes)
 
 // set port, listen for requests
-const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000
+const PORT = amsOptions.port
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`)
+  console.log(`[*] Server is running on port ${PORT}.`)
 })
 
-const boushitsu_bot = process.env.BOUSHITSU ? process.env.BOUSHITSU : 'off' // default off
-// .env => BOUSHITSU=on
-if (boushitsu_bot == 'on') {
-  // subscribe the beebotte channel, and wait for message.
-  setupBeebotte()
+const boushitsu_bot = amsOptions.enable_boushitsu ?? false // default off
+if (boushitsu_bot) {
+  if (amsOptions.beebotte_channel &&
+    amsOptions.beebotte_channel_token &&
+    amsOptions.beebotte_resource &&
+    amsOptions.slack_bearer_token) {
+    // subscribe the beebotte channel, and wait for message.
+    setupBeebotte()
+  } else {
+    console.error('[!] Boushitsu Slackbot falied to start due to lack of properties.')
+  }
 }

@@ -13,7 +13,7 @@ const getAll = async () => {
   }
 }
 
-const judgeActionAndSetRecord = async (studentId: number, allowGuest: string) => {
+const judgeActionAndSetRecord = async (studentId: number, acceptGuest: boolean) => {
   try {
     const [rows, _] = await mysql.query(
       'SELECT entered_at FROM access_log ' +
@@ -29,7 +29,7 @@ const judgeActionAndSetRecord = async (studentId: number, allowGuest: string) =>
       await updateRecord(studentId, (rows as any)[0].entered_at)
       return 'exit'
     } else {
-      if (allowGuest !== 'on') {
+      if (acceptGuest) {
         /* Wait for Promise<boolean> is resolved by using `await`! */
         const result = await isMember(studentId)
         if (!result) return 'Not a member'
