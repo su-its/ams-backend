@@ -53,18 +53,13 @@ export function setupBeebotte() {
       const receivedMessage = JSON.parse(message.toString())
       /* debug */
       // console.log(receivedMessage)
-      if (receivedMessage.data.channel === undefined) return // cancel due to missing of channel
 
       /* Set up responce message */
-      const reaction = await setupResponce(new SlackPostEphemeral(amsOptions.slack_bearer_token))
+      const reaction = await setupResponce(new SlackPostEphemeral())
       /**
-       * Existance of 'channel' property depends on
-       * the structure of 'receivedMessage'.(defined by boushitsu BOT)
-       * So this is bad pattern...
+       * ref. https://api.slack.com/interactivity/slash-commands
        */
-      reaction.setUser(receivedMessage.data.user)
-      reaction.setChannel(receivedMessage.data.channel)
-      reaction.postEphemeral()
+      reaction.postEphemeral(receivedMessage.data.response_url)
     })
   })
 }

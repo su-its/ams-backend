@@ -1,19 +1,11 @@
 import https from 'https'
 
 export class SlackPostEphemeral {
-  private channel = ''
   private footer = ''
   private text = ''
-  private user = ''
-  private token: string
 
-  constructor(token: string | undefined) {
-    if (typeof token === 'undefined') throw new Error('Slack bearer token is undefined!')
-    this.token = token as string
-  }
-
-  setChannel(channelSendTo: string) {
-    this.channel = channelSendTo
+  constructor() {
+    /* do nothing */
   }
 
   setFooter(s: string, ...rest: string[]) {
@@ -30,16 +22,10 @@ export class SlackPostEphemeral {
     this.text = rest.join(' ')
   }
 
-  setUser(user: string) {
-    this.user = user
-  }
-
-  postEphemeral() {
+  postEphemeral(url: string) {
     const payload = {
-      channel: this.channel,
       text: 'from boushitsu',
-      attachments: [],
-      user: this.user,
+      resonse_type: 'ephemeral',
       blocks: [
         {
           type: 'section',
@@ -60,13 +46,10 @@ export class SlackPostEphemeral {
       ]
     }
 
-    const req = https.request({
-      hostname: 'slack.com',
-      path: '/api/chat.postEphemeral',
+    const req = https.request(url, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
-        'Authorization': 'Bearer ' + this.token
       }
     })
 
@@ -74,7 +57,7 @@ export class SlackPostEphemeral {
     // req.on('error', err => console.error(err))
     // req.on('close', () => console.log('CLOSE'))
     // req.on('finish', () => console.log('FINISH'))
-    // req.on('response', res => console.log('STATUS', res.statusCode))
+    req.on('response', res => console.log('STATUS', res))
     req.write(JSON.stringify(payload))
     req.end()
   }
