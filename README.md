@@ -42,7 +42,7 @@ To use Slackbot, download *CA certificate*. It is required to establish TLS conn
 curl "https://beebotte.com/certs/mqtt.beebotte.com.pem" -o ./mqtt.beebotte.com.pem
 ```
 
-- You have to sign up for Beebotte and create channel to subscribe. More detail, see [Beebotte documentation](https://beebotte.com/overview).
+- You have to sign up for Beebotte and create a channel to subscribe. More detail, see [Beebotte documentation](https://beebotte.com/overview).
 - You also have to have the right to install bot to your Slack workspace. There is a great guide for designing Slack app, [here](https://api.slack.com/start/overview#apps).
 
 ---
@@ -56,11 +56,11 @@ More detail, see `config.ts`.
 - **Database**
   - See [here](https://github.com/mysqljs/mysql#connection-options)
 - **Slackbot**
-  - slack_bearer_token
-    - `xoxb-` prefixed token
+  - ~~slack_bearer_token~~ As long as using slash command, it is not required.
+    - ~~`xoxb-` prefixed token~~
   - beebotte_channel_token
     - `token_` prefixed token
 
 ### Required Bot Token Scopes
-- `chat:write` API document [here](https://api.slack.com/scopes/chat:write)
+- ~~`chat:write` API document [here](https://api.slack.com/scopes/chat:write)~~ As long as using slash command, it is not required.
 - `commands` API document [here](https://api.slack.com/scopes/commands), Tutorial [here](https://api.slack.com/interactivity/slash-commands)
