@@ -19,6 +19,7 @@ interface AmsOptions {
   /**
    * If enable_boushitsu is true, set 'xoxb-' prefixed token.
    * It is required to post (ephemeral) message to Slack channel.
+   * But, as long as use response_url, it is not used!
    */
   slack_bearer_token?: string,
 
