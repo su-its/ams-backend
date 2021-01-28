@@ -31,8 +31,7 @@ const boushitsu_bot = amsOptions.enable_boushitsu ?? false // default off
 if (boushitsu_bot) {
   if (amsOptions.beebotte_channel &&
     amsOptions.beebotte_channel_token &&
-    amsOptions.beebotte_resource &&
-    amsOptions.slack_bearer_token) {
+    amsOptions.beebotte_resource) {
     // subscribe the beebotte channel, and wait for message.
     setupBeebotte()
   } else {
