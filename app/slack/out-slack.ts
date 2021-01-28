@@ -1,23 +1,24 @@
 import https from 'https'
 
 export class SlackPostEphemeral {
-  private footer = ''
-  private text = ''
+  private footer: string
+  private text: string
 
   constructor() {
-    /* do nothing */
+    this.footer = '_text_'
+    this.text = '_footer_'
   }
 
   setFooter(s: string, ...rest: string[]) {
     /* 'text' must be more than 0 characters */
-    if (s.length === 0) s = '_test_'
+    if (s.length === 0) return
     rest.unshift(s)
     this.footer = rest.join(' ')
   }
 
   setText(s: string, ...rest: string[]) {
     /* 'text' must be more than 0 characters */
-    if (s.length === 0) s = '_test_'
+    if (s.length === 0) return
     rest.unshift(s)
     this.text = rest.join(' ')
   }
