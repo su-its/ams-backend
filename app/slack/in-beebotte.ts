@@ -54,8 +54,8 @@ export function setupBeebotte() {
       /* debug */
       // console.log(receivedMessage)
 
-      /* Set up responce message */
-      const reaction = await setupResponce(new SlackPostEphemeral())
+      /* Set up response message */
+      const reaction = await setupResponse(new SlackPostEphemeral())
       /**
        * ref. https://api.slack.com/interactivity/slash-commands
        */
@@ -70,7 +70,7 @@ const fmt = (now: Date) => {
   return h.substr(h.length - 2, 2) + ':' + m.substr(m.length - 2, 2)
 }
 
-const setupResponce = async (reaction: SlackPostEphemeral) => {
+const setupResponse = async (reaction: SlackPostEphemeral) => {
   const num = await countNumOfPeople()
   const hhmm = fmt(new Date())
   if (num < 0) {
