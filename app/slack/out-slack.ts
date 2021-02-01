@@ -58,7 +58,7 @@ export class SlackPostEphemeral {
     // req.on('error', err => console.error(err))
     // req.on('close', () => console.log('CLOSE'))
     // req.on('finish', () => console.log('FINISH'))
-    req.on('response', res => console.log('STATUS', res))
+    // req.on('response', res => console.log('STATUS', res))
     req.write(JSON.stringify(payload))
     req.end()
   }

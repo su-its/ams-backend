@@ -41,7 +41,11 @@ export function setupBeebotte() {
 
   beebotteClient.on('connect', () => {
     // Set QoS 0 or 1 (2 unavailable) if too many messages are posted.
-    beebotteClient.subscribe(channel + '/' + res, {qos: 1}, (_err, granted) => {
+    beebotteClient.subscribe(channel + '/' + res, {qos: 1}, (err, granted) => {
+      if (err) {
+        console.error('[!] Error', err)
+	return
+      }
       const t = granted[0].topic.split('/')
       if (t.length === 2) {
         console.log('Subscribed to')
