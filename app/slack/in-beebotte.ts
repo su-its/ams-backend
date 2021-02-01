@@ -76,19 +76,20 @@ const fmt = (now: Date) => {
 
 const setupResponse = async (reaction: SlackPostEphemeral) => {
   const num = await countNumOfPeople()
-  const hhmm = fmt(new Date())
+  //const hhmm = fmt(new Date())
+  const hhmm = ''
   if (num < 0) {
-    reaction.setText(':bow:_< Sorry_')
-    reaction.setFooter(BoushitsuStatus.toString(BoushitsuStatus.Error), hhmm)
+    reaction.setText(BoushitsuStatus.toString(BoushitsuStatus.Error), hhmm)
+    reaction.setFooter(':bow:_< Sorry_')
   } else {
     if (num === 0) {
-      reaction.setText('No one is currently in the room.')
-      reaction.setFooter(BoushitsuStatus.toString(BoushitsuStatus.Closed), hhmm)
+      reaction.setText(BoushitsuStatus.toString(BoushitsuStatus.Closed), hhmm)
+      reaction.setFooter('No one is currently in the room.')
     } else {
       let text = 'Currently in the room '
       for (let i = 0; i < num; i++) { text += ':bust_in_silhouette:' }
-      reaction.setText(text)
-      reaction.setFooter(BoushitsuStatus.toString(BoushitsuStatus.Open), hhmm)
+      reaction.setText(BoushitsuStatus.toString(BoushitsuStatus.Open), hhmm)
+      reaction.setFooter(text)
     }
   }
   return reaction
