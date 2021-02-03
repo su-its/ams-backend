@@ -44,7 +44,11 @@ export function setupBeebotte() {
     beebotteClient.subscribe(channel + '/' + res, {qos: 1}, (err, granted) => {
       if (err) {
         console.error('[!] Error', err)
-	return
+	process.exit(-1) // Halt!!
+      }
+      if (!granted) {
+        console.error('[!] "granted" is undefined. Faled to subscribe.')
+        process.exit(-1)
       }
       const t = granted[0].topic.split('/')
       if (t.length === 2) {
