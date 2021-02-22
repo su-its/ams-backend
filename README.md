@@ -64,3 +64,31 @@ More detail, see `config.ts`.
 ### Required Bot Token Scopes
 - ~~`chat:write` API document [here](https://api.slack.com/scopes/chat:write)~~ As long as using slash command, it is not required.
 - `commands` API document [here](https://api.slack.com/scopes/commands), Tutorial [here](https://api.slack.com/interactivity/slash-commands)
+
+---
+
+## API Reference
+**Models**
+- *Log*
+```
+{
+  "student_id": int,
+  "entered_at": string,  # string form of DATETIME
+  "exited_at": string    # string fomr of DATETIME
+}
+```
+- *Err*
+```
+{
+  "message": string  # reason of an error
+}
+```
+
+### /access_log
+**GET** : returns an array of *Log*, or *Err*
+**POST** : returns a object contains `action`
+```
+{
+  "action": string  # "exit" | "Not a member" | "enter" | "syserror"
+}
+```
