@@ -1,29 +1,10 @@
 import mqtt from 'mqtt'
 import { readFileSync } from 'fs'
 import { SlackPostEphemeral } from './out-slack'
-import { countNumOfPeople } from '../models/accesslogModel'
+import { readAccessLogs } from '../models/accessLogsModel'
 import { amsOptions } from '../../config'
 
-enum BoushitsuStatus {
-  Closed,
-  Error,
-  Open
-}
-
-namespace BoushitsuStatus {
-  export function toString(status: BoushitsuStatus) {
-    switch (status) {
-      case BoushitsuStatus.Closed:
-        return 'boushitsu status: *closed* :zzz:'
-      case BoushitsuStatus.Error:
-        return 'boushitsu status: *error* (Sorry, something went wrong.) :x:'
-      case BoushitsuStatus.Open:
-        return 'boushitsu status: *open* :heavy_check_mark:'
-    }
-  }
-}
-
-export function setupBeebotte() {
+export function setupBeebotte () {
   /**
    * ref1. https://github.com/beebotte/bbt_node/blob/master/lib/stream.js
    * ref2. https://github.com/beebotte/bbt_node/blob/master/lib/mqtt.js
@@ -41,10 +22,10 @@ export function setupBeebotte() {
 
   beebotteClient.on('connect', () => {
     // Set QoS 0 or 1 (2 unavailable) if too many messages are posted.
-    beebotteClient.subscribe(channel + '/' + res, {qos: 1}, (err, granted) => {
+    beebotteClient.subscribe(channel + '/' + res, { qos: 1 }, (err, granted) => {
       if (err) {
         console.error('[!] Error', err)
-	process.exit(-1) // Halt!!
+        process.exit(-1) // Halt!!
       }
       if (!granted) {
         console.error('[!] "granted" is undefined. Faled to subscribe.')
@@ -57,7 +38,7 @@ export function setupBeebotte() {
         console.log('- resource:', t[1])
       }
     })
-    .on('message', async (_topic, message, _packet) => {
+    beebotteClient.on('message', async (_topic, message, _packet) => {
       const receivedMessage = JSON.parse(message.toString())
       /* debug */
       // console.log(receivedMessage)
@@ -72,27 +53,20 @@ export function setupBeebotte() {
   })
 }
 
-const fmt = (now: Date) => {
-  const h = '00' + now.getHours()
-  const m = '00' + now.getMinutes()
-  return h.substr(h.length - 2, 2) + ':' + m.substr(m.length - 2, 2)
-}
-
 const setupResponse = async (reaction: SlackPostEphemeral) => {
-  const num = await countNumOfPeople()
-  //const hhmm = fmt(new Date())
-  const hhmm = ''
-  if (num < 0) {
-    reaction.setText(BoushitsuStatus.toString(BoushitsuStatus.Error), hhmm)
+  const [logs, error] = await readAccessLogs()
+  if (error || !Array.isArray(logs)) {
+    reaction.setText('boushitsu status: *error* (Sorry, something went wrong.) :x:')
     reaction.setFooter(':bow:_< Sorry_')
   } else {
+    const num = logs.length
     if (num === 0) {
-      reaction.setText(BoushitsuStatus.toString(BoushitsuStatus.Closed), hhmm)
+      reaction.setText('boushitsu status: *closed* :zzz:')
       reaction.setFooter('No one is currently in the room.')
     } else {
       let text = 'Currently in the room '
       for (let i = 0; i < num; i++) { text += ':bust_in_silhouette:' }
-      reaction.setText(BoushitsuStatus.toString(BoushitsuStatus.Open), hhmm)
+      reaction.setText('boushitsu status: *open* :heavy_check_mark:')
       reaction.setFooter(text)
     }
   }
