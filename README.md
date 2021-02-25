@@ -1,7 +1,15 @@
 # ams-backend-nodejs
-The back-end server of our [Access management system](https://github.com/su-its/Access-management-system).
 
-## Setup
+~~The back-end server of our [Access management system](https://github.com/su-its/Access-management-system).~~
+The back-end server of our [reader-bridge](https://github.com/su-its/rdr-bridge)
+
+**version: 2.0.0**
+- No longer backward compatible
+  - Changed routing path
+  - Hidden some APIs served in previous version to access the DB
+- Installed eslint and formatted according to JavaScript Standard Style
+
+## Setup:gear:
 
 :memo: Before you start, make sure you are not logged in as the root user. Check `whoami`.
 
@@ -13,16 +21,18 @@ cd ams-backend-nodejs
 
 ### Basic
 
+For developpers
+
 ```bash
 cp src/config.ts.sample src/config.ts
 ```
 
 **Then you have to edit `config.ts`** See [here](#Configuration-Guide)
 
-Start
+Start development (auto-reload when a file changed)
 
 ```bash
-npm run start
+npm run dev
 ```
 
 :loudspeaker: Due to path resolving, use npm script shown above. The command below will fail.
@@ -36,6 +46,8 @@ node ams-backend-server.js
 
 ### Optional (Slackbot)
 
+>:bulb: This project will only provide APIs to access the database, and features related to slackbot will be discontinued.
+
 To use Slackbot, download *CA certificate*. It is required to establish TLS connection with *MQTT broker(Beebotte)*. About MQTT, see [here](https://beebotte.com/docs/mqtt).
 
 ```bash
@@ -44,6 +56,25 @@ curl "https://beebotte.com/certs/mqtt.beebotte.com.pem" -o ./mqtt.beebotte.com.p
 
 - You have to sign up for Beebotte and create a channel to subscribe. More detail, see [Beebotte documentation](https://beebotte.com/overview).
 - You also have to have the right to install bot to your Slack workspace. There is a great guide for designing Slack app, [here](https://api.slack.com/start/overview#apps).
+
+## Deployment:rocket:
+
+Make sure that [pm2](https://github.com/Unitech/pm2) has been installed to the system, or install via:
+
+```bash
+npm install pm2 -g
+```
+
+Then, start pm2 process and daemonize it.
+
+```
+cd /path/to/projectdir/
+pm2 start ecosystem.config.js
+pm2 startup  # You should get output like '[PM2] To setup the Startup Script...'. Follow it.
+pm2 save
+```
+
+More: [pm2 official website](https://pm2.keymetrics.io/)
 
 ---
 
@@ -62,33 +93,56 @@ More detail, see `config.ts`.
     - `token_` prefixed token
 
 ### Required Bot Token Scopes
+
 - ~~`chat:write` API document [here](https://api.slack.com/scopes/chat:write)~~ As long as using slash command, it is not required.
 - `commands` API document [here](https://api.slack.com/scopes/commands), Tutorial [here](https://api.slack.com/interactivity/slash-commands)
 
 ---
 
 ## API Reference
+
+Each path prefixed with `/v1/` like `/v1/access_logs`.
+
 **Models**
 - *Log*
-```
+
+```json
 {
-  "student_id": int,
-  "entered_at": string,  # string form of DATETIME
+  "user_id": int,
+  "entered_at": datetime,  # string form of DATETIME
   "exited_at": string    # string fomr of DATETIME
 }
 ```
-- *Err*
+
+- *User*
+
+```json
+{
+  "user_id": int,
+  "entered_at": string  # string form of DATETIME
+}
 ```
+
+- *Err*
+
+```json
 {
   "message": string  # reason of an error
 }
 ```
 
-### /access_log
+### /access_logs
+
 **GET** : returns an array of *Log*, or *Err*
-**POST** : returns a object contains `action`
-```
-{
-  "action": string  # "exit" | "Not a member" | "enter" | "syserror"
-}
-```
+
+### /room
+
+**POST** : returns empty body. Always responces with status code 200.
+
+### /users_in_room
+
+**GET** : returns an array of *User* or *Err*
+
+### /users_in_room/:userId
+
+**GET** : returns *User* or *Err*
