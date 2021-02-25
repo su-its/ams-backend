@@ -1,17 +1,28 @@
 {
   "name": "ams-backend-nodejs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "ams-backend-server.js",
   "license": "MIT",
   "private": true,
   "scripts": {
     "start": "npm run build && node dist/ams-backend-server.js",
     "build": "tsc -p .",
-    "dev": "ts-node ams-backend-server.ts"
+    "dev": "ts-node-dev --respawn ams-backend-server.ts"
+  },
+  "engines": {
+    "node": "14"
   },
   "devDependencies": {
     "@types/express": "^4.17.9",
     "@types/node": "^14.14.14",
+    "@typescript-eslint/eslint-plugin": "^4.15.2",
+    "@typescript-eslint/parser": "^4.15.2",
+    "eslint": "^7.20.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "ts-node-dev": "^1.1.3",
     "typescript": "^4.1.3"
   },
   "dependencies": {
