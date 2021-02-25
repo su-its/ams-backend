@@ -1,7 +1,7 @@
 import express from 'express'
 // import express = require('express') // avoiding TS1259
-import accesslogRoutes from './app/routes/accesslogRoutes'
-import memberRoutes from './app/routes/membersRoutes'
+import accesslogRoutes from './app/routes/accessLogsRoutes'
+import usersInRoomRoutes from './app/routes/usersInRoomRoutes'
 import { setupBeebotte } from './app/slack/in-beebotte'
 import { amsOptions } from './config'
 
@@ -14,12 +14,12 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // simple route
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.json({ message: 'This is backend server.' })
 })
 
 // set middlewares
-app.use('/v1', accesslogRoutes, memberRoutes)
+app.use('/v1', accesslogRoutes, usersInRoomRoutes)
 
 // set port, listen for requests
 const PORT = amsOptions.port
@@ -27,8 +27,8 @@ app.listen(PORT, () => {
   console.log(`[*] Server is running on port ${PORT}.`)
 })
 
-const boushitsu_bot = amsOptions.enable_boushitsu ?? false // default off
-if (boushitsu_bot) {
+const boushitsuBot = amsOptions.enable_boushitsu ?? false // default off
+if (boushitsuBot) {
   if (amsOptions.beebotte_channel &&
     amsOptions.beebotte_channel_token &&
     amsOptions.beebotte_resource) {
