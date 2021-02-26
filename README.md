@@ -106,43 +106,52 @@ Each path prefixed with `/v1/` like `/v1/access_logs`.
 **Models**
 - *Log*
 
-```json
+```json5
 {
-  "user_id": int,
-  "entered_at": datetime,  # string form of DATETIME
-  "exited_at": string    # string fomr of DATETIME
+  /* The attributes "entered_at"/"exited_at"
+     show when he or she entered/left the room. */
+
+  // Example
+  "user_id": 1,                             // user_id: number
+  "entered_at": "2021-02-23T16:57:39.000Z"  // entered_at: string
+  "exited_at": "2021-02-23T17:32:50.000Z"   // exited_at: string
 }
 ```
 
 - *User*
 
-```json
+```json5
 {
-  "user_id": int,
-  "entered_at": string  # string form of DATETIME
+  // Example
+  "user_id": 1,                             // user_id: number
+  "entered_at": "2021-02-23T16:57:39.000Z"  // entered_at: string
 }
 ```
 
 - *Err*
 
-```json
+```json5
 {
-  "message": string  # reason of an error
+  /* Text will be produced by this API server
+     itself, or passed to by some other packages. */
+
+  // Example
+  "message": "internal server error"  // message: string
 }
 ```
 
 ### /access_logs
 
-**GET** : returns an array of *Log*, or *Err*
+- **GET** : returns an array of *Log*, or *Err*
 
 ### /room
 
-**POST** : returns empty body. Always responces with status code 200.
+- **POST** : returns empty body. Always responces with status code 200.
 
 ### /users_in_room
 
-**GET** : returns an array of *User* or *Err*
+- **GET** : returns an array of *User* or *Err*
 
 ### /users_in_room/:userId
 
-**GET** : returns *User* or *Err*
+- **GET** : returns *User* or *Err*
