@@ -146,7 +146,7 @@ Each path prefixed with `/v1/` like `/v1/access_logs`.
 
 ### /room
 
-- **POST** : returns empty body. Always responces with status code 200.
+- **POST** : accepts input from [rdr-bridge](https://github.com/su-its/rdr-bridge#%E3%82%A8%E3%83%B3%E3%83%89%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88%E3%81%B8%E9%80%81%E3%82%8Bjson), returns empty body. Always responses with status code 200.
 
 ### /users_in_room
 
