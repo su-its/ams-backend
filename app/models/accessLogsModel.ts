@@ -5,8 +5,8 @@ const TABLENAME = 'access_logs'
 
 const createAccessLog = async (userId: number, enteredAt: string) => {
   try {
-    await mysql.query('INSERT INTO ? (user_id, entered_at)' +
-      'VALUES (?, ?)', [TABLENAME, userId, enteredAt])
+    await mysql.query(`INSERT INTO ${TABLENAME} (user_id, entered_at) VALUES (?, ?)`,
+      [userId, enteredAt])
     return 0
   } catch (error) {
     return error

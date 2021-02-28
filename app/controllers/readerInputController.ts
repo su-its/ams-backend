@@ -41,11 +41,11 @@ const handleReaderInput = async (req: Request, res: Response) => {
     return
   }
 
-  if (user.length === 0) {
-    await roomTable.createUser(receivedUserId)
-  } else {
+  if (user) {
     await logsTable.createAccessLog(user.user_id, user.entered_at)
     await roomTable.deleteUser(user.user_id)
+  } else {
+    await roomTable.createUser(receivedUserId)
   }
 }
 
