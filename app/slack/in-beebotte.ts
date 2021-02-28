@@ -1,7 +1,7 @@
 import mqtt from 'mqtt'
 import { readFileSync } from 'fs'
 import { SlackPostEphemeral } from './out-slack'
-import { readAccessLogs } from '../models/accessLogsModel'
+import { listUsers } from '../models/inRoomUsersModel'
 import { amsOptions } from '../../config'
 
 export function setupBeebotte () {
@@ -54,7 +54,7 @@ export function setupBeebotte () {
 }
 
 const setupResponse = async (reaction: SlackPostEphemeral) => {
-  const [logs, error] = await readAccessLogs()
+  const [logs, error] = await listUsers()
   if (error || !Array.isArray(logs)) {
     reaction.setText('boushitsu status: *error* (Sorry, something went wrong.) :x:')
     reaction.setFooter(':bow:_< Sorry_')

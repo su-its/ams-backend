@@ -35,7 +35,7 @@ const handleReaderInput = async (req: Request, res: Response) => {
       // spawn('aplay', ['-q', 'error.wav'], { cwd: process.cwd() })
   }
 
-  const [user, error] = await roomTable.readUser(receivedUserId)
+  const [user, error] = await roomTable.getUser(receivedUserId)
   if (error) {
     // 例えばconsole.log(error)などしてログに残したい
     return

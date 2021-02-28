@@ -1,13 +1,11 @@
 # ams-backend-nodejs
 
 ~~The back-end server of our [Access management system](https://github.com/su-its/Access-management-system).~~
+
 The back-end server of our [reader-bridge](https://github.com/su-its/rdr-bridge)
 
-**version: 2.0.0**
-- No longer backward compatible
-  - Changed routing path
-  - Hidden some APIs served in previous version to access the DB
-- Installed eslint and formatted according to JavaScript Standard Style
+**version: 2.0.1**
+- Fix bug and slackbot is now working.
 
 ## Setup:gear:
 
