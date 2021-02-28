@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import * as table from '../models/accessLogsModel'
 
-const getAccessLogs = async (req: Request, res: Response) => {
-  const [logs, error] = await table.readAccessLogs(
+const listAccessLogs = async (req: Request, res: Response) => {
+  const [logs, error] = await table.listAccessLogs(
     req.query.since ? req.query.since.toString() : undefined,
     req.query.until ? req.query.until.toString() : undefined,
     req.query.order ? req.query.order.toString() : undefined,
@@ -16,4 +16,4 @@ const getAccessLogs = async (req: Request, res: Response) => {
   }
 }
 
-export { getAccessLogs }
+export { listAccessLogs }

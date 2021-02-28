@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-vars */
 import mysql from '../database/db'
 
-const TABLENAME = 'users_in_room'
+const TABLENAME = 'in_room_users'
 
 const createUser = async (userId: number) => {
   try {
     await mysql.beginTransaction()
-    await mysql.query(
-      `INSERT INTO ${TABLENAME} (user_id) VALUES (?)`, userId)
+    await mysql.query(`INSERT INTO ${TABLENAME} (user_id) VALUES (?)`, userId)
     await mysql.commit()
     return 0
   } catch (error) {
@@ -18,7 +17,7 @@ const createUser = async (userId: number) => {
 const deleteUser = async (userId: number) => {
   try {
     await mysql.beginTransaction()
-    await mysql.query(`DELETE FROM ${TABLENAME}` + 'WHERE user_id=?', userId)
+    await mysql.query(`DELETE FROM ${TABLENAME} WHERE user_id=?`, userId)
     await mysql.commit()
     return 0
   } catch (error) {
@@ -26,17 +25,17 @@ const deleteUser = async (userId: number) => {
   }
 }
 
-const readUser = async (userId: number) => {
+const getUser = async (userId: number) => {
   try {
-    const [row, _] = await mysql.query(
-      `SELECT * FROM ${TABLENAME} WHERE user_id=?`, userId)
-    return [Array.isArray(row) ? row[0] : row, null]
+    const [row, _] = await mysql.query(`SELECT * FROM ${TABLENAME} WHERE user_id=?`, userId)
+    if (Array.isArray(row) && row.length !== 0) return [row[0], null]
+    else return [null, null]
   } catch (error) {
     return [null, error]
   }
 }
 
-const readUsers = async () => {
+const listUsers = async () => {
   try {
     const [row, _] = await mysql.query(`SELECT * FROM ${TABLENAME}`)
     return [row, null]
@@ -45,4 +44,4 @@ const readUsers = async () => {
   }
 }
 
-export { createUser, deleteUser, readUser, readUsers }
+export { createUser, deleteUser, getUser, listUsers }

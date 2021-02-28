@@ -1,10 +1,10 @@
 import { Router } from 'express'
-import { getUser, getUsers } from '../controllers/usersInRoomController'
+import { getUser, listUsers } from '../controllers/inRoomUsersController'
 
 const router = Router()
 
 // Retrieve all users in the room
-router.get('/users_in_room', getUsers)
+router.get('/users_in_room', listUsers)
 
 // Find a user in the room by userId
 router.get('/users_in_room/:userId', getUser)

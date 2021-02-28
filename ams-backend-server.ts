@@ -1,7 +1,7 @@
 import express from 'express'
-// import express = require('express') // avoiding TS1259
-import accesslogRoutes from './app/routes/accessLogsRoutes'
-import usersInRoomRoutes from './app/routes/usersInRoomRoutes'
+import accesslogsRoutes from './app/routes/accessLogsRoutes'
+import readerInputRoutes from './app/routes/readerInputRoutes'
+import inRoomUsersRoutes from './app/routes/inRoomUsersRoutes'
 import { setupBeebotte } from './app/slack/in-beebotte'
 import { amsOptions } from './config'
 
@@ -19,7 +19,7 @@ app.get('/', (_req, res) => {
 })
 
 // set middlewares
-app.use('/v1', accesslogRoutes, usersInRoomRoutes)
+app.use('/v1', accesslogsRoutes, readerInputRoutes, inRoomUsersRoutes)
 
 // set port, listen for requests
 const PORT = amsOptions.port

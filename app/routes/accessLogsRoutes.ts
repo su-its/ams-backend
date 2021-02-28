@@ -1,9 +1,9 @@
 import { Router } from 'express'
-import { getAccessLogs } from '../controllers/accessLogsController'
+import { listAccessLogs } from '../controllers/accessLogsController'
 
 const router = Router()
 
 // Retrieve AccessLog
-router.get('/access_logs', getAccessLogs)
+router.get('/access_logs', listAccessLogs)
 
 export default router

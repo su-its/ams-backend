@@ -13,7 +13,7 @@ const createAccessLog = async (userId: number, enteredAt: string) => {
   }
 }
 
-const readAccessLogs = async (
+const listAccessLogs = async (
   since?: string, until?: string,
   order = 'ASC', limit = 100, offset = 0
 ) => {
@@ -31,4 +31,4 @@ const readAccessLogs = async (
   }
 }
 
-export { createAccessLog, readAccessLogs }
+export { createAccessLog, listAccessLogs }

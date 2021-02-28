@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { handleReaderInput } from '../controllers/readerInputControllers'
+import { handleReaderInput } from '../controllers/readerInputController'
 
 const router = Router()
 
@@ -9,3 +9,5 @@ const router = Router()
 
 // router.post('/reader_input', handleReaderInput)
 router.post('/room', handleReaderInput)
+
+export default router
