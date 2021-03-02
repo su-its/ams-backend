@@ -5,6 +5,6 @@ LABEL maintainer="Satake Ryota <satake00157@gmail.com>" \
 
 WORKDIR /var/www/html
 
-RUN npm install
-
-CMD [ "npm", "run", "dev"]
+ADD ./docker-entrypoint.sh /tmp
+ENTRYPOINT ["/tmp/docker-entrypoint.sh"]
+CMD [ "/sbin/init" ]
