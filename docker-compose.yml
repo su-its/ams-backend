@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  
+  # MySQL
+  db:
+    container_name: db
+    env_file: .env
+    build: docker/MySQL
+    volumes:
+      - ./docker/MySQL/conf/my.cnf:/etc/my.cnf
+      - ./docker/MySQL/logs/mysqld.log:/var/log/mysql/mysqld.log
+      - ./docker/MySQL/logs/mysql-error.log:/var/log/mysql/mysql-error.log
+      - ./docker/MySQL/db:/var/lib/mysql
+    ports:
+      - 3306:3306
+      - 33060:33060
+
+  # Node.js
+  nodejs:
+    container_name: nodejs
+    env_file: .env
+    build: ./docker/nodejs
+    links:
+      - db
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 3000:3000
