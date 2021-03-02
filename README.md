@@ -4,9 +4,6 @@
 
 The back-end server of our [reader-bridge](https://github.com/su-its/rdr-bridge)
 
-**version: 2.0.1**
-- Fix bug and slackbot is now working.
-
 ## Setup:gear:
 
 :memo: Before you start, make sure you are not logged in as the root user. Check `whoami`.
