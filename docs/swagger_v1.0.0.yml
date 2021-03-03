@@ -1,0 +1,85 @@
+swagger: "2.0"
+
+info:
+  version: "1.0.0"
+  title: AMS_BACKEND_NODEJS
+
+paths:
+  /v1/access_logs/:
+    get:
+      description: 在室していた学籍番号、入室時間、退室時間の一覧をJSONで出す
+
+      responses:
+        200:
+          description: 成功
+          schema:
+            title: ArrayOfPosts
+            type: array
+            items:
+              title: Posts
+              type: object
+              properties:
+                name_id:
+                  type: number
+                entered_at:
+                  type: string
+                exited_at:
+                  type: string
+
+  /v1/room/:
+    post:
+      description: 入室、退室した瞬間に送られるPOST
+
+      parameters:
+        - name: status
+          in: path
+          description: 入室、退室記録のステータスを更新
+          required: true
+          type: string
+          format: string
+
+        - name: user_id
+          in: path
+          description: 学籍番号
+          required: true
+          type: number
+          format: number
+
+      responses:
+        200:
+          description: 現状こうなります。
+
+  /v1/users_in_room/:
+    get:
+      description: 在室中のユーザの配列をJSONで出す
+
+　　   responses:
+        200:
+          description: 成功
+          schema:
+            title: ArrayOfPosts
+            type: array
+            items:
+              title: Posts
+              type: object
+              properties:
+                name_id:
+                  type: number
+                entered_at:
+                  type: string
+
+  /v1/users_in_room/{userId}:
+   get:
+    description: 特定のユーザが在室しているか確認します。
+
+　　parameters:
+      - name: user_id
+        in: path
+        description: 学籍番号
+        required: true
+        type: number
+        format: number
+    
+    responses:
+      200:
+        description: 在室する場合、学籍番号と入室時間を、いない場合はErrを返す。
