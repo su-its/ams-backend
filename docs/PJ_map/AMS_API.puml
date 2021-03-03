@@ -9,7 +9,8 @@ node バックエンド {
         [カードリーダ]
         [ブリッジ]
     }
-    [AMS_バックエンド]
+    [AMS_バックエンド] #Aqua
+    note left : 本リポジトリは\nここになります。
     database DB
     card Speaker
 }
