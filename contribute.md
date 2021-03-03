@@ -79,7 +79,7 @@ const dbOptions: ConnectionOptions = {
 npm install
 ```
 
-デバッグを実行
+devモードで実行
 
 ```bash
 npm run dev

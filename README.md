@@ -1,4 +1,4 @@
-# AMS_BACKEND_NODEJS
+# ams-backend-nodejs
 
 こちらが後ろで動作しています。
 
