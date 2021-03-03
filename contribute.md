@@ -10,6 +10,30 @@
 
 ---
 
+## mountしてあるlogファイル等をlocalで生成する
+
+docker_initファイルは、dockerフォルダ直下にあります
+
+---
+
+### windowsの方
+
+docker_init.batを実行してください
+
+文字化け及び改行コードエラーが発生する場合
+
+- UTF-8 → shift-jis
+- LF → CRLF
+
+---
+
+### mac、linuxの方
+
+```[bash]
+chmod 771 docker_init.sh
+sh docker_init.sh
+```
+
 ## config.tsのDBに関する記述を変更する
 
 ```[ts]
