@@ -2,6 +2,7 @@ import { spawn } from 'child_process'
 import { Request, Response } from 'express'
 import * as roomTable from '../models/inRoomUsersModel'
 import * as logsTable from '../models/accessLogsModel'
+import mysql from '../database/db'
 
 const Status = {
   SUCCESS: 'success',
@@ -41,11 +42,17 @@ const handleReaderInput = async (req: Request, res: Response) => {
     return
   }
 
-  if (user) {
-    await logsTable.createAccessLog(user.user_id, user.entered_at)
-    await roomTable.deleteUser(user.user_id)
-  } else {
-    await roomTable.createUser(receivedUserId)
+  try {
+    await mysql.beginTransaction()
+    if (user) {
+      await logsTable.createAccessLog(user.user_id, user.entered_at)
+      await roomTable.deleteUser(user.user_id)
+    } else {
+      await roomTable.createUser(receivedUserId)
+    }
+    await mysql.commit()
+  } catch (error) {
+    await mysql.rollback()
   }
 }
 
