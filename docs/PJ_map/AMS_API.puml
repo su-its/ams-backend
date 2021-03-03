@@ -17,7 +17,7 @@ node バックエンド {
 
 node フロントエンド {
     [AMS_フロントエンド]
-    storage "bou_responder(仮)"
+    storage bou_responder
 }
 
 node インターネット {
@@ -35,11 +35,11 @@ node インターネット {
 
 ' フロンドエンド部
 [AMS_バックエンド] -[#blue]-^ [AMS_フロントエンド]: JSON
-[AMS_バックエンド] -[#blue]-^ [bou_responder(仮)]
+[AMS_バックエンド] -[#blue]-^ [bou_responder]
 
 ' インターネット部
-[bou_responder(仮)] -[#green]-^ [Slack]: 通知
+[bou_responder] -[#green]-^ [Slack]: 通知
 [Slack] -[#green]-^ [bou_relay]
-[bou_relay] -[#green]-^ [bou_responder(仮)]
+[bou_relay] -[#green]-^ [bou_responder]
 
 @enduml
