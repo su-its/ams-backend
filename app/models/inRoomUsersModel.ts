@@ -5,9 +5,7 @@ const TABLENAME = 'in_room_users'
 
 const createUser = async (userId: number) => {
   try {
-    await mysql.beginTransaction()
     await mysql.query(`INSERT INTO ${TABLENAME} (user_id) VALUES (?)`, userId)
-    await mysql.commit()
     return 0
   } catch (error) {
     return error
@@ -16,9 +14,7 @@ const createUser = async (userId: number) => {
 
 const deleteUser = async (userId: number) => {
   try {
-    await mysql.beginTransaction()
     await mysql.query(`DELETE FROM ${TABLENAME} WHERE user_id=?`, userId)
-    await mysql.commit()
     return 0
   } catch (error) {
     return error
