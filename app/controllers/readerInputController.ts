@@ -13,14 +13,12 @@ const Status = {
   FATAL: 'fatal'
 } as const
 
-function playWav (...fileName: string[]) {
-  fileName.forEach(f => {
-    // stdio: 'inherit'でnodeのstdioを子プロセスにも使わせる
-    spawnSync('aplay', ['-q', f + '.wav'], { cwd: WAV_FILE_DIR, stdio: 'inherit' })
-  })
+function playWav (fileName: string) {
+  // stdio: 'inherit'でnodeのstdioを子プロセスにも使わせる
+  spawnSync('aplay', ['-q', fileName + '.wav'], { cwd: WAV_FILE_DIR, stdio: 'inherit' })
 }
 
-const handleReaderInput = async (req: Request, res: Response) => {
+async function handleReaderInput (req: Request, res: Response) {
   // reader-bridgeにOKを帰す
   res.status(200).send('OK')
 
@@ -34,7 +32,6 @@ const handleReaderInput = async (req: Request, res: Response) => {
     return false
   }
 
-  // statusとしておかしかったら止める
   if (!isValidStatus(readerStatus)) {
     playWav(Status.FATAL)
     return
