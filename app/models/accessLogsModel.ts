@@ -3,7 +3,7 @@ import mysql from '../database/db'
 
 const TABLENAME = 'access_logs'
 
-const createAccessLog = async (userId: number, enteredAt: string) => {
+async function createAccessLog (userId: number, enteredAt: string) {
   try {
     await mysql.query(`INSERT INTO ${TABLENAME} (user_id, entered_at) VALUES (?, ?)`,
       [userId, enteredAt])
@@ -13,10 +13,10 @@ const createAccessLog = async (userId: number, enteredAt: string) => {
   }
 }
 
-const listAccessLogs = async (
+async function listAccessLogs (
   since?: string, until?: string,
-  order = 'ASC', limit = 100, offset = 0
-) => {
+  order = 'DESC', limit = 100, offset = 0
+) {
   try {
     const [rows, _] = await mysql.query(
       `SELECT * FROM ${TABLENAME} ` +

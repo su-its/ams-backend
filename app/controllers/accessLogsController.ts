@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import * as table from '../models/accessLogsModel'
 
-const listAccessLogs = async (req: Request, res: Response) => {
+async function listAccessLogs (req: Request, res: Response) {
   const [logs, error] = await table.listAccessLogs(
     req.query.since ? req.query.since.toString() : undefined,
     req.query.until ? req.query.until.toString() : undefined,
