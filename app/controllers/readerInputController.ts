@@ -56,14 +56,17 @@ async function handleReaderInput (req: Request, res: Response) {
     case Status.ERROR:
       playWav(Status.ERROR)
       console.error('[!] Reader-bridge status', Status.ERROR)
+      res.status(204).send()
       return
     case Status.FATAL:
       playWav(Status.FATAL)
       console.error('[!] Reader-bridge status', Status.FATAL)
+      res.status(204).send()
       return
     default:
       /* isValidStatus()でチェックするので多分ここには来ない */
       console.error('[!] 日本はもう終わりよ～ん')
+      res.status(500).send()
       return
   }
 
@@ -96,8 +99,7 @@ async function handleReaderInput (req: Request, res: Response) {
   // 処理が一通り終わったので音を鳴らす
   playWav(isExit ? 'out' : 'in')
 
-  // reader-bridgeにOKを返す
-  res.status(200).send('OK')
+  res.status(204).send()
 }
 
 export { handleReaderInput }
