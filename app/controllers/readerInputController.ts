@@ -41,7 +41,6 @@ async function handleReaderInput (req: Request, res: Response) {
   // reader-bridgeからのリクエストを正しく受け取ったことを音で知らせる
   switch (readerStatus) {
     case Status.SUCCESS:
-      playWav(Status.SUCCESS)
       break
     case Status.ERROR:
       playWav(Status.ERROR)
@@ -64,16 +63,15 @@ async function handleReaderInput (req: Request, res: Response) {
     return
   }
 
+  const isExit = !!user
   try {
     await mysql.beginTransaction()
-    if (user) {
+    if (isExit) {
       // 退室
-      playWav('out')
       await logsTable.createAccessLog(user.user_id, user.entered_at)
       await roomTable.deleteUser(user.user_id)
     } else {
       // 入室
-      playWav('in')
       await roomTable.createUser(receivedUserId)
     }
     await mysql.commit()
@@ -82,7 +80,10 @@ async function handleReaderInput (req: Request, res: Response) {
     await mysql.rollback()
   }
 
-  // reader-bridgeにOKを帰す
+  // 処理が一通り終わったので音を鳴らす
+  playWav(isExit ? 'out' : 'in')
+
+  // reader-bridgeにOKを返す
   res.status(200).send('OK')
 }
 
