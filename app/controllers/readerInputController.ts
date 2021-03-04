@@ -25,16 +25,20 @@ async function handleReaderInput (req: Request, res: Response) {
   const readerStatus = req.body.status
   const receivedUserId = req.body.user_id
 
-  const isValidStatus = (s: string) => {
-    for (const itr of Object.values(Status)) {
-      if (itr === s) return true
-    }
-    return false
+  function isValidStatus (status: any) {
+    // statusがtruthyであることを確認する
+    if (!status) return false
+    // statusが正しいStatusかであることを確認する
+    else if (!Object.values(Status).includes(status)) return false
+    return true
   }
 
   if (!isValidStatus(readerStatus)) {
-    playWav(Status.FATAL)
-    return
+    res.status(400).json({
+      message: 'Invalid status in body'
+    })
+    // 一応ログに
+    console.error('Received a request including invalid status')
   }
 
   // reader-bridgeからのリクエストを正しく受け取ったことを音で知らせる
