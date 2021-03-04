@@ -32,27 +32,26 @@ async function handleReaderInput (req: Request, res: Response) {
     return true
   }
 
+  // statusが適切かチェック
   if (!isValidStatus(readerStatus)) {
     res.status(400).json({
       message: 'Invalid status in body'
     })
-    // 一応ログに
     console.error('[!] Received a request including invalid status')
-    return
-  }
-
-  if (!Number.isInteger(receivedUserId)) {
-    res.status(400).json({
-      message: 'Invalid user_id in body'
-    })
-    // こちらの場合もログに
-    console.error('[!] Received a request including invalid user_id')
     return
   }
 
   // reader-bridgeからのリクエストを正しく受け取ったことを音で知らせる
   switch (readerStatus) {
     case Status.SUCCESS:
+      // ちゃんとしたIDが来ているかチェック
+      if (!Number.isInteger(receivedUserId)) {
+        res.status(400).json({
+          message: 'Invalid user_id in body'
+        })
+        console.error('[!] Received a request including invalid user_id')
+        return
+      }
       break
     case Status.ERROR:
       playWav(Status.ERROR)
