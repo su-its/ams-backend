@@ -48,20 +48,22 @@ async function handleReaderInput (req: Request, res: Response) {
       break
     case Status.ERROR:
       playWav(Status.ERROR)
+      console.error('[!] Reader-bridge status', Status.ERROR)
       return
     case Status.FATAL:
       playWav(Status.FATAL)
+      console.error('[!] Reader-bridge status', Status.FATAL)
       return
     default:
-      /* isValidStatus()でちぇっくするので多分ここには来ない */
-      playWav(Status.FATAL)
+      /* isValidStatus()でチェックするので多分ここには来ない */
+      console.error('[!] 日本はもう終わりよ～ん')
       return
   }
 
   // 入室or退室処理
   const [user, error] = await roomTable.getUser(receivedUserId)
   if (error) {
-    // 例えばconsole.log(error)などしてログに残したい
+    console.error('[!] Error:', error)
     return
   }
 
@@ -79,7 +81,7 @@ async function handleReaderInput (req: Request, res: Response) {
     }
     await mysql.commit()
   } catch (error) {
-    console.error(error)
+    console.error('[!] Error:', error)
     await mysql.rollback()
   }
 }
