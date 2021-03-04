@@ -35,7 +35,17 @@ async function handleReaderInput (req: Request, res: Response) {
       message: 'Invalid status in body'
     })
     // 一応ログに
-    console.error('Received a request including invalid status')
+    console.error('[!] Received a request including invalid status')
+    return
+  }
+
+  if (!Number.isInteger(receivedUserId)) {
+    res.status(400).json({
+      message: 'Invalid user_id in body'
+    })
+    // こちらの場合もログに
+    console.error('[!] Received a request including invalid user_id')
+    return
   }
 
   // reader-bridgeからのリクエストを正しく受け取ったことを音で知らせる
@@ -76,8 +86,10 @@ async function handleReaderInput (req: Request, res: Response) {
     }
     await mysql.commit()
   } catch (error) {
+    playWav('error')
     console.error('[!] Error:', error)
     await mysql.rollback()
+    return
   }
 
   // 処理が一通り終わったので音を鳴らす
