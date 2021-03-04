@@ -19,9 +19,6 @@ function playWav (fileName: string) {
 }
 
 async function handleReaderInput (req: Request, res: Response) {
-  // reader-bridgeにOKを帰す
-  res.status(200).send('OK')
-
   const readerStatus = req.body.status
   const receivedUserId = req.body.user_id
 
@@ -84,6 +81,9 @@ async function handleReaderInput (req: Request, res: Response) {
     console.error('[!] Error:', error)
     await mysql.rollback()
   }
+
+  // reader-bridgeにOKを帰す
+  res.status(200).send('OK')
 }
 
 export { handleReaderInput }
