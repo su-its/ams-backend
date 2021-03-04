@@ -15,14 +15,14 @@ const createAccessLog = async (userId: number, enteredAt: string) => {
 
 const listAccessLogs = async (
   since?: string, until?: string,
-  order = 'ASC', limit = 100, offset = 0
+  order = 'DESC', limit = 100, offset = 0
 ) => {
   try {
     const [rows, _] = await mysql.query(
       `SELECT * FROM ${TABLENAME} ` +
       "WHERE exited_at >= IFNULL(?, '1970-01-01') " +
       'AND entered_at < IFNULL(?, ADDDATE(CURDATE(), 1)) ' +
-      `ORDER BY entered_at ${order in ['ASC', 'DESC'] ? order : 'ASC'} ` +
+      `ORDER BY entered_at ${['ASC', 'DESC'].includes(order) ? order : 'DESC'} ` +
       'LIMIT ? OFFSET ?',
       [since, until, limit, offset])
     return [rows, null]
