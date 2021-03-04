@@ -1,0 +1,135 @@
+openapi: "3.0.3"
+
+info:
+  version: "1.0.0"
+  title: AMS_BACKEND_NODEJS
+
+  description: 学生の部屋の入退室を記録、参照するAPI
+  termsOfService: https://github.com/su-its/ams-project
+
+  contact:
+    name: Githubのリポジトリ
+    url: https://github.com/su-its/ams-backend-nodejs
+    email: support@example.com #メーリングリスト書いておくと良いかと
+
+servers:
+  - url: http://api.localhost/v1
+    description: ローカル環境のAPI
+  - url: http://api.ams_backend/v1
+    description: 本番環境のAPI
+
+paths:
+  /access_logs/:
+    get:
+      description: 在室していた学籍番号、入室時間、退室時間の一覧をJSONで出す
+      responses:
+        200:
+          description: 学籍番号、入室時間、退室時間の一覧をJSONのArrayで返す
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Log"
+                example:
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
+                    exited_at: "2021-02-23T17:32:50.000Z"
+
+  /room/:
+    post:
+      description: 入室、退室した瞬間に送られるPOST
+      parameters:
+        - name: status
+          in: path
+          description: 入退室時の情報更新がしっかり出来ているかのステータス
+          required: true
+          schema:
+            type: string
+            example:
+              - user_id: success
+
+        - name: userId
+          in: path
+          description: ユーザIDを送信する
+          required: true
+          schema:
+            type: integer
+            example:
+              - user_id: 1
+
+      responses:
+        200:
+          description: 現状こうなります。OKとか返すようになります。
+
+  /users_in_room/:
+    get:
+      description: 在室中のユーザの配列をJSONで出す
+
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+                example:
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
+
+  /users_in_room/{userId}:
+    get:
+      description: 特定のユーザが在室しているか確認します。
+      parameters:
+        - name: userId
+          in: path
+          description: ユーザIDを送信する
+          required: true
+          schema:
+            type: integer
+            example:
+              - user_id: 1
+
+      responses:
+        200:
+          description: 在室する場合、学籍番号と入室時間を、いない場合はErrを返す。
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref:  "#/components/schemas/User"
+
+components:
+  schemas:
+    Log:
+      type: array
+      properties:
+        user_id:
+          type: integer
+          format: int64
+        entered_at:
+          type: string
+          format: datetime
+        exited_at:
+          type: string
+          format: datetime
+
+    User:
+      type: array
+      properties:
+        user_id:
+          type: integer
+          format: int64
+        entered_at:
+          type: string
+          format: datetime
+
+    Err:
+      type: array
+      properties:
+        message:
+          type: string
+          example: internal server error

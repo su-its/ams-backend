@@ -1,0 +1,45 @@
+@startuml AMS_API
+
+skinparam sequence {
+    ArrowFontSize 18
+}
+
+node バックエンド {
+    file カードリーダ部{
+        [カードリーダ]
+        [ブリッジ]
+    }
+    [AMS_バックエンド] #Aqua
+    note left : 本リポジトリは\nここになります。
+    database DB
+    card Speaker
+}
+
+node フロントエンド {
+    [AMS_フロントエンド]
+    storage bou_responder
+}
+
+node インターネット {
+    [Slack]
+    storage bou_relay
+}
+
+フロントエンド-[hidden]up->インターネット
+
+' カードリーダ&バックエンド部
+[カードリーダ] --^ [ブリッジ]: データ
+[ブリッジ] --^ [AMS_バックエンド]: データ
+[AMS_バックエンド] --^ DB: SQL
+[AMS_バックエンド] --^ Speaker: 通知音
+
+' フロンドエンド部
+[AMS_バックエンド] -[#blue]-^ [AMS_フロントエンド]: JSON
+[AMS_バックエンド] -[#blue]-^ [bou_responder]
+
+' インターネット部
+[bou_responder] -[#green]-^ [Slack]: 通知
+[Slack] -[#green]-^ [bou_relay]
+[bou_relay] -[#green]-^ [bou_responder]
+
+@enduml
