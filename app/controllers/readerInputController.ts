@@ -15,6 +15,8 @@ const Status = {
 
 function playWav (fileName: string) {
   // stdio: 'inherit'でnodeのstdioを子プロセスにも使わせる
+  // asyncなspawnだとChildProcessが返ってきて世話するのが面倒くさいので、spawnSyncを使う
+  // 順番通りに最後まで再生したいのでspawnSyncを使う
   spawnSync('aplay', ['-q', fileName + '.wav'], { cwd: WAV_FILE_DIR, stdio: 'inherit' })
 }
 
