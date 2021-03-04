@@ -10,45 +10,12 @@ interface AmsOptions {
    * Accept student who is not registered to DB or not.
    */
   accept_guest: boolean,
-
-  /**
-   * Enable/disable boushitsu Slackbot.
-   */
-  enable_boushitsu?: boolean,
-
-  /**
-   * If enable_boushitsu is true, set 'xoxb-' prefixed token.
-   * It is required to post (ephemeral) message to Slack channel.
-   * But, as long as use response_url, it is not used!
-   */
-  slack_bearer_token?: string,
-
-  /**
-   * If enable_boushitsu is true, set 'token_' prefixed token.
-   * It is required to subscribe to Beebotte channel.
-   */
-  beebotte_channel_token?: string,
-
-  /**
-   * If enable_boushitsu is true, set channel to subscribe.
-   */
-  beebotte_channel?: string,
-
-  /**
-   * If enable_boushitsu is true, set resource to subscribe.
-   */
-  beebotte_resource?: string
 }
 
 // settings for this backend server and boushitsu Slackbot
 const amsOptions: AmsOptions = {
   port: 3000,
   accept_guest: true,
-  enable_boushitsu: true,
-  slack_bearer_token: '',
-  beebotte_channel_token: '',
-  beebotte_channel: '',
-  beebotte_resource: ''
 }
 
 // settings for connection to MySQL database
