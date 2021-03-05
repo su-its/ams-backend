@@ -21,7 +21,7 @@ services:
     container_name: nodejs
     env_file: .env
     build: ./docker/nodejs
-    links:
+    depends_on:
       - db
     volumes:
       - .:/var/www/html
