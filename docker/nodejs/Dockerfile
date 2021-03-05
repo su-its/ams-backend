@@ -1,4 +1,4 @@
-FROM node:15.9.0-buster as node
+FROM node:lts
 
 LABEL maintainer="Satake Ryota <satake00157@gmail.com>" \
     description="nodejsのDockerfile"
