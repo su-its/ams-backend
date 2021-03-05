@@ -1,8 +1,9 @@
-openapi: "3.0.3"
+openapi: "3.1.0"
 
 info:
   version: "1.0.0"
   title: AMS_BACKEND_NODEJS
+  summary: 入退室記録API
 
   description: 学生の部屋の入退室を記録、参照するAPI
   termsOfService: https://github.com/su-its/ams-project
@@ -10,7 +11,7 @@ info:
   contact:
     name: Githubのリポジトリ
     url: https://github.com/su-its/ams-backend-nodejs
-    email: support@example.com #メーリングリスト書いておくと良いかと
+    email: example_team@shizuoka.com #存在しません
 
 servers:
   - url: http://api.localhost/v1
@@ -21,6 +22,8 @@ servers:
 paths:
   /access_logs/:
     get:
+      tags:
+        - User
       description: 在室していた学籍番号、入室時間、退室時間の一覧をJSONで出す
       responses:
         200:
@@ -32,31 +35,33 @@ paths:
                 items:
                   $ref: "#/components/schemas/Log"
                 example:
-                  - user_id: 1
-                    entered_at: "2021-02-23T16:57:39.000Z"
-                    exited_at: "2021-02-23T17:32:50.000Z"
+                  user_id: 1
+                  entered_at: "2021-02-23T16:57:39.000Z"
+                  exited_at: "2021-02-23T17:32:50.000Z"
 
   /room/:
     post:
+      tags:
+        - User
       description: 入室、退室した瞬間に送られるPOST
       parameters:
         - name: status
-          in: path
-          description: 入退室時の情報更新がしっかり出来ているかのステータス
+          in: query
+          description: ブリッジのステータス
           required: true
           schema:
             type: string
             example:
-              - user_id: success
+              status: success
 
         - name: userId
-          in: path
+          in: query
           description: ユーザIDを送信する
           required: true
           schema:
             type: integer
             example:
-              - user_id: 1
+              user_id: 1
 
       responses:
         200:
@@ -64,6 +69,8 @@ paths:
 
   /users_in_room/:
     get:
+      tags:
+        - User
       description: 在室中のユーザの配列をJSONで出す
 
       responses:
@@ -76,21 +83,25 @@ paths:
                 items:
                   $ref: "#/components/schemas/User"
                 example:
-                  - user_id: 1
-                    entered_at: "2021-02-23T16:57:39.000Z"
+                  user_id: 1
+                  entered_at: "2021-02-23T16:57:39.000Z"
 
   /users_in_room/{userId}:
     get:
+      tags:
+        - User
       description: 特定のユーザが在室しているか確認します。
       parameters:
         - name: userId
-          in: path
+          in: query
           description: ユーザIDを送信する
           required: true
           schema:
             type: integer
+            items:
+              style: form
             example:
-              - user_id: 1
+              userId: 1
 
       responses:
         200:
@@ -100,7 +111,10 @@ paths:
               schema:
                 type: object
                 items:
-                  $ref:  "#/components/schemas/User"
+                  $ref: "#/components/schemas/User"
+                example:
+                  user_id: 1
+                  entered_at: "2021-02-23T16:57:39.000Z"
 
 components:
   schemas:
@@ -133,3 +147,7 @@ components:
         message:
           type: string
           example: internal server error
+
+tags:
+  - name: User
+    description: 学籍番号を主キーとするAPI(退室してなければ退室時間は記録されてない)
