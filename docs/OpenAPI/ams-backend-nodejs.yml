@@ -24,18 +24,20 @@ paths:
     get:
       tags:
         - User
-      description: 在室していた学籍番号、入室時間、退室時間の一覧を入室時間の降順でJSONで出す
+      description: 在室していた人の学籍番号、入室時間、退室時間の一覧を入室時間の降順でJSONで出す
       responses:
         200:
           description: 学籍番号、入室時間、退室時間の一覧をJSONのArrayで返す。※この関数にのみページネーションが実装されている。
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Log"
+                type: array
+                items:
+                  $ref: "#/components/schemas/Log"
               example:
-                user_id: 1
-                entered_at: "2021-02-23T16:57:39.000Z"
-                exited_at: "2021-02-23T17:32:50.000Z"
+                - user_id: 1
+                  entered_at: "2021-02-23T16:57:39.000Z"
+                  exited_at: "2021-02-23T17:32:50.000Z"
 
   /room/:
     post:
@@ -69,7 +71,7 @@ paths:
     get:
       tags:
         - User
-      description: 在室中のユーザの配列をJSONで出す
+      description: 在室中のユーザのArrayをJSONで出す
 
       responses:
         200:
@@ -81,8 +83,8 @@ paths:
                 items:
                   $ref: "#/components/schemas/User"
                 example:
-                  user_id: 1
-                  entered_at: "2021-02-23T16:57:39.000Z"
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
 
   /users_in_room/{user_id}:
     get:
