@@ -5,6 +5,6 @@ LABEL maintainer="Satake Ryota <satake00157@gmail.com>" \
 
 WORKDIR /var/www/html
 
-ADD ./docker-entrypoint.sh /tmp
+COPY ./docker-entrypoint.sh /tmp
 ENTRYPOINT ["/tmp/docker-entrypoint.sh"]
 CMD [ "/sbin/init" ]

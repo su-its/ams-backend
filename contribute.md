@@ -6,7 +6,7 @@
 `cp config.ts.sample config.ts`
 
 - .envファイルの生成
-`cp .env_copy .env`
+`cp .env.sample .env`
 
 ---
 
@@ -30,7 +30,6 @@ docker_init.batを実行してください
 ### mac、linuxの方
 
 ```[bash]
-chmod 771 docker_init.sh
 sh docker_init.sh
 ```
 
