@@ -2,16 +2,16 @@ version: "3.9"
 
 services:
   
-  # MySQL
+  # MariaDB
   db:
     container_name: db
     env_file: .env
-    build: docker/MySQL
+    build: docker/MariaDB
     volumes:
-      - ./docker/MySQL/conf/my.cnf:/etc/my.cnf
-      - ./docker/MySQL/logs/mysqld.log:/var/log/mysql/mysqld.log
-      - ./docker/MySQL/logs/mysql-error.log:/var/log/mysql/mysql-error.log
-      - ./docker/MySQL/db:/var/lib/mysql
+      - ./docker/MariaDB/conf/my.cnf:/etc/mysql/my.cnf
+      - ./docker/MariaDB/logs/mysqld.log:/var/log/mysql/mysqld.log
+      - ./docker/MariaDB/logs/mysql-error.log:/var/log/mysql/mysql-error.log
+      - ./docker/MariaDB/db:/var/lib/mysql
     ports:
       - 3306:3306
       - 33060:33060
