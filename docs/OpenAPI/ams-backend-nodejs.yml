@@ -14,58 +14,56 @@ info:
     email: example_team@shizuoka.com #存在しません
 
 servers:
-  - url: http://api.localhost/v1
-    description: ローカル環境のAPI
-  - url: http://api.ams_backend/v1
-    description: 本番環境のAPI
+  - url: http://localhost:3000/v1
+    description: (Dockerを使用した場合の)ローカル環境のAPI
+  - url: http://localhost:3000/v1
+    description: ITS室の本番環境のAPI
 
 paths:
   /access_logs/:
     get:
       tags:
         - User
-      description: 在室していた学籍番号、入室時間、退室時間の一覧をJSONで出す
+      description: 在室していた学籍番号、入室時間、退室時間の一覧を入室時間の降順でJSONで出す
       responses:
         200:
-          description: 学籍番号、入室時間、退室時間の一覧をJSONのArrayで返す
+          description: 学籍番号、入室時間、退室時間の一覧をJSONのArrayで返す。※この関数にのみページネーションが実装されている。
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Log"
-                example:
-                  user_id: 1
-                  entered_at: "2021-02-23T16:57:39.000Z"
-                  exited_at: "2021-02-23T17:32:50.000Z"
+                $ref: "#/components/schemas/Log"
+              example:
+                user_id: 1
+                entered_at: "2021-02-23T16:57:39.000Z"
+                exited_at: "2021-02-23T17:32:50.000Z"
 
   /room/:
     post:
       tags:
         - User
       description: 入室、退室した瞬間に送られるPOST
-      parameters:
-        - name: status
-          in: query
-          description: ブリッジのステータス
-          required: true
-          schema:
-            type: string
+      requestBody:
+        description: 入室or退室時間
+        content:
+          application/json:
+            schema:
+              status:
+                description: ブリッジのステータス
+                required: true
+                type: string
+                format: string
+              user_id:
+                description: ユーザIDを送信する
+                required: true
+                type: integer
+                format: int64
             example:
               status: success
-
-        - name: userId
-          in: query
-          description: ユーザIDを送信する
-          required: true
-          schema:
-            type: integer
-            example:
               user_id: 1
 
       responses:
         200:
-          description: 現状こうなります。OKとか返すようになります。
+          description: 現状こうなります。OKとか返すようになります。 #要修正
 
   /users_in_room/:
     get:
@@ -86,13 +84,13 @@ paths:
                   user_id: 1
                   entered_at: "2021-02-23T16:57:39.000Z"
 
-  /users_in_room/{userId}:
+  /users_in_room/{user_id}:
     get:
       tags:
         - User
       description: 特定のユーザが在室しているか確認します。
       parameters:
-        - name: userId
+        - name: user_id
           in: query
           description: ユーザIDを送信する
           required: true
@@ -100,12 +98,11 @@ paths:
             type: integer
             items:
               style: form
-            example:
-              userId: 1
+            example: 1
 
       responses:
         200:
-          description: 在室する場合、学籍番号と入室時間を、いない場合はErrを返す。
+          description: 在室する場合、学籍番号と入室時間をJSONで出力する。
           content:
             application/json:
               schema:
@@ -115,6 +112,8 @@ paths:
                 example:
                   user_id: 1
                   entered_at: "2021-02-23T16:57:39.000Z"
+        204:
+          description: 不在の場合、NO CONTENTを出力する。
 
 components:
   schemas:
