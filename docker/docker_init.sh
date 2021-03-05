@@ -1,11 +1,11 @@
 #!/bin/sh
 
-# mysqlのログフォルダ作成
-cd MySQL
+# MariaDBのログフォルダ作成
+cd MariaDB
 mkdir db
 mkdir logs
 
-# mysqlのログファイル作成
+# MariaDBのログファイル作成
 cd logs
 touch mysqld.log
 touch mysql-error.log
