@@ -12,6 +12,7 @@ services:
       - ./docker/MariaDB/logs/mysqld.log:/var/log/mysql/mysqld.log
       - ./docker/MariaDB/logs/mysql-error.log:/var/log/mysql/mysql-error.log
       - ./docker/MariaDB/db:/var/lib/mysql
+      - ./schema:/schema
     ports:
       - 3306:3306
       - 33060:33060
