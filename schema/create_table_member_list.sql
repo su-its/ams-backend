@@ -1,3 +1,5 @@
+USE `Entering_And_Leaving_The_Room`;
+
 CREATE TABLE `member_list` (
   `id` int unsigned PRIMARY KEY NOT NULL,
   `name` varchar(255) NOT NULL,
