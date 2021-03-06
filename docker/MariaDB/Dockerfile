@@ -17,6 +17,4 @@ RUN mkdir -p /var/log/mysql && \
     touch /var/log/mysql/mysql-error.log && \
     touch /var/log/mysql/mysqld.log
 
-ADD ./docker-entrypoint.sh /tmp
-ENTRYPOINT ["/tmp/docker-entrypoint.sh"]
-CMD [ "/sbin/init" ]
+WORKDIR /schema
