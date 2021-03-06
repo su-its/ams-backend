@@ -1,16 +1,16 @@
 #!/bin/sh
 
-# MariaDB起動
-nohup mysqld &
+# パスワードの情報を通知
+echo 'パスワードはデフォルトで pass'
 
 # 入退室時間のテーブル
-mysqldump -h 127.0.0.1 -u user -p pass < create_table_access_logs.sql
+mysql -u user -p Entering_And_Leaving_The_Room < create_table_access_logs.sql
 
 # 入室中のテーブル
-mysqldump -h 127.0.0.1 -u user -p pass < create_table_in_room_users.sql
+mysql -u user -p Entering_And_Leaving_The_Room < create_table_in_room_users.sql
 
 # メンバのテーブル
-mysqldump -h 127.0.0.1 -u user -p pass < create_table_member_list.sql
+mysql -u user -p Entering_And_Leaving_The_Room < create_table_member_list.sql
 
 # スタブデータの注入
-mysqldump -h 127.0.0.1 -u user -p pass < insert_test_data.sql
+mysql -u user -p Entering_And_Leaving_The_Room < insert_test_data.sql

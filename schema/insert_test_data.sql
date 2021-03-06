@@ -17,8 +17,6 @@
 
 /*CREATE DATABASE /*!32312 IF NOT EXISTS `test` /*!40100 DEFAULT CHARACTER SET utf8mb4 ;*/
 
-USE `Entering_And_Leaving_The_Room`;
-
 --
 -- Dumping data for table `access_logs`
 --
