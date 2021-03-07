@@ -1,10 +1,10 @@
 @echo on
-rem mysqlのログフォルダ作成
-cd MySQL
+rem MariaDBのログフォルダ作成
+cd MariaDB
 mkdir db
 mkdir logs
 
-rem mysqlのログファイル作成
+rem MariaDBのログファイル作成
 cd logs
 echo "">mysqld.log
 echo "">mysql-error.log

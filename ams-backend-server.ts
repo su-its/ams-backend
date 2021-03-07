@@ -2,7 +2,6 @@ import express from 'express'
 import accesslogsRoutes from './app/routes/accessLogsRoutes'
 import readerInputRoutes from './app/routes/readerInputRoutes'
 import inRoomUsersRoutes from './app/routes/inRoomUsersRoutes'
-import { setupBeebotte } from './app/slack/in-beebotte'
 import { amsOptions } from './config'
 
 const app: express.Express = express()
@@ -26,15 +25,3 @@ const PORT = amsOptions.port
 app.listen(PORT, () => {
   console.log(`[*] Server is running on port ${PORT}.`)
 })
-
-const boushitsuBot = amsOptions.enable_boushitsu ?? false // default off
-if (boushitsuBot) {
-  if (amsOptions.beebotte_channel &&
-    amsOptions.beebotte_channel_token &&
-    amsOptions.beebotte_resource) {
-    // subscribe the beebotte channel, and wait for message.
-    setupBeebotte()
-  } else {
-    console.error('[!] Boushitsu Slackbot falied to start due to lack of properties.')
-  }
-}

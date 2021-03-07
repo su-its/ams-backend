@@ -1,0 +1,154 @@
+openapi: "3.1.0"
+
+info:
+  version: "1.0.0"
+  title: AMS_BACKEND_NODEJS
+  summary: 入退室記録API
+
+  description: 学生の部屋の入退室を記録、参照するAPI
+  termsOfService: https://github.com/su-its/ams-project
+
+  contact:
+    name: Githubのリポジトリ
+    url: https://github.com/su-its/ams-backend-nodejs
+    email: example_team@shizuoka.com #存在しません
+
+servers:
+  - url: http://localhost:3000/v1
+    description: (Dockerを使用した場合の)ローカル環境のAPI
+  - url: http://localhost:3000/v1
+    description: ITS室の本番環境のAPI
+
+paths:
+  /access_logs/:
+    get:
+      tags:
+        - User
+      description: 在室していた人の学籍番号、入室時間、退室時間の一覧を入室時間の降順でJSONで出す
+      responses:
+        200:
+          description: 学籍番号、入室時間、退室時間の一覧をJSONのArrayで返す。※この関数にのみページネーションが実装されている。
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Log"
+              example:
+                - user_id: 1
+                  entered_at: "2021-02-23T16:57:39.000Z"
+                  exited_at: "2021-02-23T17:32:50.000Z"
+
+  /room/:
+    post:
+      tags:
+        - User
+      description: 入室、退室した瞬間に送られるPOST
+      requestBody:
+        description: 入室or退室時間
+        content:
+          application/json:
+            schema:
+              status:
+                description: ブリッジのステータス
+                required: true
+                type: string
+                format: string
+              user_id:
+                description: ユーザIDを送信する
+                required: true
+                type: integer
+                format: int64
+            example:
+              status: success
+              user_id: 1
+
+      responses:
+        200:
+          description: 現状こうなります。OKとか返すようになります。 #要修正
+
+  /users_in_room/:
+    get:
+      tags:
+        - User
+      description: 在室中のユーザのArrayをJSONで出す
+
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+                example:
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
+
+  /users_in_room/{user_id}:
+    get:
+      tags:
+        - User
+      description: 特定のユーザが在室しているか確認します。
+      parameters:
+        - name: user_id
+          in: query
+          description: ユーザIDを送信する
+          required: true
+          schema:
+            type: integer
+            items:
+              style: form
+            example: 1
+
+      responses:
+        200:
+          description: 在室する場合、学籍番号と入室時間をJSONで出力する。
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/User"
+                example:
+                  user_id: 1
+                  entered_at: "2021-02-23T16:57:39.000Z"
+        204:
+          description: 不在の場合、NO CONTENTを出力する。
+
+components:
+  schemas:
+    Log:
+      type: array
+      properties:
+        user_id:
+          type: integer
+          format: int64
+        entered_at:
+          type: string
+          format: datetime
+        exited_at:
+          type: string
+          format: datetime
+
+    User:
+      type: array
+      properties:
+        user_id:
+          type: integer
+          format: int64
+        entered_at:
+          type: string
+          format: datetime
+
+    Err:
+      type: array
+      properties:
+        message:
+          type: string
+          example: internal server error
+
+tags:
+  - name: User
+    description: 学籍番号を主キーとするAPI(退室してなければ退室時間は記録されてない)
