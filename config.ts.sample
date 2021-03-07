@@ -9,13 +9,13 @@ interface AmsOptions {
   /**
    * Accept student who is not registered to DB or not.
    */
-  accept_guest: boolean,
+  acceptGuest: boolean
 }
 
 // settings for this backend server and boushitsu Slackbot
 const amsOptions: AmsOptions = {
   port: 3000,
-  accept_guest: true,
+  acceptGuest: true
 }
 
 // settings for connection to MySQL database

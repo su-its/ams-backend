@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import * as table from '../models/inRoomUsersModel'
 
-const getUser = async (req: Request, res: Response) => {
-  const [user, error] = await table.getUser(parseInt(req.params.userId))
+async function getUser (req: Request, res: Response) {
+  const [user, error] = await table.getUser(parseInt(req.params.user_id))
   if (error) {
     res.status(500).json({ message: error.message || 'internal server error' })
   } else {
@@ -10,7 +10,7 @@ const getUser = async (req: Request, res: Response) => {
   }
 }
 
-const listUsers = async (_req: Request, res: Response) => {
+async function listUsers (_req: Request, res: Response) {
   const [users, error] = await table.listUsers()
   if (error) {
     res.status(500).json({ message: error.message || 'internal server error' })

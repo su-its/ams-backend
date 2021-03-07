@@ -3,7 +3,7 @@ import mysql from '../database/db'
 
 const TABLENAME = 'in_room_users'
 
-const createUser = async (userId: number) => {
+async function createUser (userId: number) {
   try {
     await mysql.query(`INSERT INTO ${TABLENAME} (user_id) VALUES (?)`, userId)
     return 0
@@ -12,7 +12,7 @@ const createUser = async (userId: number) => {
   }
 }
 
-const deleteUser = async (userId: number) => {
+async function deleteUser (userId: number) {
   try {
     await mysql.query(`DELETE FROM ${TABLENAME} WHERE user_id=?`, userId)
     return 0
@@ -21,7 +21,7 @@ const deleteUser = async (userId: number) => {
   }
 }
 
-const getUser = async (userId: number) => {
+async function getUser (userId: number) {
   try {
     const [row, _] = await mysql.query(`SELECT * FROM ${TABLENAME} WHERE user_id=?`, userId)
     if (Array.isArray(row) && row.length !== 0) return [row[0], null]
@@ -31,7 +31,7 @@ const getUser = async (userId: number) => {
   }
 }
 
-const listUsers = async () => {
+async function listUsers () {
   try {
     const [row, _] = await mysql.query(`SELECT * FROM ${TABLENAME}`)
     return [row, null]
