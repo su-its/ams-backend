@@ -1,8 +1,11 @@
-import { spawn } from 'child_process'
+import { spawnSync } from 'child_process'
 import { Request, Response } from 'express'
+import { join } from 'path'
 import * as roomTable from '../models/inRoomUsersModel'
 import * as logsTable from '../models/accessLogsModel'
 import mysql from '../database/db'
+
+const WAV_FILE_DIR = join(process.cwd(), 'sound')
 
 const Status = {
   SUCCESS: 'success',
@@ -10,50 +13,93 @@ const Status = {
   FATAL: 'fatal'
 } as const
 
-const handleReaderInput = async (req: Request, res: Response) => {
-  res.status(200).send()
+function playWav (fileName: string) {
+  // stdio: 'inherit'でnodeのstdioを子プロセスにも使わせる
+  // asyncなspawnだとChildProcessが返ってきて世話するのが面倒くさいので、spawnSyncを使う
+  // 順番通りに最後まで再生したいのでspawnSyncを使う
+  spawnSync('aplay', ['-q', fileName + '.wav'], { cwd: WAV_FILE_DIR, stdio: 'inherit' })
+}
 
+async function handleReaderInput (req: Request, res: Response) {
   const readerStatus = req.body.status
   const receivedUserId = req.body.user_id
 
-  if (!readerStatus || !receivedUserId) {
-    // spawn('aplay', ['-q', 'error.wav'], { cwd: process.cwd() })
+  function isValidStatus (status: any) {
+    // statusがtruthyであることを確認する
+    if (!status) return false
+    // statusが正しいStatusかであることを確認する
+    else if (!Object.values(Status).includes(status)) return false
+    return true
+  }
+
+  // statusが適切かチェック
+  if (!isValidStatus(readerStatus)) {
+    res.status(400).json({
+      message: 'Invalid status in body'
+    })
+    console.error('[!] Received a request including invalid status')
     return
   }
 
+  // reader-bridgeからのリクエストを正しく受け取ったことを音で知らせる
   switch (readerStatus) {
     case Status.SUCCESS:
-      // spawn('aplay', ['-q', 'success.wav'], { cwd: process.cwd() })
+      // ちゃんとしたIDが来ているかチェック
+      if (!Number.isInteger(receivedUserId)) {
+        res.status(400).json({
+          message: 'Invalid user_id in body'
+        })
+        console.error('[!] Received a request including invalid user_id')
+        return
+      }
       break
     case Status.ERROR:
-      // spawn('aplay', ['-q', 'error.wav'], { cwd: process.cwd() })
-      break
+      playWav(Status.ERROR)
+      console.error('[!] Reader-bridge status', Status.ERROR)
+      res.status(204).send()
+      return
     case Status.FATAL:
-      // spawn('aplay', ['-q', 'fatal.wav'], { cwd: process.cwd() })
-      break
+      playWav(Status.FATAL)
+      console.error('[!] Reader-bridge status', Status.FATAL)
+      res.status(204).send()
+      return
     default:
-      /* never */
-      // spawn('aplay', ['-q', 'error.wav'], { cwd: process.cwd() })
+      /* isValidStatus()でチェックするので多分ここには来ない */
+      console.error('[!] 日本はもう終わりよ～ん')
+      res.status(500).send()
+      return
   }
 
+  // 入室or退室処理
   const [user, error] = await roomTable.getUser(receivedUserId)
   if (error) {
-    // 例えばconsole.log(error)などしてログに残したい
+    console.error('[!] Error:', error)
     return
   }
 
+  const isExit = !!user
   try {
     await mysql.beginTransaction()
-    if (user) {
+    if (isExit) {
+      // 退室
       await logsTable.createAccessLog(user.user_id, user.entered_at)
       await roomTable.deleteUser(user.user_id)
     } else {
+      // 入室
       await roomTable.createUser(receivedUserId)
     }
     await mysql.commit()
   } catch (error) {
+    playWav('error')
+    console.error('[!] Error:', error)
     await mysql.rollback()
+    return
   }
+
+  // 処理が一通り終わったので音を鳴らす
+  playWav(isExit ? 'out' : 'in')
+
+  res.status(204).send()
 }
 
 export { handleReaderInput }
