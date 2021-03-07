@@ -86,11 +86,21 @@ async function handleReaderInput (req: Request, res: Response) {
     await mysql.beginTransaction()
     if (isExit) {
       // 退室
-      await logsTable.createAccessLog(user.user_id, user.entered_at)
-      await roomTable.deleteUser(user.user_id)
+      const caResult = await logsTable.createAccessLog(user.user_id, user.entered_at)
+      // 終了コードが0でなかったらthrowする
+      if (caResult !== 0) {
+        throw caResult
+      }
+      const duResult = await roomTable.deleteUser(user.user_id)
+      if (duResult !== 0) {
+        throw duResult
+      }
     } else {
       // 入室
-      await roomTable.createUser(receivedUserId)
+      const cuResult = await roomTable.createUser(receivedUserId)
+      if (cuResult !== 0) {
+        throw cuResult
+      }
     }
     await mysql.commit()
   } catch (error) {
