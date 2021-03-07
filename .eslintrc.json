@@ -14,6 +14,9 @@
     "plugins": [
         "@typescript-eslint"
     ],
+    "ignorePatterns":[
+        "dist/"
+    ],
     "rules": {
         "brace-style": ["error", "1tbs", { "allowSingleLine": false }],
         "curly": ["error", "all"]
