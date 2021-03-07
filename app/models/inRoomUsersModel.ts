@@ -24,8 +24,11 @@ async function deleteUser (userId: number) {
 async function getUser (userId: number) {
   try {
     const [row, _] = await mysql.query(`SELECT * FROM ${TABLENAME} WHERE user_id=?`, userId)
-    if (Array.isArray(row) && row.length !== 0) return [row[0], null]
-    else return [null, null]
+    if (Array.isArray(row) && row.length !== 0) {
+      return [row[0], null]
+    } else {
+      return [null, null]
+    }
   } catch (error) {
     return [null, error]
   }
