@@ -40,7 +40,7 @@ async function listAccessLogs (req: Request, res: Response) {
   if (error2) {
     res.status(500).json({ message: error?.message || 'internal server error' })
   } else {
-    const urlOfEndpoint = req.protocol + '://' + req.hostname + ':' + amsOptions.port + req.path
+    const urlOfEndpoint = req.protocol + '://' + req.hostname + ':' + amsOptions.port + req.baseUrl + req.path
 
     const nextPage = urlOfEndpoint + '?page=' + (page + 1)
     const prevPage = urlOfEndpoint + '?page=' + (page - 1)
