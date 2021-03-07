@@ -13,24 +13,6 @@ async function createAccessLog (userId: number, enteredAt: string) {
   }
 }
 
-async function listAccessLogs (
-  since?: string, until?: string,
-  order = 'DESC', limit = 100, offset = 0
-) {
-  try {
-    const [rows, _] = await mysql.query(
-      `SELECT * FROM ${TABLENAME} ` +
-      "WHERE exited_at >= IFNULL(?, '1970-01-01') " +
-      'AND entered_at < IFNULL(?, ADDDATE(CURDATE(), 1)) ' +
-      `ORDER BY entered_at ${['ASC', 'DESC'].includes(order) ? order : 'DESC'} ` +
-      'LIMIT ? OFFSET ?',
-      [since, until, limit, offset])
-    return [rows, null]
-  } catch (error) {
-    return [null, error]
-  }
-}
-
 /**
  * access_logsの総行数を取得する
  */
@@ -52,4 +34,22 @@ async function getCountOfAccessLogs () {
   }
 }
 
-export { createAccessLog, listAccessLogs, getCountOfAccessLogs }
+async function listAccessLogs (
+  since?: string, until?: string,
+  order = 'DESC', limit = 100, offset = 0
+) {
+  try {
+    const [rows, _] = await mysql.query(
+      `SELECT * FROM ${TABLENAME} ` +
+      "WHERE exited_at >= IFNULL(?, '1970-01-01') " +
+      'AND entered_at < IFNULL(?, ADDDATE(CURDATE(), 1)) ' +
+      `ORDER BY entered_at ${['ASC', 'DESC'].includes(order) ? order : 'DESC'} ` +
+      'LIMIT ? OFFSET ?',
+      [since, until, limit, offset])
+    return [rows, null]
+  } catch (error) {
+    return [null, error]
+  }
+}
+
+export { createAccessLog, getCountOfAccessLogs, listAccessLogs }
