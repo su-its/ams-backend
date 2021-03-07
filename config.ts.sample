@@ -9,7 +9,7 @@ interface AmsOptions {
   /**
    * Accept student who is not registered to DB or not.
    */
-  acceptGuest: boolean,
+  acceptGuest: boolean
 }
 
 // settings for this backend server and boushitsu Slackbot

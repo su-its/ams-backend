@@ -1,152 +1,39 @@
 # ams-backend-nodejs
 
-~~The back-end server of our [Access management system](https://github.com/su-its/Access-management-system).~~
+本リポジトリはこのような立ち位置になっています。
 
-The back-end server of our [reader-bridge](https://github.com/su-its/rdr-bridge)
-
-## Setup:gear:
-
-:memo: Before you start, make sure you are not logged in as the root user. Check `whoami`.
-
-```bash
-cd ~
-git clone https://github.com/su-its/ams-backend-nodejs.git
-cd ams-backend-nodejs
-```
-
-### Basic
-
-For developpers
-
-```bash
-cp src/config.ts.sample src/config.ts
-```
-
-**Then you have to edit `config.ts`** See [here](#Configuration-Guide)
-
-Start development (auto-reload when a file changed)
-
-```bash
-npm run dev
-```
-
-:loudspeaker: Due to path resolving, use npm script shown above. The command below will fail.
-
-```bash
-# NG
-npm run build
-cd dist
-node ams-backend-server.js
-```
-
-### Optional (Slackbot)
-
->:bulb: This project will only provide APIs to access the database, and features related to slackbot will be discontinued.
-
-To use Slackbot, download *CA certificate*. It is required to establish TLS connection with *MQTT broker(Beebotte)*. About MQTT, see [here](https://beebotte.com/docs/mqtt).
-
-```bash
-curl "https://beebotte.com/certs/mqtt.beebotte.com.pem" -o ./mqtt.beebotte.com.pem
-```
-
-- You have to sign up for Beebotte and create a channel to subscribe. More detail, see [Beebotte documentation](https://beebotte.com/overview).
-- You also have to have the right to install bot to your Slack workspace. There is a great guide for designing Slack app, [here](https://api.slack.com/start/overview#apps).
-
-## Deployment:rocket:
-
-Make sure that [pm2](https://github.com/Unitech/pm2) has been installed to the system, or install via:
-
-```bash
-npm install pm2 -g
-```
-
-Then, start pm2 process and daemonize it.
-
-```
-cd /path/to/projectdir/
-pm2 start ecosystem.config.js
-pm2 startup  # You should get output like '[PM2] To setup the Startup Script...'. Follow it.
-pm2 save
-```
-
-More: [pm2 official website](https://pm2.keymetrics.io/)
+![APIの立ち位置](docs/PJ_map/AMS_API.png)
 
 ---
 
-## Configuration Guide
+## 関係のあるリポジトリ一覧
 
-More detail, see `config.ts`.
+## 議論したり、作業の優先順位を付けるリポジトリ
 
-:loudspeaker: If you don't use the Slackbot, set `enable_boushitsu` false, and *comment out* all of properties `slack_` and `beebotte_` of `amsOptions`.
-
-- **Database**
-  - See [here](https://github.com/mysqljs/mysql#connection-options)
-- **Slackbot**
-  - ~~slack_bearer_token~~ As long as using slash command, it is not required.
-    - ~~`xoxb-` prefixed token~~
-  - beebotte_channel_token
-    - `token_` prefixed token
-
-### Required Bot Token Scopes
-
-- ~~`chat:write` API document [here](https://api.slack.com/scopes/chat:write)~~ As long as using slash command, it is not required.
-- `commands` API document [here](https://api.slack.com/scopes/commands), Tutorial [here](https://api.slack.com/interactivity/slash-commands)
+[<span style="font-size: 25px">ams-project</span>](https://github.com/su-its/ams-project)
 
 ---
 
-## API Reference
+### カードリーダ部
 
-Each path prefixed with `/v1/` like `/v1/access_logs`.
+[<span style="color: YellowGreen;font-size: 25px">カードリーダ部のブリッジ</span>](https://github.com/su-its/rdr-bridge)
 
-**Models**
-- *Log*
+---
 
-```json5
-{
-  /* The attributes "entered_at"/"exited_at"
-     show when he or she entered/left the room. */
+### フロンドエンド部
 
-  // Example
-  "user_id": 1,                             // user_id: number
-  "entered_at": "2021-02-23T16:57:39.000Z"  // entered_at: string
-  "exited_at": "2021-02-23T17:32:50.000Z"   // exited_at: string
-}
-```
+[<span style="color: plum;font-size: 25px">AMS_フロントエンド</span>](https://github.com/su-its/ams-frontend)
 
-- *User*
+---
 
-```json5
-{
-  // Example
-  "user_id": 1,                             // user_id: number
-  "entered_at": "2021-02-23T16:57:39.000Z"  // entered_at: string
-}
-```
+#### レスポンスを受け取るリポジトリ
 
-- *Err*
+[<span style="color: Thistle;font-size: 25px">bou_responder</span>](https://github.com/su-its/bou-responder)
 
-```json5
-{
-  /* Text will be produced by this API server
-     itself, or passed to by some other packages. */
+---
 
-  // Example
-  "message": "internal server error"  // message: string
-}
-```
+## APIの動作はこちらに記載しています
 
-### /access_logs
+### OpenAPIで記載しています
 
-- **GET** : returns an array of *Log*, or *Err*
-
-### /room
-
-- **POST** : accepts input from [rdr-bridge](https://github.com/su-its/rdr-bridge#%E3%82%A8%E3%83%B3%E3%83%89%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88%E3%81%B8%E9%80%81%E3%82%8Bjson), returns empty body. Always responses with status code 200.
-
-### /users_in_room
-
-- **GET** : returns an array of *User* or *Err*
-
-### /users_in_room/:userId
-
-- **GET** : returns *User* or *Err*
+[<span style="font-size: 25px">APIをOpenAPIで書いたもの</span>](docs/OpenAPI/redoc-static.html)
