@@ -5,11 +5,12 @@ const TABLENAME = 'access_logs'
 
 async function createAccessLog (userId: number, enteredAt: string) {
   try {
+    // INSERT すると [ResultSetHeader, undefined] が返ってくる
     await mysql.query(`INSERT INTO ${TABLENAME} (user_id, entered_at) VALUES (?, ?)`,
       [userId, enteredAt])
-    return 0
+    return [0, null]
   } catch (error) {
-    return error
+    return [null, error]
   }
 }
 

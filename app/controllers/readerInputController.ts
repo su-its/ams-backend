@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { spawnSync } from 'child_process'
 import { Request, Response } from 'express'
 import { join } from 'path'
@@ -86,20 +87,20 @@ async function handleReaderInput (req: Request, res: Response) {
     await mysql.beginTransaction()
     if (isExit) {
       // 退室
-      const caResult = await logsTable.createAccessLog(user.user_id, user.entered_at)
-      // 終了コードが0でなかったらthrowする
-      if (caResult !== 0) {
-        throw caResult
+      const [_caResult, caErr] = await logsTable.createAccessLog(user.user_id, user.entered_at)
+      // エラーがnullでなかったらthrowする
+      if (caErr) {
+        throw caErr
       }
-      const duResult = await roomTable.deleteUser(user.user_id)
-      if (duResult !== 0) {
-        throw duResult
+      const [_duResult, duErr] = await roomTable.deleteUser(user.user_id)
+      if (duErr) {
+        throw duErr
       }
     } else {
       // 入室
-      const cuResult = await roomTable.createUser(receivedUserId)
-      if (cuResult !== 0) {
-        throw cuResult
+      const [_cuResult, cuErr] = await roomTable.createUser(receivedUserId)
+      if (cuErr) {
+        throw cuErr
       }
     }
     await mysql.commit()

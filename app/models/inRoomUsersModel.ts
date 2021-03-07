@@ -5,19 +5,21 @@ const TABLENAME = 'in_room_users'
 
 async function createUser (userId: number) {
   try {
+    // INSERT すると [ResultSetHeader, undefined] が返ってくる
     await mysql.query(`INSERT INTO ${TABLENAME} (user_id) VALUES (?)`, userId)
-    return 0
+    return [0, null]
   } catch (error) {
-    return error
+    return [null, error]
   }
 }
 
 async function deleteUser (userId: number) {
   try {
+    // DELETE すると [ResultSetHeader, undefined] が返ってくる
     await mysql.query(`DELETE FROM ${TABLENAME} WHERE user_id=?`, userId)
-    return 0
+    return [0, null]
   } catch (error) {
-    return error
+    return [null, error]
   }
 }
 
