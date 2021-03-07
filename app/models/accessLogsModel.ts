@@ -9,8 +9,8 @@ async function createAccessLog (userId: number, enteredAt: string) {
     await mysql.query(`INSERT INTO ${TABLENAME} (user_id, entered_at) VALUES (?, ?)`,
       [userId, enteredAt])
     return [0, null]
-  } catch (error) {
-    return [null, error]
+  } catch (err) {
+    return [null, err]
   }
 }
 
@@ -27,8 +27,8 @@ async function listAccessLogs (
       'LIMIT ? OFFSET ?',
       [since, until, limit, offset])
     return [rows, null]
-  } catch (error) {
-    return [null, error]
+  } catch (err) {
+    return [null, err]
   }
 }
 

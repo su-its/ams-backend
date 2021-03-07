@@ -75,10 +75,10 @@ async function handleReaderInput (req: Request, res: Response) {
   }
 
   // 入室or退室処理
-  const [user, error] = await roomTable.getUser(receivedUserId)
-  if (error) {
-    console.error('[!] Error:', error)
-    res.status(500).json({ message: error.message || 'internal server error' })
+  const [user, err] = await roomTable.getUser(receivedUserId)
+  if (err) {
+    console.error('[!] Error:', err)
+    res.status(500).json({ message: err.message || 'internal server error' })
     return
   }
 
@@ -104,11 +104,11 @@ async function handleReaderInput (req: Request, res: Response) {
       }
     }
     await mysql.commit()
-  } catch (error) {
+  } catch (err) {
     playWav('error')
-    console.error('[!] Error:', error)
+    console.error('[!] Error:', err)
     await mysql.rollback()
-    res.status(500).json({ message: error.message || 'internal server error' })
+    res.status(500).json({ message: err.message || 'internal server error' })
     return
   }
 
