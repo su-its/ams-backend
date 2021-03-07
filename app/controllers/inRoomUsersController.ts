@@ -6,7 +6,11 @@ async function getUser (req: Request, res: Response) {
   if (error) {
     res.status(500).json({ message: error.message || 'internal server error' })
   } else {
-    res.status(200).json(user) // Nullable
+    if (!user) {
+      res.status(204).send() // 指定された人が在室していなかったとき
+    } else {
+      res.status(200).json(user)
+    }
   }
 }
 

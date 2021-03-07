@@ -26,9 +26,12 @@ async function handleReaderInput (req: Request, res: Response) {
 
   function isValidStatus (status: any) {
     // statusがtruthyであることを確認する
-    if (!status) return false
+    if (!status) {
+      return false
     // statusが正しいStatusかであることを確認する
-    else if (!Object.values(Status).includes(status)) return false
+    } else if (!Object.values(Status).includes(status)) {
+      return false
+    }
     return true
   }
 
