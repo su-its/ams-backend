@@ -1,7 +1,11 @@
-FROM mysql:5
+FROM mariadb:10.1.48
 
 LABEL maintainer="Satake Ryota <satake00157@gmail.com>" \
-    description="MySQL5.7のDockerfile"
+    description="MariaDB10.1.48のDockerfile"
+
+# confファイル転送して権限を変更する(win開発者向け)
+ADD ./conf/my.cnf /etc/mysql/my.cnf
+RUN chmod 644 /etc/mysql/my.cnf
 
 # timezoneに関するリポジトリを取得
 RUN apt-get update && \
@@ -16,3 +20,5 @@ RUN rm /etc/localtime && \
 RUN mkdir -p /var/log/mysql && \
     touch /var/log/mysql/mysql-error.log && \
     touch /var/log/mysql/mysqld.log
+
+WORKDIR /schema
