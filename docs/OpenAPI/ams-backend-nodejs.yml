@@ -175,8 +175,7 @@ components:
         data:
           type: array
           items:
-            type:
-              $ref: "#/components/schemas/Log"
+            $ref: "#/components/schemas/Log"
 
 tags:
   - name: User
