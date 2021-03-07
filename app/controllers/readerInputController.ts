@@ -77,6 +77,7 @@ async function handleReaderInput (req: Request, res: Response) {
   const [user, error] = await roomTable.getUser(receivedUserId)
   if (error) {
     console.error('[!] Error:', error)
+    res.status(500).json({ message: error.message || 'internal server error' })
     return
   }
 
@@ -96,6 +97,7 @@ async function handleReaderInput (req: Request, res: Response) {
     playWav('error')
     console.error('[!] Error:', error)
     await mysql.rollback()
+    res.status(500).json({ message: error.message || 'internal server error' })
     return
   }
 
