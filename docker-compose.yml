@@ -8,7 +8,6 @@ services:
     env_file: .env
     build: docker/MariaDB
     volumes:
-      - ./docker/MariaDB/conf/my.cnf:/etc/mysql/my.cnf
       - ./docker/MariaDB/logs/mysqld.log:/var/log/mysql/mysqld.log
       - ./docker/MariaDB/logs/mysql-error.log:/var/log/mysql/mysql-error.log
       - ./docker/MariaDB/db:/var/lib/mysql
