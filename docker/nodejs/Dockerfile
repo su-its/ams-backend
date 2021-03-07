@@ -4,13 +4,13 @@ LABEL maintainer="Satake Ryota <satake00157@gmail.com>" \
     description="nodejsのDockerfile"
 
 # audioグループの作成
-RUN usermod -aG audio node
+#RUN usermod -aG audio node
 
 # ALSA関連のパッケージをインストール
-RUN apt update && \
-    apt upgrade -y && \
-    apt install -y \
-    alsa-utils
+#RUN apt update && \
+#    apt upgrade -y && \
+#    apt install -y \
+#    alsa-utils
 
 WORKDIR /var/www/html
 
