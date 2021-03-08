@@ -14,6 +14,27 @@ async function createAccessLog (userId: number, enteredAt: string) {
   }
 }
 
+/**
+ * access_logsの総行数を取得する
+ */
+async function getCountOfAccessLogs () {
+  try {
+    // https://stackoverflow.com/a/11412968
+    const [rows, _] = await mysql.query(`SELECT count(*) AS logCount FROM ${TABLENAME}`)
+
+    if (Array.isArray(rows) && rows.length === 1) {
+      const row = rows[0]
+      if ('logCount' in row) {
+        return [row.logCount, null]
+      }
+    }
+
+    return [null, 'response from DB is malformed']
+  } catch (error) {
+    return [null, error]
+  }
+}
+
 async function listAccessLogs (
   since?: string, until?: string,
   order = 'DESC', limit = 100, offset = 0
@@ -32,4 +53,4 @@ async function listAccessLogs (
   }
 }
 
-export { createAccessLog, listAccessLogs }
+export { createAccessLog, getCountOfAccessLogs, listAccessLogs }

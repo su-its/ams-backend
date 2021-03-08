@@ -15,10 +15,19 @@ const Status = {
 } as const
 
 function playWav (fileName: string) {
-  // stdio: 'inherit'でnodeのstdioを子プロセスにも使わせる
+  // stdio: 'inherit'だとnodeのstdioに流れてしまって後で使えないので'pipe'
   // asyncなspawnだとChildProcessが返ってきて世話するのが面倒くさいので、spawnSyncを使う
   // 順番通りに最後まで再生したいのでspawnSyncを使う
-  spawnSync('aplay', ['-q', fileName + '.wav'], { cwd: WAV_FILE_DIR, stdio: 'inherit' })
+  const aplay = spawnSync('aplay', [fileName + '.wav'], { cwd: WAV_FILE_DIR, stdio: 'pipe' })
+
+  // spawnSync().errorはコマンドを実行できなかった際にErrorオブジェクトが入る
+  if (aplay.error) {
+    console.error('[!] spawnSync error:', aplay.error)
+  // spawnSync().statusは実行したコマンドの終了コードが入る
+  // errorではないのでnullではないはずだが一応確認
+  } else if (aplay.status !== null && aplay.status !== 0) {
+    console.error('[!] aplay error:', aplay.stderr)
+  }
 }
 
 async function handleReaderInput (req: Request, res: Response) {
