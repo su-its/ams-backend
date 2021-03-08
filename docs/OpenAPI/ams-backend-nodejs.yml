@@ -24,20 +24,32 @@ paths:
     get:
       tags:
         - User
-      description: 在室していた人の学籍番号、入室時間、退室時間の一覧を入室時間の降順でJSONで出す
+      description: 在室していた人の学籍番号、入室時間、退室時間の一覧を入室時間の降順で取得
+      parameters:
+        - name: page
+          in: query
+          description: 取得するページ番号
+          required: false
+          schema:
+            type: integer
+            default: 1
       responses:
         200:
-          description: 学籍番号、入室時間、退室時間の一覧をJSONのArrayで返す。※この関数にのみページネーションが実装されている。
+          description: 指定されたページに対応するPageオブジェクトを返す
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Log"
-              example:
-                - user_id: 1
-                  entered_at: "2021-02-23T16:57:39.000Z"
-                  exited_at: "2021-02-23T17:32:50.000Z"
+                type:
+                  $ref: "#/components/schemas/Page"
+                example:
+                  page: 2
+                  next_page: "http://localhost:3000/v1/access_logs?page=3"
+                  prev_page: "http://localhost:3000/v1/access_logs?page=1"
+                  total_page: 15
+                  data:
+                    - user_id: 1
+                      entered_at: "2021-02-23T16:57:39.000Z"
+                      exited_at: "2021-02-23T17:32:50.000Z"
 
   /room/:
     post:
@@ -148,6 +160,22 @@ components:
         message:
           type: string
           example: internal server error
+
+    Page:
+      type: object
+      properties:
+        page:
+          type: integer
+        next_page:
+          type: string
+        prev_page:
+          type: string
+        total_page:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Log"
 
 tags:
   - name: User
