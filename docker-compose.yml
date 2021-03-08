@@ -27,3 +27,10 @@ services:
       - .:/var/www/html
     ports:
       - 3000:3000
+
+  #ドキュメントの校正
+  redpen:
+    container_name: redpen
+    build: ./docker/redpen
+    volumes:
+      - .:/tmp
