@@ -3,3 +3,6 @@ dist
 config.ts
 mqtt.beebotte.com.pem
 .env
+
+# textlint用
+.cache
