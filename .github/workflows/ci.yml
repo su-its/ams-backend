@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  document_CI:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: aptを最新化
+        run: |
+          apt update
+          apt upgrade -y
+      - name: Javaをインストール
+        run: apt install -y openjdk-11-jdk
+      - name: Redpenのインストール
+        run: |
+          wget https://github.com/redpen-cc/redpen/releases/download/redpen-1.10.4/redpen-1.10.4.tar.gz -O - | tar xz && \
+          cp -av redpen-distribution-1.10.4/* /usr/local/ && \
+          rm -rf redpen-distribution-1.10.4
+      - name: pathに追加
+        run: export PATH=$PATH:/usr/local/bin
+      - name: Redpenの実行
+        run: redpen -c docs/config/Redpen-conig.xml *.md
