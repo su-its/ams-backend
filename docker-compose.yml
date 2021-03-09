@@ -33,4 +33,4 @@ services:
     container_name: redpen
     build: ./docker/redpen
     volumes:
-      - .:/tmp
+      - .:/redpen
