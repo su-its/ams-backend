@@ -23,6 +23,10 @@ RUN wget https://github.com/redpen-cc/redpen/releases/download/redpen-${Redpen_v
 # pathに追加
 ENV PATH $PATH:/usr/local/bin
 
+# shはtmpフォルダにあるけど、
+# バインドマウントしてるのはredpenフォルダ
+WORKDIR /redpen
+
 # Redpen用のshをセット
 COPY ./docker-entrypoint.sh /tmp
 ENTRYPOINT ["/tmp/docker-entrypoint.sh"]
