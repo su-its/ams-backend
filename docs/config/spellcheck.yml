@@ -1,6 +1,6 @@
 version: 1
 rules:
   - expected: Hogehoge
-    spacs:
+    specs:
       - from: hogehoge
         to: Hoegehoge
