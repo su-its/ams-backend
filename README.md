@@ -14,19 +14,19 @@
 
 ---
 
-### カードリーダ部
+## カードリーダ部
 
 [カードリーダ部のブリッジ](https://github.com/su-its/rdr-bridge)
 
 ---
 
-### フロンドエンド部
+## フロンドエンド部
 
 [AMS_フロントエンド](https://github.com/su-its/ams-frontend)
 
 ---
 
-#### レスポンスを受け取るリポジトリ
+## レスポンスを受け取るリポジトリ
 
 [bou_responder](https://github.com/su-its/bou-responder)
 
