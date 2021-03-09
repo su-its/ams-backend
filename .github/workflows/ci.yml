@@ -7,8 +7,6 @@ on:
 jobs:
   document_Redpen_CI:
     runs-on: ubuntu-latest
-    env:
-      Redpen_ver: 1.10.4
 
     steps:
       - name: リポジトリをチェックアウト
@@ -22,6 +20,8 @@ jobs:
       - name: Java、ダウンローダ、解答ソフトをインストール
         run: apt install -y openjdk-11-jre wget tar
       - name: Redpenのインストール
+        env:
+          Redpen_ver: 1.10.4
         run: |
           wget https://github.com/redpen-cc/redpen/releases/download/redpen-${Redpen_ver}/redpen-${Redpen_ver}.tar.gz
           tar xvf redpen-${Redpen_ver}.tar.gz
