@@ -5,22 +5,29 @@ on:
     branches: [develop, main]
 
 jobs:
-  document_CI:
+  document_Redpen_CI:
     runs-on: ubuntu-latest
+    env:
+      Redpen_ver: 1.10.4
 
     steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
       - name: aptを最新化
         run: |
           apt update
           apt upgrade -y
-      - name: Javaをインストール
-        run: apt install -y openjdk-11-jdk
+      - name: Java、ダウンローダ、解答ソフトをインストール
+        run: apt install -y openjdk-11-jre wget tar
       - name: Redpenのインストール
         run: |
-          wget https://github.com/redpen-cc/redpen/releases/download/redpen-1.10.4/redpen-1.10.4.tar.gz -O - | tar xz && \
-          cp -av redpen-distribution-1.10.4/* /usr/local/ && \
-          rm -rf redpen-distribution-1.10.4
+          wget https://github.com/redpen-cc/redpen/releases/download/redpen-${Redpen_ver}/redpen-${Redpen_ver}.tar.gz &&
+          tar xvf redpen-${Redpen_ver}.tar.gz &&
+          cp -av redpen-distribution-${Redpen_ver}/* /usr/local/ &&
+          rm -rf redpen-distribution-${Redpen_ver}
       - name: pathに追加
         run: export PATH=$PATH:/usr/local/bin
       - name: Redpenの実行
-        run: redpen -c docs/config/Redpen-conig.xml *.md
+        run: sh docker/redpen/docker-entrypoint.sh
