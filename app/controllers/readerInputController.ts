@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { spawnSync } from 'child_process'
 import { Request, Response } from 'express'
 import { join } from 'path'
@@ -83,9 +84,10 @@ async function handleReaderInput (req: Request, res: Response) {
   }
 
   // 入室or退室処理
-  const [user, error] = await roomTable.getUser(receivedUserId)
-  if (error) {
-    console.error('[!] Error:', error)
+  const [user, err] = await roomTable.getUser(receivedUserId)
+  if (err) {
+    console.error('[!] Error:', err)
+    res.status(500).json({ message: err.message || 'internal server error' })
     return
   }
 
@@ -94,17 +96,28 @@ async function handleReaderInput (req: Request, res: Response) {
     await mysql.beginTransaction()
     if (isExit) {
       // 退室
-      await logsTable.createAccessLog(user.user_id, user.entered_at)
-      await roomTable.deleteUser(user.user_id)
+      const [_caResult, caErr] = await logsTable.createAccessLog(user.user_id, user.entered_at)
+      // エラーがnullでなかったらthrowする
+      if (caErr) {
+        throw caErr
+      }
+      const [_duResult, duErr] = await roomTable.deleteUser(user.user_id)
+      if (duErr) {
+        throw duErr
+      }
     } else {
       // 入室
-      await roomTable.createUser(receivedUserId)
+      const [_cuResult, cuErr] = await roomTable.createUser(receivedUserId)
+      if (cuErr) {
+        throw cuErr
+      }
     }
     await mysql.commit()
-  } catch (error) {
+  } catch (err) {
     playWav('error')
-    console.error('[!] Error:', error)
+    console.error('[!] Error:', err)
     await mysql.rollback()
+    res.status(500).json({ message: err.message || 'internal server error' })
     return
   }
 
