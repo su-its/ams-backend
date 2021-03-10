@@ -17,17 +17,17 @@ jobs:
           persist-credentials: false
       - name: aptを最新化
         run: |
-          apt update
-          apt upgrade -y
+          sudo apt update
+          sudo apt upgrade -y
       - name: Java、ダウンローダ、解答ソフトをインストール
-        run: apt install -y openjdk-11-jre wget tar
+        run: sudo apt install -y openjdk-11-jre wget tar
       - name: Redpenのインストール
         env:
           Redpen_ver: 1.10.4
         run: |
           wget https://github.com/redpen-cc/redpen/releases/download/redpen-${Redpen_ver}/redpen-${Redpen_ver}.tar.gz
           tar xvf redpen-${Redpen_ver}.tar.gz
-          cp -av redpen-distribution-${Redpen_ver}/* /usr/local/
+          sudo cp -av redpen-distribution-${Redpen_ver}/* /usr/local/
           rm -rf redpen-distribution-${Redpen_ver}
       - name: pathに追加
         run: export PATH=$PATH:/usr/local/bin
