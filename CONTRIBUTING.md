@@ -1,24 +1,24 @@
-# どうやってdockerで開発するのか
+# どうやって docker で開発するのか
 
 ## 1. 必要なファイルのリネーム
 
-- config.tsファイルの生成
-`cp config.ts.sample config.ts`
+- config.ts ファイルの生成
+ `cp config.ts.sample config.ts`
 
-- .envファイルの生成
-`cp .env.sample .env`
-
----
-
-## 2. mountしてあるlogファイル等をlocalで生成する
-
-docker_initファイルは、dockerフォルダ直下にあります
+- .env ファイルの生成
+ `cp .env.sample .env`
 
 ---
 
-### windowsの方
+## 2. mount してある log ファイル等を local で生成する
 
-docker_init.batを実行してください
+docker_init ファイルは， docker フォルダ直下にあります
+
+---
+
+### windows の方
+
+docker_init.bat を実行してください
 
 文字化け及び改行コードエラーが発生する場合
 
@@ -27,13 +27,13 @@ docker_init.batを実行してください
 
 ---
 
-### mac、linuxの方
+### mac ，linux の方
 
 ```[bash]
 sh docker_init.sh
 ```
 
-## 3. config.tsのDBに関する記述を変更する
+## 3. config.ts の DB に関する記述を変更する
 
 ```[ts]
 const dbOptions: ConnectionOptions = {
@@ -48,13 +48,13 @@ const dbOptions: ConnectionOptions = {
 
 ---
 
-## 4. **dockerで動かす**
+## 4. **docker で動かす**
 
 例： `docker-compose up -d --build`
 
 ---
 
-## 5. databaseの初期化とテストデータ挿入
+## 5. database の初期化とテストデータ挿入
 
 パスワードは表示されます
 
@@ -63,16 +63,16 @@ const dbOptions: ConnectionOptions = {
 
 ---
 
-## Dockerで開発しない人向け
+## Docker で開発しない人向け
 
-### 1. config.tsを変更
+### 1. config.ts を変更
 
-- config.tsファイルの生成
-`cp config.ts.sample config.ts`
+- config.ts ファイルの生成
+ `cp config.ts.sample config.ts`
 
 ---
 
-### 2. config.tsにMySQLの情報を書く
+### 2. config.ts に MySQL の情報を書く
 
 ```[bash]
 const dbOptions: ConnectionOptions = {
@@ -87,7 +87,7 @@ const dbOptions: ConnectionOptions = {
 
 ---
 
-### 3. DBをマイグレート
+### 3. DB をマイグレート
 
 ```[bash]
 # スキーマフォルダに移動
@@ -108,15 +108,15 @@ mysql -u {ユーザ名} -p {DB名} < insert_test_data.sql
 
 ---
 
-### 4. node.jsを動かす
+### 4. node.js を動かす
 
-必要なmoduleをインストール
+必要な module をインストール
 
 ```[bash]
 npm install
 ```
 
-devモードで実行
+dev モードで実行
 
 ```[bash]
 npm run dev
