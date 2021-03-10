@@ -1,6 +1,6 @@
 # ams-backend-nodejs
 
-本リポジトリはこのような立ち位置になっています。
+本リポジトリはこのような立ち位置になっています．
 
 ![APIの立ち位置](docs/PJ_map/AMS_API.png)
 
@@ -8,7 +8,7 @@
 
 ## 関係のあるリポジトリ一覧
 
-## 議論したり、作業の優先順位を付けるリポジトリ
+## 議論したり，作業の優先順位を付けるリポジトリ
 
 [ams-project](https://github.com/su-its/ams-project)
 
@@ -20,7 +20,7 @@
 
 ---
 
-## フロンドエンド部
+## フロントエンド部
 
 [AMS_フロントエンド](https://github.com/su-its/ams-frontend)
 
@@ -32,8 +32,8 @@
 
 ---
 
-## APIの動作はこちらに記載しています
+## API の動作はこちらに記載しています
 
-### OpenAPIで記載しています
+### OpenAPI で記載しています
 
-[APIをOpenAPIで書いたもの](docs/OpenAPI/redoc-static.html)
+[API を OpenAPI で書いたもの](docs/OpenAPI/redoc-static.html)
