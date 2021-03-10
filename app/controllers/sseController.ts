@@ -20,7 +20,8 @@ const frontEndOrigin = 'http://localhost:8000'
 export function sseHandler (_req: Request, res: Response) {
   res.set({
     'Access-Control-Allow-Origin': frontEndOrigin, // オリジン間リソース共有をこのオリジンとだけ許可
-    'Content-Type': 'text/event-stream' // event-streamでクライアント-サーバー間を繋ぎっぱなしにする
+    'Content-Type': 'text/event-stream', // event-streamでクライアント-サーバー間を繋ぎっぱなしにする
+    'Cache-Control': 'no-cache' // 参考にしたサイトの多くでしようされていたのでno-cacheを指定(無くてもよさげ)
   })
 
   // hello world
