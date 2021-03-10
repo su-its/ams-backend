@@ -38,7 +38,7 @@ async function listAccessLogs (req: Request, res: Response) {
     DATA_PAR_PAGE * (page - 1))
 
   if (error2) {
-    res.status(500).json({ message: error?.message || 'internal server error' })
+    res.status(500).json({ message: error2?.message || 'internal server error' })
   } else {
     const urlOfEndpoint = req.protocol + '://' + req.hostname + ':' + amsOptions.port + req.baseUrl + req.path
 
