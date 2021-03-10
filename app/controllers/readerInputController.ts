@@ -15,6 +15,7 @@ const Status = {
   FATAL: 'fatal'
 } as const
 
+// フロントエンドに通知するためのイベントを定義。sseHandler関数にlistenさせる
 const emitter = new EventEmitter()
 
 function playWav (fileName: string) {
@@ -127,6 +128,7 @@ async function handleReaderInput (req: Request, res: Response) {
   // 処理が一通り終わったので音を鳴らす
   playWav(isExit ? 'out' : 'in')
 
+  // イベントの発火
   emitter.emit('usersUpdated')
 
   res.status(204).send()
