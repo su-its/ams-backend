@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { spawnSync } from 'child_process'
+import { EventEmitter } from 'events'
 import { Request, Response } from 'express'
 import { join } from 'path'
 import * as roomTable from '../models/inRoomUsersModel'
@@ -13,6 +14,8 @@ const Status = {
   ERROR: 'error',
   FATAL: 'fatal'
 } as const
+
+const emitter = new EventEmitter()
 
 function playWav (fileName: string) {
   // stdio: 'inherit'だとnodeのstdioに流れてしまって後で使えないので'pipe'
@@ -124,7 +127,9 @@ async function handleReaderInput (req: Request, res: Response) {
   // 処理が一通り終わったので音を鳴らす
   playWav(isExit ? 'out' : 'in')
 
+  emitter.emit('usersUpdated')
+
   res.status(204).send()
 }
 
-export { handleReaderInput }
+export { emitter, handleReaderInput }
