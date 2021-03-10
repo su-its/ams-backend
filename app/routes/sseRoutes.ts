@@ -3,6 +3,6 @@ import { sseHandler } from '../controllers/sseController'
 
 const router = Router()
 
-router.get('/sse', sseHandler)
+router.get('/users_updated_event', sseHandler)
 
 export default router
