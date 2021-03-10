@@ -6,3 +6,6 @@ mqtt.beebotte.com.pem
 
 # textlint用
 .cache
+
+# Redpen用
+Redpen/
