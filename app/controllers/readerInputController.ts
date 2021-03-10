@@ -64,7 +64,6 @@ async function handleReaderInput (req: Request, res: Response) {
     return
   }
 
-  // reader-bridgeからのリクエストを正しく受け取ったことを音で知らせる
   switch (readerStatus) {
     case Status.SUCCESS:
       // ちゃんとしたIDが来ているかチェック
