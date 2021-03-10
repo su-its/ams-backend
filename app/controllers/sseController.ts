@@ -14,11 +14,11 @@ export function sseHandler (req: Request, res: Response) {
   })
   res.status(200).write('data: hello\n\n') // nnは必須
 
-  emitter.on('usersUpdated', async () => {
+  emitter.on('usersUpdated', async function sendUsersUpdatedEvent () {
     const [users, err] = await roomTable.listUsers()
     if (err) {
-      // do something
-      res.status(500).send('error')
+      // status codeが4xxや5xxだった時点でEventSource(クライアント側)はcloseする。再接続もしない
+      res.status(500).json({ message: err?.message || 'internal server error' })
     } else {
       res.status(200).write(`data: ${JSON.stringify(users)}\n\n`)
     }
