@@ -1,8 +1,8 @@
-# どうやってOpenAPI用のHTMLを作成するのか
+# どうやって OpenAPI 用の HTML を作成するのか
 
 ## 要件
 
-node.jsインストールまたはDocker、WSL等使って、nodeを利用出来るようにしておく。
+node.js インストールまたは Docker ， WSL 等使って， node を利用出来るようにしておく．
 
 ---
 
