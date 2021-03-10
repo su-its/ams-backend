@@ -9,13 +9,14 @@ import EventEmitter from 'events'
 const frontEndOrigin = 'http://localhost:8000'
 
 /**
+ * @param {Express.Request} _req - HTTPリクエスト
+ * @param {Express.Response} res - HTTPレスポンス
  * `/{version}/sse`に来たリクエストにストリームを開いて繋ぎっぱなしにする。
  * 在室者のリストの変更を検知して更新されたリストをpush(≒プッシュ通知)する。
  *
  * Server-Sent eventsについて
  * https://html.spec.whatwg.org/multipage/server-sent-events.html
  */
-
 export function sseHandler (_req: Request, res: Response) {
   res.set({
     'Access-Control-Allow-Origin': frontEndOrigin, // オリジン間リソース共有をこのオリジンとだけ許可
@@ -38,7 +39,7 @@ export function sseHandler (_req: Request, res: Response) {
     const [users, err] = await roomTable.listUsers()
     if (err) {
       // status codeが4xxや5xxだった時点でクライアント側ではEventSourceのerrorイベントが
-      // 発火する。数秒後に再接続をトライするっぽい?
+      // 発火する。たぶん数秒後に再接続をトライする
       res.status(500).json({ message: err?.message || 'internal server error' })
     } else {
       // イベント名は任意。小文字の方がいいのかな?
