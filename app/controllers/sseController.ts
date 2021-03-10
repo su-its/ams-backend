@@ -25,7 +25,7 @@ export function sseHandler (_req: Request, res: Response) {
   })
 
   // hello world
-  res.status(200).write('event: hello\ndata: hello\n\n') // nnは必須 コネクションが切れてしまうのでsend()は使わない
+  res.status(200).write('data: hello\n\n') // nnは必須 コネクションが切れてしまうのでsend()は使わない
 
   // ブラウザーの再読み込みを繰り返すとその度にEventEmitterにlistenerが追加され、10を超えると
   // 'MaxListenersExceededWarning: Possible EventEmitter memory leak detected.'
@@ -43,8 +43,14 @@ export function sseHandler (_req: Request, res: Response) {
       // 発火する。たぶん数秒後に再接続をトライする
       res.status(500).json({ message: err?.message || 'internal server error' })
     } else {
-      // イベント名は任意。小文字の方がいいのかな?
-      res.status(200).write(`event: usersUpdated\ndata: ${JSON.stringify(users)}\n\n`)
+      try {
+        const json = JSON.stringify(users)
+        // イベント名は任意。全て小文字の方がいいのかな?
+        res.status(200).write(`event: usersUpdated\ndata: ${json}\n\n`)
+      } catch (err) {
+        console.error(err)
+        res.status(500).json({ message: 'internal server error' })
+      }
     }
   })
 }
