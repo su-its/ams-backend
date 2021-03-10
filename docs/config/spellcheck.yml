@@ -1,0 +1,6 @@
+version: 1
+rules:
+  - expected: Hogehoge
+    specs:
+      - from: hogehoge
+        to: Hoegehoge

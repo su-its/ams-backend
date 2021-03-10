@@ -4,7 +4,7 @@ LABEL maintainer="Satake Ryota <satake00157@gmail.com>" \
     description="MariaDB10.1.48のDockerfile"
 
 # confファイル転送して権限を変更する(win開発者向け)
-ADD ./conf/my.cnf /etc/mysql/my.cnf
+COPY ./conf/my.cnf /etc/mysql/my.cnf
 RUN chmod 644 /etc/mysql/my.cnf
 
 # timezoneに関するリポジトリを取得

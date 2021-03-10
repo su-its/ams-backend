@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:14.16.0
 
 LABEL maintainer="Satake Ryota <satake00157@gmail.com>" \
     description="nodejsのDockerfile"
