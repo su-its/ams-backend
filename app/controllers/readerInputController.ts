@@ -18,6 +18,12 @@ const Status = {
 // フロントエンドに通知するためのイベントを定義。sseHandler関数にlistenさせる
 const emitter = new EventEmitter()
 
+// 検知してもどうしようも無いがもしエラーが出たら記録する
+emitter.on('error', () => {
+  console.error('[!] Some error related to "emitter(node:events.EventEmitter)" has occured')
+  // さいきょうのえらーはんどりんぐ
+})
+
 function playWav (fileName: string) {
   // stdio: 'inherit'だとnodeのstdioに流れてしまって後で使えないので'pipe'
   // asyncなspawnだとChildProcessが返ってきて世話するのが面倒くさいので、spawnSyncを使う
