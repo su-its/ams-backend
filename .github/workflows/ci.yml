@@ -17,10 +17,10 @@ jobs:
           persist-credentials: false
       - name: aptを最新化
         run: |
-          apt update
-          apt upgrade -y
+          sudo apt update
+          sudo apt upgrade -y
       - name: Java、ダウンローダ、解答ソフトをインストール
-        run: apt install -y openjdk-11-jre wget tar
+        run: sudo apt install -y openjdk-11-jre wget tar
       - name: Redpenのインストール
         env:
           Redpen_ver: 1.10.4
