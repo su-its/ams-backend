@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Request, Response } from 'express'
 import { emitter } from './readerInputController'
 import * as roomTable from '../models/inRoomUsersModel'
@@ -43,6 +44,10 @@ export function sseHandler (_req: Request, res: Response) {
       // 発火する。たぶん数秒後に再接続をトライする
       res.status(500).json({ message: err?.message || 'internal server error' })
     } else {
+      // とりあえずuser_nameは仮で割り当てる
+      (users as Array<{ user_id: number, user_name?: string, entered_at: Date }>).forEach(user => {
+        user.user_name = '辻野あかり'
+      })
       try {
         const json = JSON.stringify(users)
         // イベント名は任意。全て小文字の方がいいのかな?
