@@ -15,11 +15,11 @@
       },
     "preset-ja-technical-writing": true,
     "spellcheck-tech-word": true,
-    "prh": {
-      "rulePaths": [
-        "./docs/config/spellcheck.yml"
-      ]
-    }
+    //"prh": {
+    //  "rulePaths": [
+    //    "./docs/config/spellcheck.yml"
+    //  ]
+    //}
   },
   "plugins": [
     "review"
