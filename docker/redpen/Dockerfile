@@ -7,9 +7,9 @@ LABEL maintainer="Satake Ryota <satake00157@gmail.com>" \
 ENV Redpen_ver 1.10.4
 
 # Javaをインストール
-RUN apt update && \
-    apt upgrade -y && \
-    apt install -y openjdk-11-jre wget tar
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y openjdk-11-jre wget tar
 
 # Redpenをインストール
 RUN wget https://github.com/redpen-cc/redpen/releases/download/redpen-${Redpen_ver}/redpen-${Redpen_ver}.tar.gz && \
