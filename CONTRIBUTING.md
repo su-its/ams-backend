@@ -1,4 +1,7 @@
-# どうやって docker で開発するのか
+# 開発者ガイド
+
+<details>
+<summary>Docker の場合</summary>
 
 ## 1. 必要なファイルのリネーム
 
@@ -84,17 +87,18 @@ textlint が自動修正できるモノに限られます
 詳細はログを参照してください
 
 ---
+</details>
+<details>
+<summary>Docker で開発しない人向け</summary>
 
-## Docker で開発しない人向け
-
-### 1. config.ts を変更
+## 1. config.ts を変更
 
 - config.ts ファイルの生成
  `cp config.ts.sample config.ts`
 
 ---
 
-### 2. config.ts に MySQL の情報を書く
+## 2. config.ts に MySQL の情報を書く
 
 ```[bash]
 const dbOptions: ConnectionOptions = {
@@ -109,7 +113,7 @@ const dbOptions: ConnectionOptions = {
 
 ---
 
-### 3. DB をマイグレート
+## 3. DB をマイグレート
 
 ```[bash]
 # スキーマフォルダに移動
@@ -130,7 +134,7 @@ mysql -u {ユーザ名} -p {DB名} < insert_test_data.sql
 
 ---
 
-### 4. node.js を動かす
+## 4. node.js を動かす
 
 必要な module をインストール
 
@@ -146,6 +150,6 @@ npm run dev
 
 ---
 
-### 5. Docker 使用者の 7. に従う
+## 5. Docker 使用者の 7. に従う
 
 [使い方](#7-textlint-の実行)
