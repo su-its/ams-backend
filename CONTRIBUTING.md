@@ -63,6 +63,28 @@ const dbOptions: ConnectionOptions = {
 
 ---
 
+## 6. Redpen の実行
+
+- `docker start redpen`
+
+`Redpen` というフォルダに結果が出力されます
+
+---
+
+## 7. Textlint の実行
+
+- `sh textlint.sh`
+
+`Textlint` というフォルダに結果が出力されます
+
+自動で修正する場合は `textlint --fix ファイル名` で直す事が出来ますが
+
+textlint が自動修正できるモノに限られます
+
+詳細はログを参照してください
+
+---
+
 ## Docker で開発しない人向け
 
 ### 1. config.ts を変更
@@ -121,3 +143,9 @@ dev モードで実行
 ```[bash]
 npm run dev
 ```
+
+---
+
+### 5. Docker 使用者の 7. に従う
+
+[使い方](#7-textlint-の実行)
