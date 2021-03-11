@@ -31,6 +31,7 @@ export function sseHandler (_req: Request, res: Response) {
   // ブラウザーの再読み込みを繰り返すとその度にEventEmitterにlistenerが追加され、10を超えると
   // 'MaxListenersExceededWarning: Possible EventEmitter memory leak detected.'
   // のような警告が出る。とりあえずは警告が出そうになったらこのイベントに登録済みのlistenerたちを解除する
+  // TODO EventEmitterからlistenerが外れてもフロントエンド側とのコネクションが切れるわけではないのでそこを何とかする
   if (emitter.listenerCount('usersUpdated') + 1 > EventEmitter.defaultMaxListeners) {
     emitter.removeAllListeners('usersUpdated')
   }
