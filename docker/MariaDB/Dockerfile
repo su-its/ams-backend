@@ -7,6 +7,9 @@ LABEL maintainer="Satake Ryota <satake00157@gmail.com>" \
 COPY ./conf/my.cnf /etc/mysql/my.cnf
 RUN chmod 644 /etc/mysql/my.cnf
 
+# 何故aptではダメなのか
+# 参考URL https://wp.tekapo.com/2019/07/15/difference-between-apt-and-apt-get/
+
 # timezoneに関するリポジトリを取得
 RUN apt-get update && \
     apt-get install -y tzdata

@@ -3,7 +3,7 @@
 
         <!-- 文の長さ自体を検査する機能 -->
         <validator name="SentenceLength">
-            <property name="max_len" value="40"/>
+            <property name="max_len" value="100"/>
         </validator>
 
         <!-- 文中のコンマの数を検査
@@ -57,10 +57,6 @@
         <!-- 類似した節が存在するかを検査
              節の場所を移動させた際に、元の場所の節の削除を忘れた場合にエラーを出力します -->
         <validator name="DuplicatedSection" />
-
-        <!-- 中身が無い節に（章）対してエラーを出力します
-             節の中に文がなく、小節から始まるときにもエラーを出力します -->
-        <validator name="EmptySection" />
 
         <!-- 環境によっては小さな小節を利用できないことがあります
              SectionLevelは節が細かすぎるとエラーを出力します -->

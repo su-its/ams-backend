@@ -1,39 +1,42 @@
-# どうやってdockerで開発するのか
+# 開発者ガイド
+
+<details>
+<summary>Docker の場合</summary>
 
 ## 1. 必要なファイルのリネーム
 
-- config.tsファイルの生成
-`cp config.ts.sample config.ts`
+- config.ts ファイルの生成
+ `cp config.ts.sample config.ts`
 
-- .envファイルの生成
-`cp .env.sample .env`
-
----
-
-## 2. mountしてあるlogファイル等をlocalで生成する
-
-docker_initファイルは、dockerフォルダ直下にあります
+- .env ファイルの生成
+ `cp .env.sample .env`
 
 ---
 
-### windowsの方
+## 2. mount してある log ファイル等を local で生成する
 
-docker_init.batを実行してください
+docker_init ファイルは， docker フォルダ直下にあります
 
-文字化け及び改行コードエラーが発生する場合
+---
+
+### windows の方
+
+docker_init.bat を実行してください
+
+文字化け等が発生する場合
 
 - UTF-8 → shift-jis
 - LF → CRLF
 
 ---
 
-### mac、linuxの方
+### mac ，linux の方
 
 ```[bash]
 sh docker_init.sh
 ```
 
-## 3. config.tsのDBに関する記述を変更する
+## 3. config.ts の DB に関する記述を変更する
 
 ```[ts]
 const dbOptions: ConnectionOptions = {
@@ -48,13 +51,13 @@ const dbOptions: ConnectionOptions = {
 
 ---
 
-## 4. **dockerで動かす**
+## 4. **docker で動かす**
 
 例： `docker-compose up -d --build`
 
 ---
 
-## 5. databaseの初期化とテストデータ挿入
+## 5. database の初期化とテストデータ挿入
 
 パスワードは表示されます
 
@@ -63,16 +66,39 @@ const dbOptions: ConnectionOptions = {
 
 ---
 
-## Dockerで開発しない人向け
+## 6. Redpen の実行
 
-### 1. config.tsを変更
+- `docker start redpen`
 
-- config.tsファイルの生成
-`cp config.ts.sample config.ts`
+`Redpen` というフォルダに結果が出力されます
 
 ---
 
-### 2. config.tsにMySQLの情報を書く
+## 7. Textlint の実行
+
+- `sh textlint.sh`
+
+`Textlint` というフォルダに結果が出力されます
+
+自動で修正する場合は `textlint --fix ファイル名` で直す事が出来ますが
+
+textlint が自動修正できるモノに限られます
+
+詳細はログを参照してください
+
+---
+</details>
+<details>
+<summary>Docker で開発しない人向け</summary>
+
+## 1. config.ts を変更
+
+- config.ts ファイルの生成
+ `cp config.ts.sample config.ts`
+
+---
+
+## 2. config.ts に MySQL の情報を書く
 
 ```[bash]
 const dbOptions: ConnectionOptions = {
@@ -87,7 +113,7 @@ const dbOptions: ConnectionOptions = {
 
 ---
 
-### 3. DBをマイグレート
+## 3. DB をマイグレート
 
 ```[bash]
 # スキーマフォルダに移動
@@ -108,16 +134,22 @@ mysql -u {ユーザ名} -p {DB名} < insert_test_data.sql
 
 ---
 
-### 4. node.jsを動かす
+## 4. node.js を動かす
 
-必要なmoduleをインストール
+必要な module をインストール
 
 ```[bash]
 npm install
 ```
 
-devモードで実行
+dev モードで実行
 
 ```[bash]
 npm run dev
 ```
+
+---
+
+## 5. Docker 使用者の 7. に従う
+
+[使い方](#7-textlint-の実行)

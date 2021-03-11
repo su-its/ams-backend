@@ -1,6 +1,6 @@
 # Deployment
 
-## PM2のインストール(まだの場合)
+## PM2のインストール（まだの場合）
 
 ```[bash]
 npm install pm2 -g
