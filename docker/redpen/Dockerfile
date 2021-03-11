@@ -6,14 +6,6 @@ LABEL maintainer="Satake Ryota <satake00157@gmail.com>" \
 # Redpenのversion指定
 ENV Redpen_ver 1.10.4
 
-# 何故aptではダメなのか
-# 参考URL https://wp.tekapo.com/2019/07/15/difference-between-apt-and-apt-get/
-
-# Javaをインストール
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y wget tar
-
 # Redpenをインストール
 RUN wget https://github.com/redpen-cc/redpen/releases/download/redpen-${Redpen_ver}/redpen-${Redpen_ver}.tar.gz && \
     tar xvf redpen-${Redpen_ver}.tar.gz && \
