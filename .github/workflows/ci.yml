@@ -21,10 +21,6 @@ jobs:
           java-version: '15'
           java-package: 'jre'
           architecture: x64
-      - name: ダウンローダ、解答ソフトをインストール
-        run: sudo apt-get install -y wget tar
-      - name: EULAに合意する
-        run: sudo ACCEPT_EULA=Y
       - name: Redpenのインストール
         env:
           Redpen_ver: 1.10.4
