@@ -20,7 +20,7 @@ docker_init ファイルは， docker フォルダ直下にあります
 
 docker_init.bat を実行してください
 
-文字化け及び改行コードエラーが発生する場合
+文字化け等が発生する場合
 
 - UTF-8 → shift-jis
 - LF → CRLF
