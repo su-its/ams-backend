@@ -18,7 +18,7 @@ jobs:
       - name: aptを最新化
         run: |
           sudo apt-get update
-          sudo apt-get upgrade -y
+          sudo ACCEPT_EULA=Y apt-get upgrade -y
       - name: Java、ダウンローダ、解答ソフトをインストール
         run: sudo apt-get install -y openjdk-11-jre wget tar
       - name: Redpenのインストール
