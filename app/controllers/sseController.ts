@@ -23,8 +23,7 @@ export function sseHandler (_req: Request, res: Response) {
   res.set({
     'Access-Control-Allow-Origin': frontEndOrigin, // オリジン間リソース共有をこのオリジンとだけ許可
     'Content-Type': 'text/event-stream', // event-streamでクライアント-サーバー間を繋ぎっぱなしにする
-    'Cache-Control': 'no-cache', // 参考にしたサイトの多くで使用されていたのでno-cacheを指定(無くてもよさげ)
-    Connection: 'keep-alive' // 参考にしたサイトの多くで使用されていたので
+    'Cache-Control': 'no-store' // レスポンスがキャッシュに保存されないようにする(クライアント側でも同じことをしているが一応)
   })
 
   // hello world
