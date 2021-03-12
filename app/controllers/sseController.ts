@@ -75,7 +75,7 @@ async function sendUsersUpdatedEvent () {
  * @param {Express.Request} req - HTTPリクエスト
  * @param {Express.Response} res - HTTPレスポンス
  */
-function sseHandler (req: Request, res: Response) {
+function addSubscriber (req: Request, res: Response) {
   // 適切なレスポンスヘッダーを設定
   res.set({
     'Content-Type': 'text/event-stream; charset=utf-8', // event-streamでクライアント-サーバー間を繋ぎっぱなしにする
@@ -120,4 +120,4 @@ function printCurState () {
   console.log(`Current clients has ${clients.length} connection(s).`)
 }
 
-export { sseHandler }
+export { addSubscriber }
