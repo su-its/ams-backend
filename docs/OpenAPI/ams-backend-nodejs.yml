@@ -92,12 +92,18 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/User"
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
                 example:
-                  - user_id: 1
-                    entered_at: "2021-02-23T16:57:39.000Z"
+                  data:
+                    - user_id: 1
+                      entered_at: "2021-02-23T16:57:39.000Z"
+                    - user_id: 2
+                      entered_at: "2021-02-23T18:03:41.000Z"
 
   /users_in_room/{user_id}:
     get:
@@ -122,11 +128,15 @@ paths:
             application/json:
               schema:
                 type: object
-                items:
-                  $ref: "#/components/schemas/User"
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
                 example:
-                  user_id: 1
-                  entered_at: "2021-02-23T16:57:39.000Z"
+                  data:
+                    - user_id: 1
+                      entered_at: "2021-02-23T16:57:39.000Z"
         204:
           description: 不在の場合、NO CONTENTを出力する。
 
