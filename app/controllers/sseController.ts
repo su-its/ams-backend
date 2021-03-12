@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
+import { EventEmitter } from 'events'
 import { Request, Response } from 'express'
-import { emitter } from './readerInputController'
 import * as roomTable from '../models/inRoomUsersModel'
 
 // TODO あとでmodelsかどこかのファイルに移動する
@@ -31,7 +31,7 @@ let clients: {
 /**
  * `usersUpdated`という`event`フィールドを持つSSEを配列`clients`内の全ての
  * クライアントに対して投げる関数。`emitter`(events.EventEmitter)の発火する
- * `usersUpdated`イベントのコールバック関数として使用する。80行目あたりを参照。
+ * `usersUpdated`イベントのコールバック関数として使用する。111行目あたりを参照。
  *
  * Server-Sent eventsについて
  * https://html.spec.whatwg.org/multipage/server-sent-events.html
@@ -104,8 +104,17 @@ function addSubscriber (req: Request, res: Response) {
 }
 
 // ここが最初に実行される
+// フロントエンドに通知するためのイベントを定義する
+const emitter = new EventEmitter()
+
 // listenerの登録
 emitter.on('usersUpdated', sendUsersUpdatedEvent)
+
+// 検知してもどうしようも無いが、もしエラーが出たら記録する
+emitter.on('error', () => {
+  console.error('[!] Some error related to "emitter(node:events.EventEmitter)" has occured')
+  // さいきょうのえらーはんどりんぐ
+})
 
 /**
  * デバッグ用の関数。現在の`clients`と`emitter`の状態を表示する。
@@ -120,4 +129,4 @@ function printCurState () {
   console.log(`Current clients has ${clients.length} connection(s).`)
 }
 
-export { addSubscriber }
+export { emitter, addSubscriber }
