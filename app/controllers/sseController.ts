@@ -6,6 +6,7 @@ import EventEmitter from 'events'
 
 /**
  * CORS用
+ * // TODO corsブランチをマージしたら消す
  */
 const frontEndOrigin = 'http://localhost:8000'
 
