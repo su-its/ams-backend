@@ -77,8 +77,8 @@ paths:
               user_id: 1
 
       responses:
-        200:
-          description: 現状こうなります。OKとか返すようになります。 #要修正
+        204:
+          description: NO CONTENT を返します。
 
   /users_in_room/:
     get:
@@ -186,4 +186,4 @@ components:
 
 tags:
   - name: User
-    description: 学籍番号を主キーとするAPI(退室してなければ退室時間は記録されてない)
+    description: 学籍番号を主キーとするAPI(必ずすべてのプロパティに何らかの値が入っています)
