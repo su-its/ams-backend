@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS member_list (
+CREATE TABLE IF NOT EXISTS members (
   id int unsigned PRIMARY KEY NOT NULL,
   name varchar(255) NOT NULL,
   created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,

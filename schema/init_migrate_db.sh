@@ -10,7 +10,7 @@ mysql -u user -p Entering_And_Leaving_The_Room < create_table_access_logs.sql
 mysql -u user -p Entering_And_Leaving_The_Room < create_table_in_room_users.sql
 
 # メンバのテーブル
-mysql -u user -p Entering_And_Leaving_The_Room < create_table_member_list.sql
+mysql -u user -p Entering_And_Leaving_The_Room < create_table_members.sql
 
 # スタブデータの注入
 mysql -u user -p Entering_And_Leaving_The_Room < insert_test_data.sql
