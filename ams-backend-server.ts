@@ -1,7 +1,8 @@
 import express from 'express'
 import accesslogsRoutes from './app/routes/accessLogsRoutes'
-import readerInputRoutes from './app/routes/readerInputRoutes'
 import inRoomUsersRoutes from './app/routes/inRoomUsersRoutes'
+import readerInputRoutes from './app/routes/readerInputRoutes'
+import sseRoutes from './app/routes/sseRoutes'
 import { amsOptions } from './config'
 
 const app: express.Express = express()
@@ -18,7 +19,7 @@ app.get('/', (_req, res) => {
 })
 
 // set middlewares
-app.use('/v1', accesslogsRoutes, readerInputRoutes, inRoomUsersRoutes)
+app.use('/v1', accesslogsRoutes, inRoomUsersRoutes, readerInputRoutes, sseRoutes)
 
 // set port, listen for requests
 const PORT = amsOptions.port

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { spawnSync } from 'child_process'
+import { EventEmitter } from 'events'
 import { Request, Response } from 'express'
 import { join } from 'path'
 import * as roomTable from '../models/inRoomUsersModel'
@@ -13,6 +14,15 @@ const Status = {
   ERROR: 'error',
   FATAL: 'fatal'
 } as const
+
+// フロントエンドに通知するためのイベントを定義。sseHandler関数にlistenさせる
+const emitter = new EventEmitter()
+
+// 検知してもどうしようも無いがもしエラーが出たら記録する
+emitter.on('error', () => {
+  console.error('[!] Some error related to "emitter(node:events.EventEmitter)" has occured')
+  // さいきょうのえらーはんどりんぐ
+})
 
 function playWav (fileName: string) {
   // stdio: 'inherit'だとnodeのstdioに流れてしまって後で使えないので'pipe'
@@ -54,7 +64,6 @@ async function handleReaderInput (req: Request, res: Response) {
     return
   }
 
-  // reader-bridgeからのリクエストを正しく受け取ったことを音で知らせる
   switch (readerStatus) {
     case Status.SUCCESS:
       // ちゃんとしたIDが来ているかチェック
@@ -124,7 +133,10 @@ async function handleReaderInput (req: Request, res: Response) {
   // 処理が一通り終わったので音を鳴らす
   playWav(isExit ? 'out' : 'in')
 
+  // イベントの発火
+  emitter.emit('usersUpdated')
+
   res.status(204).send()
 }
 
-export { handleReaderInput }
+export { emitter, handleReaderInput }
