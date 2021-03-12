@@ -4,6 +4,23 @@ import { emitter } from './readerInputController'
 import * as roomTable from '../models/inRoomUsersModel'
 import EventEmitter from 'events'
 
+// TODO あとでmodelsかどこかのファイルに移動する
+/**
+ * クライアントに返すデータの構造のもと
+ */
+interface InRoomUser {
+  'user_id': number,
+  'entered_at': Date
+}
+
+// TODO あとでmodelsかどこかのファイルに移動する
+/**
+ * クライアントに返すデータの構造
+ */
+interface NamedInRoomUser extends InRoomUser {
+  'user_name': string | null
+}
+
 /**
  * @param {Express.Request} _req - HTTPリクエスト
  * @param {Express.Response} res - HTTPレスポンス
@@ -42,7 +59,7 @@ function sseHandler (_req: Request, res: Response) {
       // TODO
       // とりあえずuser_nameは仮で割り当てる。user_nameはstringかnullにしてある(undefinedではない!)
       // 最悪Array<any>でも可
-      (users as Array<{ user_id: number, user_name: string | null, entered_at: Date }>).forEach(user => {
+      (users as NamedInRoomUser[]).forEach(user => {
         user.user_name = null
       })
       try {
