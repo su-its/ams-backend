@@ -47,10 +47,12 @@ async function listAccessLogs (req: Request, res: Response) {
     const totalPage = Math.ceil(countOfRecords / DATA_PAR_PAGE)
 
     const json = {
-      page: page,
-      next_page: page < totalPage ? nextPage : undefined,
-      prev_page: page > 1 ? prevPage : undefined,
-      total_page: totalPage,
+      meta: {
+        page: page,
+        next_page: page < totalPage ? nextPage : null,
+        prev_page: page > 1 ? prevPage : null,
+        total_page: totalPage
+      },
       data: logs
     }
     res.status(200).json(json)
