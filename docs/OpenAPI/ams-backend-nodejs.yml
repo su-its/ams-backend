@@ -42,10 +42,11 @@ paths:
                 type:
                   $ref: "#/components/schemas/Page"
                 example:
-                  page: 2
-                  next_page: "http://localhost:3000/v1/access_logs?page=3"
-                  prev_page: "http://localhost:3000/v1/access_logs?page=1"
-                  total_page: 15
+                  meta:
+                    page: 2
+                    next_page: "http://localhost:3000/v1/access_logs?page=3"
+                    prev_page: "http://localhost:3000/v1/access_logs?page=1"
+                    total_page: 15
                   data:
                     - user_id: 1
                       entered_at: "2021-02-23T16:57:39.000Z"
@@ -91,12 +92,18 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/User"
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
                 example:
-                  - user_id: 1
-                    entered_at: "2021-02-23T16:57:39.000Z"
+                  data:
+                    - user_id: 1
+                      entered_at: "2021-02-23T16:57:39.000Z"
+                    - user_id: 2
+                      entered_at: "2021-02-23T18:03:41.000Z"
 
   /users_in_room/{user_id}:
     get:
@@ -121,57 +128,57 @@ paths:
             application/json:
               schema:
                 type: object
-                items:
-                  $ref: "#/components/schemas/User"
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
                 example:
-                  user_id: 1
-                  entered_at: "2021-02-23T16:57:39.000Z"
+                  data:
+                    - user_id: 1
+                      entered_at: "2021-02-23T16:57:39.000Z"
         204:
           description: 不在の場合、NO CONTENTを出力する。
 
 components:
   schemas:
     Log:
-      type: array
+      type: object
       properties:
         user_id:
           type: integer
           format: int64
         entered_at:
           type: string
-          format: datetime
+          format: date-time
         exited_at:
           type: string
-          format: datetime
+          format: date-time
 
     User:
-      type: array
+      type: object
       properties:
         user_id:
           type: integer
           format: int64
         entered_at:
           type: string
-          format: datetime
-
-    Err:
-      type: array
-      properties:
-        message:
-          type: string
-          example: internal server error
+          format: date-time
 
     Page:
       type: object
       properties:
-        page:
-          type: integer
-        next_page:
-          type: string
-        prev_page:
-          type: string
-        total_page:
-          type: integer
+        meta:
+          type: object
+          properties:
+            page:
+              type: integer
+            next_page:
+              type: string
+            prev_page:
+              type: string
+            total_page:
+              type: integer
         data:
           type: array
           items:

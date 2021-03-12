@@ -9,7 +9,10 @@ async function getUser (req: Request, res: Response) {
     if (!user) {
       res.status(204).send() // 指定された人が在室していなかったとき
     } else {
-      res.status(200).json(user)
+      const toBeSent = {
+        data: [user]
+      }
+      res.status(200).json(toBeSent)
     }
   }
 }
@@ -19,7 +22,10 @@ async function listUsers (_req: Request, res: Response) {
   if (err) {
     res.status(500).json({ message: err.message || 'internal server error' })
   } else {
-    res.status(200).json(users)
+    const toBeSent = {
+      data: users
+    }
+    res.status(200).json(toBeSent)
   }
 }
 
