@@ -23,7 +23,10 @@ interface NamedInRoomUser extends InRoomUser {
 /**
  * SSEの送り先リスト
  */
-const clients: Response[] = []
+const clients: {
+  id: number, // クライアントを一意に識別するためにidを振る
+  res: Response
+}[] = []
 
 /**
  * `usersUpdated`という`event`フィールドを持つSSEを配列`clients`内の全ての
@@ -37,11 +40,11 @@ async function sendUsersUpdatedEvent () {
   const [users, err] = await roomTable.listUsers()
   if (err) {
     // listUsers()でエラーがあったら一旦全クライアントとのストリームを閉じる。
-    for (const res of clients) {
+    for (const client of clients) {
       // ストリームが(サーバー側から)閉じられた時にクライアント側ではEventSourceのerrorイベントが
       // 発火し、数秒後に再接続をトライしてくる。だからここは迷わずコネクションを切ってよし。
       // ただし何度もリトライされても困るのでクライアントには3回トライしたら止めるなど配慮してほしい。
-      res.status(204).end()
+      client.res.status(204).end()
     }
   } else {
     for (const user of users as NamedInRoomUser[]) {
@@ -51,13 +54,13 @@ async function sendUsersUpdatedEvent () {
     try {
       const json = JSON.stringify(users)
       // イベント名は任意。全て小文字の方がいいのかな?
-      for (const res of clients) {
-        res.status(200).write(`event: usersUpdated\ndata: ${json}\n\n`, 'utf-8')
+      for (const client of clients) {
+        client.res.status(200).write(`event: usersUpdated\ndata: ${json}\n\n`, 'utf-8')
       }
     } catch (err) {
       console.error(err)
-      for (const res of clients) {
-        res.status(204).end()
+      for (const client of clients) {
+        client.res.status(204).end()
       }
     }
   }
@@ -81,8 +84,13 @@ function sseHandler (_req: Request, res: Response) {
   // hello world
   res.status(200).write('data: hello\n\n', 'utf-8') // nnは必須 コネクションが切れてしまうのでsend()は使わない
 
+  const client = {
+    id: Date.now(), // 登録した時刻でクライアントを識別する
+    res: res
+  }
+
   // リストに追加
-  clients.push(res)
+  clients.push(client)
   // printCurState() // デバッグ用
 }
 
