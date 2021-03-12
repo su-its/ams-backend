@@ -143,47 +143,42 @@ paths:
 components:
   schemas:
     Log:
-      type: array
+      type: object
       properties:
         user_id:
           type: integer
           format: int64
         entered_at:
           type: string
-          format: datetime
+          format: date-time
         exited_at:
           type: string
-          format: datetime
+          format: date-time
 
     User:
-      type: array
+      type: object
       properties:
         user_id:
           type: integer
           format: int64
         entered_at:
           type: string
-          format: datetime
-
-    Err:
-      type: array
-      properties:
-        message:
-          type: string
-          example: internal server error
+          format: date-time
 
     Page:
       type: object
       properties:
         meta:
-          page:
-            type: integer
-          next_page:
-            type: string
-          prev_page:
-            type: string
-          total_page:
-            type: integer
+          type: object
+          properties:
+            page:
+              type: integer
+            next_page:
+              type: string
+            prev_page:
+              type: string
+            total_page:
+              type: integer
         data:
           type: array
           items:
