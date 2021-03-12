@@ -52,12 +52,12 @@ async function sendUsersUpdatedEvent () {
       const json = JSON.stringify(users)
       // イベント名は任意。全て小文字の方がいいのかな?
       for (const res of clients) {
-        res.status(200).write(`event: usersUpdated\ndata: ${json}\n\n`)
+        res.status(200).write(`event: usersUpdated\ndata: ${json}\n\n`, 'utf-8')
       }
     } catch (err) {
       console.error(err)
       for (const res of clients) {
-        res.status(500).json({ message: 'internal server error' })
+        res.status(204).end()
       }
     }
   }
@@ -72,12 +72,14 @@ async function sendUsersUpdatedEvent () {
 function sseHandler (_req: Request, res: Response) {
   // 適切なレスポンスヘッダーを設定
   res.set({
-    'Content-Type': 'text/event-stream', // event-streamでクライアント-サーバー間を繋ぎっぱなしにする
+    'Content-Type': 'text/event-stream; charset=utf-8', // event-streamでクライアント-サーバー間を繋ぎっぱなしにする
     'Cache-Control': 'no-store' // レスポンスがキャッシュに保存されないようにする(クライアント側でも同じことをしているが一応)
   })
+  // https://stackoverflow.com/questions/7636165/how-do-server-sent-events-actually-work/11998868
+  res.flushHeaders()
 
   // hello world
-  res.status(200).write('data: hello\n\n') // nnは必須 コネクションが切れてしまうのでsend()は使わない
+  res.status(200).write('data: hello\n\n', 'utf-8') // nnは必須 コネクションが切れてしまうのでsend()は使わない
 
   // リストに追加
   clients.push(res)
