@@ -1,3 +1,4 @@
+import cors from 'cors'
 import express from 'express'
 import accesslogsRoutes from './app/routes/accessLogsRoutes'
 import inRoomUsersRoutes from './app/routes/inRoomUsersRoutes'
@@ -12,6 +13,10 @@ app.use(express.json())
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }))
+
+// CORS
+// TODO 今は全てのパスに対してCORSが有効だが将来的には特定のパス以下(/v1など)のみに限定したい
+app.use(cors())
 
 // simple route
 app.get('/', (_req, res) => {
