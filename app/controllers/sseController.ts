@@ -55,7 +55,9 @@ async function sendUsersUpdatedEvent () {
     }
 
     try {
-      const json = JSON.stringify(users)
+      const json = JSON.stringify({
+        data: users
+      })
       // イベント名は任意。全て小文字の方がいいのかな?
       for (const client of clients) {
         client.res.status(200).write(`event: usersUpdated\ndata: ${json}\n\n`, 'utf-8')
