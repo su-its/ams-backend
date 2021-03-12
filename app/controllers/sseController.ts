@@ -23,7 +23,7 @@ interface NamedInRoomUser extends InRoomUser {
 /**
  * SSEの送り先リスト
  */
-const clients: {
+let clients: {
   id: number, // クライアントを一意に識別するためにidを振る
   res: Response
 }[] = []
@@ -35,13 +35,16 @@ const clients: {
  *
  * Server-Sent eventsについて
  * https://html.spec.whatwg.org/multipage/server-sent-events.html
+ *
+ * Server-Sent eventsについて2
+ * https://stackoverflow.com/questions/7636165/how-do-server-sent-events-actually-work/11998868
  */
 async function sendUsersUpdatedEvent () {
   const [users, err] = await roomTable.listUsers()
   if (err) {
-    // listUsers()でエラーがあったら一旦全クライアントとのストリームを閉じる。
+    // listUsers()でエラーがあったら一旦全クライアントとのコネクションを閉じる。
     for (const client of clients) {
-      // ストリームが(サーバー側から)閉じられた時にクライアント側ではEventSourceのerrorイベントが
+      // コネクションが(サーバー側から)閉じられた時にクライアント側ではEventSourceのerrorイベントが
       // 発火し、数秒後に再接続をトライしてくる。だからここは迷わずコネクションを切ってよし。
       // ただし何度もリトライされても困るのでクライアントには3回トライしたら止めるなど配慮してほしい。
       client.res.status(204).end()
@@ -67,31 +70,37 @@ async function sendUsersUpdatedEvent () {
 }
 
 /**
- * @param {Express.Request} _req - HTTPリクエスト
+ * @param {Express.Request} req - HTTPリクエスト
  * @param {Express.Response} res - HTTPレスポンス
  * `/{version}/users_updated_event`に来たリクエストについて対応するレスポンスに
  * 適切なレスポンスヘッダーを設定して、それを配列`clients`に格納する関数。
  */
-function sseHandler (_req: Request, res: Response) {
+function sseHandler (req: Request, res: Response) {
   // 適切なレスポンスヘッダーを設定
   res.set({
     'Content-Type': 'text/event-stream; charset=utf-8', // event-streamでクライアント-サーバー間を繋ぎっぱなしにする
     'Cache-Control': 'no-store' // レスポンスがキャッシュに保存されないようにする(クライアント側でも同じことをしているが一応)
   })
-  // https://stackoverflow.com/questions/7636165/how-do-server-sent-events-actually-work/11998868
-  res.flushHeaders()
 
-  // hello world
-  res.status(200).write('data: hello\n\n', 'utf-8') // nnは必須 コネクションが切れてしまうのでsend()は使わない
+  // hello world デバッグ用
+  // res.status(200).write('data: Hello World\n\n', 'utf-8') // nnは必須 コネクションが切れてしまうのでsend()は使わない
 
+  // https://www.vhudyma-blog.eu/a-complete-guide-to-server-sent-events-in-javascript
+  const id = Date.now()
   const client = {
-    id: Date.now(), // 登録した時刻でクライアントを識別する
+    id: id, // 登録した時刻でクライアントを識別する
     res: res
   }
 
   // リストに追加
   clients.push(client)
   // printCurState() // デバッグ用
+
+  // クライアント側がコネクションを切った場合、リストから除去する
+  req.on('close', () => {
+    clients = clients.filter(client => client.id !== id)
+    // printCurState() // デバッグ用
+  })
 }
 
 // ここが最初に実行される
