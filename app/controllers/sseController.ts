@@ -70,10 +70,10 @@ async function sendUsersUpdatedEvent () {
 }
 
 /**
- * @param {Express.Request} req - HTTPリクエスト
- * @param {Express.Response} res - HTTPレスポンス
  * `/{version}/users_updated_event`に来たリクエストについて対応するレスポンスに
  * 適切なレスポンスヘッダーを設定して、それを配列`clients`に格納する関数。
+ * @param {Express.Request} req - HTTPリクエスト
+ * @param {Express.Response} res - HTTPレスポンス
  */
 function sseHandler (req: Request, res: Response) {
   // 適切なレスポンスヘッダーを設定
@@ -107,6 +107,10 @@ function sseHandler (req: Request, res: Response) {
 // listenerの登録
 emitter.on('usersUpdated', sendUsersUpdatedEvent)
 
+/**
+ * デバッグ用の関数。現在の`clients`と`emitter`の状態を表示する。
+ * `emitter`の状態はずっと同じはず。むしろ変化したら異常。
+ */
 // eslint-disable-next-line no-unused-vars
 function printCurState () {
   console.log(new Date().toISOString(), 'Current State')
