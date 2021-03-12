@@ -20,6 +20,9 @@ interface NamedInRoomUser extends InRoomUser {
   'user_name': string | null
 }
 
+/**
+ * SSEの送り先リスト
+ */
 const clients: Response[] = []
 
 /**
@@ -35,10 +38,10 @@ async function sendUsersUpdatedEvent () {
   if (err) {
     // listUsers()でエラーがあったら一旦全クライアントとのストリームを閉じる。
     for (const res of clients) {
-      // status codeが4xxや5xxだった時点でクライアント側ではEventSourceのerrorイベントが
+      // ストリームが(サーバー側から)閉じられた時にクライアント側ではEventSourceのerrorイベントが
       // 発火し、数秒後に再接続をトライしてくる。だからここは迷わずコネクションを切ってよし。
       // ただし何度もリトライされても困るのでクライアントには3回トライしたら止めるなど配慮してほしい。
-      res.status(500).json({ message: err?.message || 'internal server error' })
+      res.status(204).end()
     }
   } else {
     for (const user of users as NamedInRoomUser[]) {
