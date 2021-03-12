@@ -13,7 +13,7 @@ import EventEmitter from 'events'
  * Server-Sent eventsについて
  * https://html.spec.whatwg.org/multipage/server-sent-events.html
  */
-export function sseHandler (_req: Request, res: Response) {
+function sseHandler (_req: Request, res: Response) {
   res.set({
     'Content-Type': 'text/event-stream', // event-streamでクライアント-サーバー間を繋ぎっぱなしにする
     'Cache-Control': 'no-store' // レスポンスがキャッシュに保存されないようにする(クライアント側でも同じことをしているが一応)
@@ -56,3 +56,5 @@ export function sseHandler (_req: Request, res: Response) {
     }
   })
 }
+
+export { sseHandler }
