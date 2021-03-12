@@ -5,12 +5,6 @@ import * as roomTable from '../models/inRoomUsersModel'
 import EventEmitter from 'events'
 
 /**
- * CORS用
- * // TODO corsブランチをマージしたら消す
- */
-const frontEndOrigin = 'http://localhost:8000'
-
-/**
  * @param {Express.Request} _req - HTTPリクエスト
  * @param {Express.Response} res - HTTPレスポンス
  * `/{version}/sse`に来たリクエストにストリームを開いて繋ぎっぱなしにする。
@@ -21,7 +15,6 @@ const frontEndOrigin = 'http://localhost:8000'
  */
 export function sseHandler (_req: Request, res: Response) {
   res.set({
-    'Access-Control-Allow-Origin': frontEndOrigin, // オリジン間リソース共有をこのオリジンとだけ許可
     'Content-Type': 'text/event-stream', // event-streamでクライアント-サーバー間を繋ぎっぱなしにする
     'Cache-Control': 'no-store' // レスポンスがキャッシュに保存されないようにする(クライアント側でも同じことをしているが一応)
   })
