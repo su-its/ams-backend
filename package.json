@@ -5,9 +5,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "npm run build && node dist/ams-backend-server.js",
     "build": "tsc -p .",
-    "dev": "ts-node-dev --respawn ams-backend-server.ts",
+    "dev": "ts-node-dev --respawn --kill-child ams-backend-server.ts",
+    "lint": "eslint . --ext .js,.ts",
+    "start": "npm run build && node dist/ams-backend-server.js",
     "test": "jest"
   },
   "engines": {
@@ -40,7 +41,6 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mqtt": "^4.2.6",
     "mysql2": "^2.2.5"
   }
 }
