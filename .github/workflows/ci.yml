@@ -2,34 +2,75 @@ name: CI
 
 on:
   pull_request:
-    branches: 
+    branches:
       - develop
       - main
 
 jobs:
+  # Redpen
   document_Redpen_CI:
     runs-on: ubuntu-latest
-
+    env:
+      redpen_conf: docs/config/Redpen-config.xml
     steps:
       - name: リポジトリをチェックアウト
         uses: actions/checkout@v2
         with:
           persist-credentials: false
-      - name: javaをダウンロードしてくる
-        uses: actions/setup-java@v1
+          submodules: true
+      - name: Redpenを実行:PRチェック
+        uses: tsuyoshicho/action-redpen@v1
         with:
-          java-version: '15'
-          java-package: 'jre'
-          architecture: x64
-      - name: Redpenのインストール
-        env:
-          Redpen_ver: 1.10.4
-        run: |
-          wget https://github.com/redpen-cc/redpen/releases/download/redpen-${Redpen_ver}/redpen-${Redpen_ver}.tar.gz
-          tar xvf redpen-${Redpen_ver}.tar.gz
-          sudo cp -av redpen-distribution-${Redpen_ver}/* /usr/local/
-          rm -rf redpen-distribution-${Redpen_ver}
-      - name: pathに追加
-        run: export PATH=$PATH:/usr/local/bin
-      - name: Redpenの実行
-        run: sh docker/redpen/docker-entrypoint.sh
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-check
+          targets: "*.md"
+          config: ${redpen_conf}
+      - name: Redpenを実行:チェック
+        uses: tsuyoshicho/action-redpen@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-check
+          targets: "*.md"
+          config: ${redpen_conf}
+      - name: Redpenを実行:レビュー
+        uses: tsuyoshicho/action-redpen@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          targets: "*.md"
+          config: ${redpen_conf}
+
+  # Textlint
+  document_textlint_CI:
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          submodules: true
+      - name: nodejsの設定
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+      - name: textlintの実行:PRチェック
+        uses: tsuyoshicho/action-textlint@v3
+        with:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-check
+          level: info
+          textlint_flags: "./**"
+      - name: textlintの実行:チェック
+        uses: tsuyoshicho/action-textlint@v3
+        with:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-check
+          level: info
+          textlint_flags: "./**"
+      - name: textlintの実行:レビュー
+        uses: tsuyoshicho/action-textlint@v3
+        with:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          level: info
+          textlint_flags: "./**"
