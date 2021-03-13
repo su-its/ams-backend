@@ -1,12 +1,15 @@
 {
-  "filters": {
-    "comments": true
-  },
   "rules": {
     "preset-japanese": true,
-    "preset-ja-spacing": true,
-    "ja-space-between-half-and-full-width": {
-      "space": "always"
+    "preset-ja-spacing": {
+      "ja-space-between-half-and-full-width": {
+        "space": "always",
+        "exceptPunctuation": true
+      },
+      "ja-space-around-code": {
+        "before": true,
+        "after": true
+      }
     },
     "@proofdict/proofdict": {
       "dictURL": "https://azu.github.io/proof-dictionary/"
@@ -14,5 +17,12 @@
     "preset-ja-technical-writing": true,
     "spellcheck-tech-word": true
   },
-  "plugins": ["review"]
+  "plugins": {
+    "@textlint/markdown": {
+      "extensions": [".md"]
+    },
+    "@textlint/asciidoc": {
+      "extensions": [".adoc"]
+    }
+  }
 }
