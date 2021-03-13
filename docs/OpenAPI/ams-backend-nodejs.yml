@@ -39,16 +39,16 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Page"
-                example:
-                  meta:
-                    page: 2
-                    next_page: "http://localhost:3000/v1/access_logs?page=3"
-                    prev_page: "http://localhost:3000/v1/access_logs?page=1"
-                    total_page: 15
-                  data:
-                    - user_id: 1
-                      entered_at: "2021-02-23T16:57:39.000Z"
-                      exited_at: "2021-02-23T17:32:50.000Z"
+              example:
+                meta:
+                  page: 2
+                  next_page: "http://localhost:3000/v1/access_logs?page=3"
+                  prev_page: "http://localhost:3000/v1/access_logs?page=1"
+                  total_page: 15
+                data:
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
+                    exited_at: "2021-02-23T17:32:50.000Z"
 
   /users_in_room/:
     get:
@@ -66,12 +66,12 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/User"
-                example:
-                  data:
-                    - user_id: 1
-                      entered_at: "2021-02-23T16:57:39.000Z"
-                    - user_id: 2
-                      entered_at: "2021-02-23T18:03:41.000Z"
+              example:
+                data:
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
+                  - user_id: 2
+                    entered_at: "2021-02-23T18:03:41.000Z"
 
   /users_in_room/{user_id}:
     get:
@@ -98,10 +98,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/User"
-                example:
-                  data:
-                    - user_id: 1
-                      entered_at: "2021-02-23T16:57:39.000Z"
+              example:
+                data:
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
         204:
           description: 不在の場合、 NO CONTENT を返す
 
