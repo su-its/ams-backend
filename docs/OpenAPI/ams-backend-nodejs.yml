@@ -52,8 +52,8 @@ paths:
 
   /users_in_room/:
     get:
-      summary: 在室中のユーザ情報一覧を取得
-      description: 在室中のユーザのArrayをJSONで返す
+      summary: ユーザ情報一覧を取得
+      description: ユーザのユーザ情報のArrayをJSONで返す
       responses:
         200:
           description: 成功
@@ -75,8 +75,8 @@ paths:
 
   /users_in_room/{user_id}:
     get:
-      summary: 在室中のとある1人のユーザ情報を取得
-      description: 特定のユーザが在室しているか確認するために使える
+      summary: 特定ユーザ1名のユーザ情報を取得
+      description: 指定されたユーザのユーザ情報もしくは NO CONTENT を返す
       parameters:
         - name: user_id
           in: path
