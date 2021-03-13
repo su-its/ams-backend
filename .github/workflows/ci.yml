@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       redpen_conf: docs/config/Redpen-config.xml
-      search: find . \( -type d -and -name 'node_modules' -and -prune \) -or \( -name "*.md" \)
     steps:
       - name: リポジトリをチェックアウト
         uses: actions/checkout@v2
@@ -24,28 +23,26 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-check
-          targets: ${search}
+          targets: "*"
           config: ${redpen_conf}
       - name: Redpenを実行:チェック
         uses: tsuyoshicho/action-redpen@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-check
-          targets: ${search}
+          targets: "*"
           config: ${redpen_conf}
       - name: Redpenを実行:レビュー
         uses: tsuyoshicho/action-redpen@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
-          targets: ${search}
+          targets: "*"
           config: ${redpen_conf}
 
   # Textlint
   document_textlint_CI:
     runs-on: ubuntu-latest
-    env:
-      search: find . \( -type d -and -name 'node_modules' -and -prune \) -or \( -name "*.md" \)
     steps:
       - name: リポジトリをチェックアウト
         uses: actions/checkout@v2
@@ -62,18 +59,18 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-check
           level: info
-          textlint_flags: ${search}
+          textlint_flags: "*"
       - name: textlintの実行:チェック
         uses: tsuyoshicho/action-textlint@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-check
           level: info
-          textlint_flags: ${search}
+          textlint_flags: "*"
       - name: textlintの実行:レビュー
         uses: tsuyoshicho/action-textlint@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
           level: info
-          textlint_flags: ${search}
+          textlint_flags: "*"
