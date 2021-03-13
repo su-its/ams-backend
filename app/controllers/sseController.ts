@@ -47,10 +47,11 @@ async function sendUsersUpdatedEvent () {
       // コネクションが(サーバー側から)閉じられた時にクライアント側ではEventSourceのerrorイベントが
       // 発火し、数秒後に再接続をトライしてくる。だからここは迷わずコネクションを切ってよし。
       // ただし何度もリトライされても困るのでクライアントには3回トライしたら止めるなど配慮してほしい。
-      client.res.status(204).end()
+      client.res.end()
     }
   } else {
     for (const user of users as NamedInRoomUser[]) {
+      // TODO まだ名前をDBに登録していないので表示させられないが、将来的につけたい
       user.user_name = null
     }
 
@@ -60,12 +61,12 @@ async function sendUsersUpdatedEvent () {
       })
       // イベント名は任意。全て小文字の方がいいのかな?
       for (const client of clients) {
-        client.res.status(200).write(`event: usersUpdated\ndata: ${json}\n\n`, 'utf-8')
+        client.res.write(`event: usersUpdated\ndata: ${json}\n\n`, 'utf-8')
       }
     } catch (err) {
       console.error(err)
       for (const client of clients) {
-        client.res.status(204).end()
+        client.res.end()
       }
     }
   }
@@ -84,8 +85,12 @@ function addSubscriber (req: Request, res: Response) {
     'Cache-Control': 'no-store' // レスポンスがキャッシュに保存されないようにする(クライアント側でも同じことをしているが一応)
   })
 
+  // https://stackoverflow.com/questions/7636165/how-do-server-sent-events-actually-work/11998868
+  // https://masteringjs.io/tutorials/express/server-sent-events
+  res.flushHeaders() // ヘッダー(ステータスコード含む)だけ送る
+
   // hello world デバッグ用
-  // res.status(200).write('data: Hello World\n\n', 'utf-8') // nnは必須 コネクションが切れてしまうのでsend()は使わない
+  // res.write('data: Hello World\n\n', 'utf-8') // nnは必須 コネクションが切れてしまうのでsend()は使わない
 
   // https://www.vhudyma-blog.eu/a-complete-guide-to-server-sent-events-in-javascript
   const id = Date.now()
