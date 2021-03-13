@@ -40,6 +40,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.16.0
+          npm-version: 7.6.1
       - name: textlintの実行
         uses: tsuyoshicho/action-textlint@v3.0.1
         with:
