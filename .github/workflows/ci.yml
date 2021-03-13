@@ -17,7 +17,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Redpenを実行
-        uses: tsuyoshicho/action-redpen@v1.4.2
+        uses: tsuyoshicho/action-redpen@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           level: error
@@ -40,9 +40,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.16.0
-          npm-version: 7.6.1
       - name: textlintの実行
-        uses: tsuyoshicho/action-textlint@v3.0.1
+        uses: tsuyoshicho/action-textlint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
@@ -62,7 +61,7 @@ jobs:
         with:
           persist-credentials: false
       - name: alexによる査読
-        uses: reviewdog/action-alex@v1.2.0
+        uses: reviewdog/action-alex@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
