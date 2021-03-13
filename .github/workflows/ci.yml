@@ -20,7 +20,7 @@ jobs:
       - name: Redpenを実行
         uses: tsuyoshicho/action-redpen@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.github_token }}
           level: info
           reporter: github-pr-review
           targets: "*.md"
@@ -44,7 +44,7 @@ jobs:
       - name: textlintの実行
         uses: tsuyoshicho/action-textlint@v3.0.1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
           level: info
           reviewdog_flags: true
