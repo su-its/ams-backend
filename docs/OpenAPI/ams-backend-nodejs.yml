@@ -23,7 +23,7 @@ paths:
   /access_logs/:
     get:
       tags:
-        - User
+        - Log
       description: 在室していた人の学籍番号、入室時間、退室時間の一覧を入室時間の降順で取得
       parameters:
         - name: page
@@ -32,6 +32,7 @@ paths:
           required: false
           schema:
             type: integer
+            style: form
             default: 1
       responses:
         200:
@@ -39,8 +40,7 @@ paths:
           content:
             application/json:
               schema:
-                type:
-                  $ref: "#/components/schemas/Page"
+                $ref: "#/components/schemas/Page"
                 example:
                   meta:
                     page: 2
@@ -58,20 +58,22 @@ paths:
         - User
       description: 入室、退室した瞬間に送られるPOST
       requestBody:
-        description: 入室or退室時間
+        description: 学籍番号とブリッジのステータス
         content:
           application/json:
             schema:
-              status:
-                description: ブリッジのステータス
-                required: true
-                type: string
-                format: string
-              user_id:
-                description: ユーザIDを送信する
-                required: true
-                type: integer
-                format: int64
+              type: object
+              properties:
+                status:
+                  description: ブリッジのステータス
+                  required: true
+                  type: string
+                  format: string
+                user_id:
+                  description: 学籍番号
+                  required: true
+                  type: integer
+                  format: int64
             example:
               status: success
               user_id: 1
@@ -112,13 +114,13 @@ paths:
       description: 特定のユーザが在室しているか確認します。
       parameters:
         - name: user_id
-          in: query
-          description: ユーザIDを送信する
+          in: path
+          description: 学籍番号を送信する
           required: true
           schema:
             type: integer
             items:
-              style: form
+              style: matrix
             example: 1
 
       responses:
@@ -185,5 +187,8 @@ components:
             $ref: "#/components/schemas/Log"
 
 tags:
+  - name: Log
+    description: 過去に在室していた人の情報を扱うAPI
+
   - name: User
-    description: 学籍番号を主キーとするAPI(必ずすべてのプロパティに何らかの値が入っています)
+    description: 学籍番号を主キーとするAPI
