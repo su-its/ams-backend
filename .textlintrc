@@ -20,9 +20,6 @@
   "plugins": {
     "@textlint/markdown": {
       "extensions": [".md"]
-    },
-    "@textlint/asciidoc": {
-      "extensions": [".adoc"]
     }
   }
 }
