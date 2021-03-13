@@ -23,8 +23,6 @@ jobs:
           level: error
           reporter: github-pr-review
           targets: "*.md"
-          reviewdog_flags: true
-          fail_on_error: true
           config: docs/config/Redpen-config.xml
 
   # Textlint
@@ -46,9 +44,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
           level: error
-          reviewdog_flags: true
           textlint_flags: "*.md"
-          fail_on_error: true
 
   # Alex
   # https://github.com/reviewdog/action-alex
@@ -67,5 +63,3 @@ jobs:
           reporter: github-pr-review
           level: error
           alex_flags: "*.md"
-          reviewdog_flags: true
-          fail_on_error: true
