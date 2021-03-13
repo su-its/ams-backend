@@ -27,15 +27,14 @@ paths:
       parameters:
         - name: page
           in: query
-          description: 取得するページ番号
+          description: 取得したいページ番号
           required: false
           schema:
             type: integer
-            style: form
             default: 1
       responses:
         200:
-          description: 指定されたページに対応するPageオブジェクトを返す
+          description: 指定されたページに対応するPageオブジェクト(JSON)を返す
           content:
             application/json:
               schema:
@@ -81,12 +80,10 @@ paths:
       parameters:
         - name: user_id
           in: path
-          description: 学籍番号を送信する
+          description: 取得したいユーザの学籍番号
           required: true
           schema:
             type: integer
-            items:
-              style: matrix
             example: 1
 
       responses:
@@ -113,7 +110,7 @@ paths:
       summary: 入室、退室イベントを知らせる
       description: 入室、退室した瞬間にブリッジから送られてくるPOSTを受け取るためのパス
       requestBody:
-        description: 学籍番号とブリッジ(=カードリーダ)のステータス
+        description: ブリッジ(=カードリーダ)のステータスと学籍番号
         content:
           application/json:
             schema:
@@ -128,7 +125,6 @@ paths:
                   description: 学籍番号
                   required: true
                   type: integer
-                  format: int64
             example:
               status: success
               user_id: 1
@@ -143,12 +139,14 @@ components:
       type: object
       properties:
         user_id:
+          description: 学籍番号
           type: integer
-          format: int64
         entered_at:
+          description: 入室時間
           type: string
           format: date-time
         exited_at:
+          description: 退室時間
           type: string
           format: date-time
 
@@ -156,9 +154,10 @@ components:
       type: object
       properties:
         user_id:
+          description: 学籍番号
           type: integer
-          format: int64
         entered_at:
+          description: 入室時間
           type: string
           format: date-time
 
@@ -166,15 +165,20 @@ components:
       type: object
       properties:
         meta:
+          description: ページネーションに必要なメタ情報
           type: object
           properties:
             page:
+              description: このページのページ番号
               type: integer
             next_page:
+              description: 次のページへのリンク
               type: string
             prev_page:
+              description: 前のページへのリンク
               type: string
             total_page:
+              description: 全体のページ数
               type: integer
         data:
           type: array
