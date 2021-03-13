@@ -1,4 +1,11 @@
 {
+  "plugins": {
+    "@textlint/markdown": {
+      "extensions": [
+        ".md"
+      ]
+    }
+  },
   "rules": {
     "preset-japanese": true,
     "preset-ja-spacing": {
@@ -14,12 +21,17 @@
     "@proofdict/proofdict": {
       "dictURL": "https://azu.github.io/proof-dictionary/"
     },
-    "preset-ja-technical-writing": true,
-    "spellcheck-tech-word": true
-  },
-  "plugins": {
-    "@textlint/markdown": {
-      "extensions": [".md"]
+    "preset-ja-technical-writing": {
+      "no-exclamation-question-mark": {
+        "allowFullWidthExclamation": true,
+        "allowFullWidthQuestion": true
+      }
+    },
+    "spellcheck-tech-word": true,
+    "ja-technical-writing/ja-no-mixed-period": {
+      "allowPeriodMarks": [
+        ":"
+      ]
     }
   }
 }
