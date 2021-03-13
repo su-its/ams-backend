@@ -19,13 +19,13 @@ jobs:
       - name: Redpenを実行
         uses: tsuyoshicho/action-redpen@v1.4.2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          level: error
-          reporter: github-pr-review
-          targets: "*.md"
-          reviewdog_flags: true
-          fail_on_error: true
-          config: docs/config/Redpen-config.xml
+          INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_LEVEL: error
+          INPUT_REPORTER: github-pr-review
+          INPUT_TARGETS: "*.md"
+          INPUT_REVIEWDOG_FLAGS: true
+          INPUT_FAIL_ON_ERROR: true
+          REDPEN_CONFIG: docs/config/Redpen-config.xml
 
   # Textlint
   # URL: https://github.com/tsuyoshicho/action-textlint
@@ -40,16 +40,15 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.16.0
-          npm-version: 7.6.1
       - name: textlintの実行
         uses: tsuyoshicho/action-textlint@v3.0.1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          level: error
-          reviewdog_flags: true
-          textlint_flags: "*.md"
-          fail_on_error: true
+          INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_REPORTER: github-pr-review
+          INPUT_LEVEL: error
+          INPUT_REVIEWDOG_FLAGS: true
+          INPUT_TEXTLINT_FLAGS: "*.md"
+          INPUT_FAIL_ON_ERROR: true
 
   # Alex
   # https://github.com/reviewdog/action-alex
@@ -64,9 +63,9 @@ jobs:
       - name: alexによる査読
         uses: reviewdog/action-alex@v1.2.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          level: error
-          alex_flags: "*.md"
-          reviewdog_flags: true
-          fail_on_error: true
+          INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_REPORTER: github-pr-review
+          INPUT_LEVEL: info
+          INPUT_ALEX_FLAGS: "*.md"
+          INPUT_REVIEWDOG_FLAGS: true
+          INPUT_FAIL_ON_ERROR: true
