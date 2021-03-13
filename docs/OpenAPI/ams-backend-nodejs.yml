@@ -22,9 +22,8 @@ servers:
 paths:
   /access_logs/:
     get:
-      tags:
-        - Log
-      description: 在室していた人の学籍番号、入室時間、退室時間の一覧を入室時間の降順で取得
+      summary: 入退室記録一覧を取得
+      description: 在室していた人の学籍番号、入室時間、退室時間の一覧を入室時間の降順で返す
       parameters:
         - name: page
           in: query
@@ -52,42 +51,10 @@ paths:
                       entered_at: "2021-02-23T16:57:39.000Z"
                       exited_at: "2021-02-23T17:32:50.000Z"
 
-  /room/:
-    post:
-      tags:
-        - User
-      description: 入室、退室した瞬間に送られるPOST
-      requestBody:
-        description: 学籍番号とブリッジのステータス
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  description: ブリッジのステータス
-                  required: true
-                  type: string
-                  format: string
-                user_id:
-                  description: 学籍番号
-                  required: true
-                  type: integer
-                  format: int64
-            example:
-              status: success
-              user_id: 1
-
-      responses:
-        204:
-          description: NO CONTENT を返します。
-
   /users_in_room/:
     get:
-      tags:
-        - User
-      description: 在室中のユーザのArrayをJSONで出す
-
+      summary: 在室中のユーザ情報一覧を取得
+      description: 在室中のユーザのArrayをJSONで返す
       responses:
         200:
           description: 成功
@@ -109,9 +76,8 @@ paths:
 
   /users_in_room/{user_id}:
     get:
-      tags:
-        - User
-      description: 特定のユーザが在室しているか確認します。
+      summary: 在室中のとある1人のユーザ情報を取得
+      description: 特定のユーザが在室しているか確認するために使える
       parameters:
         - name: user_id
           in: path
@@ -125,7 +91,7 @@ paths:
 
       responses:
         200:
-          description: 在室する場合、学籍番号と入室時間をJSONで出力する。
+          description: 在室する場合、学籍番号と入室時間をJSONで返す
           content:
             application/json:
               schema:
@@ -140,7 +106,36 @@ paths:
                     - user_id: 1
                       entered_at: "2021-02-23T16:57:39.000Z"
         204:
-          description: 不在の場合、NO CONTENTを出力する。
+          description: 不在の場合、 NO CONTENT を返す
+
+  /room/:
+    post:
+      summary: 入室、退室イベントを知らせる
+      description: 入室、退室した瞬間にブリッジから送られてくるPOSTを受け取るためのパス
+      requestBody:
+        description: 学籍番号とブリッジ(=カードリーダ)のステータス
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  description: ブリッジのステータス
+                  required: true
+                  type: string
+                  format: string
+                user_id:
+                  description: 学籍番号
+                  required: true
+                  type: integer
+                  format: int64
+            example:
+              status: success
+              user_id: 1
+
+      responses:
+        204:
+          description: NO CONTENT を返す
 
 components:
   schemas:
@@ -185,10 +180,3 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Log"
-
-tags:
-  - name: Log
-    description: 過去に在室していた人の情報を扱うAPI
-
-  - name: User
-    description: 学籍番号を主キーとするAPI
