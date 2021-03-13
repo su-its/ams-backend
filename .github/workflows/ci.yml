@@ -16,10 +16,29 @@ jobs:
         with:
           persist-credentials: false
           submodules: true
-      - name: Redpenを実行:レビュー
-        uses: tsuyoshicho/action-redpen@v1
+      - name: Redpenを実行:チェック
+        uses: tsuyoshicho/action-redpen@v1.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          level: info
+          reporter: github-pr-check
+          targets: "*.md"
+          fail_on_error: true
+          config: docs/config/Redpen-config.xml
+      - name: Redpenを実行:チェック
+        uses: tsuyoshicho/action-redpen@v1.4.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          level: warning
+          reporter: github-check
+          targets: "*.md"
+          fail_on_error: true
+          config: docs/config/Redpen-config.xml
+      - name: Redpenを実行:レビュー
+        uses: tsuyoshicho/action-redpen@v1.4.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          level: error
           reporter: github-pr-review
           targets: "*.md"
           fail_on_error: true
@@ -38,11 +57,42 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.16.0
-      - name: textlintの実行
-        uses: tsuyoshicho/action-textlint@v3
+      - name: textlintの実行:PRチェック
+        uses: tsuyoshicho/action-textlint@v3.0.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-check
+          level: info
+          fail_on_error: true
+          textlint_flags: "*.md"
+      - name: textlintの実行:チェック
+        uses: tsuyoshicho/action-textlint@v3.0.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-check
+          level: warning
+          fail_on_error: true
+          textlint_flags: "*.md"
+      - name: textlintの実行:レビュー
+        uses: tsuyoshicho/action-textlint@v3.0.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
-          level: info
+          level: error
           fail_on_error: true
-          textlint_flags: ". --ext .md"
+          textlint_flags: "*.md"
+
+  # markdownlint
+  markdownlint_CI:
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          submodules: true
+      - name: markdownlintをかける
+        uses: reviewdog/action-markdownlint@v0.1.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
