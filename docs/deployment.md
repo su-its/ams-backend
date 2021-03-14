@@ -113,7 +113,7 @@ tail -f --retry ~/.pm2/logs/ams-error.log
 PM2のアップデートは次のコマンドで実行できます
 
 ```bash
-pm2 updatePM2 # pm2 updateでも可
+pm2 update
 ```
 
 ### npmおよびnodeのアップデート時の注意
