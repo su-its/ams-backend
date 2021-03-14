@@ -22,70 +22,38 @@ servers:
 paths:
   /access_logs/:
     get:
-      tags:
-        - User
-      description: 在室していた人の学籍番号、入室時間、退室時間の一覧を入室時間の降順で取得
+      summary: 入退室記録一覧を取得
+      description: 在室していた人の学籍番号、入室時間、退室時間の一覧を入室時間の降順で返す
       parameters:
         - name: page
           in: query
-          description: 取得するページ番号
+          description: 取得したいページ番号
           required: false
           schema:
             type: integer
             default: 1
       responses:
         200:
-          description: 指定されたページに対応するPageオブジェクトを返す
+          description: 指定されたページに対応するPageオブジェクト(JSON)を返す
           content:
             application/json:
               schema:
-                type:
-                  $ref: "#/components/schemas/Page"
-                example:
-                  meta:
-                    page: 2
-                    next_page: "http://localhost:3000/v1/access_logs?page=3"
-                    prev_page: "http://localhost:3000/v1/access_logs?page=1"
-                    total_page: 15
-                  data:
-                    - user_id: 1
-                      entered_at: "2021-02-23T16:57:39.000Z"
-                      exited_at: "2021-02-23T17:32:50.000Z"
-
-  /room/:
-    post:
-      tags:
-        - User
-      description: 入室、退室した瞬間に送られるPOST
-      requestBody:
-        description: 入室or退室時間
-        content:
-          application/json:
-            schema:
-              status:
-                description: ブリッジのステータス
-                required: true
-                type: string
-                format: string
-              user_id:
-                description: ユーザIDを送信する
-                required: true
-                type: integer
-                format: int64
-            example:
-              status: success
-              user_id: 1
-
-      responses:
-        200:
-          description: 現状こうなります。OKとか返すようになります。 #要修正
+                $ref: "#/components/schemas/Page"
+              example:
+                meta:
+                  page: 2
+                  next_page: "http://localhost:3000/v1/access_logs?page=3"
+                  prev_page: "http://localhost:3000/v1/access_logs?page=1"
+                  total_page: 15
+                data:
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
+                    exited_at: "2021-02-23T17:32:50.000Z"
 
   /users_in_room/:
     get:
-      tags:
-        - User
-      description: 在室中のユーザのArrayをJSONで出す
-
+      summary: ユーザ情報一覧を取得
+      description: ユーザのユーザ情報のArrayをJSONで返す
       responses:
         200:
           description: 成功
@@ -98,32 +66,29 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/User"
-                example:
-                  data:
-                    - user_id: 1
-                      entered_at: "2021-02-23T16:57:39.000Z"
-                    - user_id: 2
-                      entered_at: "2021-02-23T18:03:41.000Z"
+              example:
+                data:
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
+                  - user_id: 2
+                    entered_at: "2021-02-23T18:03:41.000Z"
 
   /users_in_room/{user_id}:
     get:
-      tags:
-        - User
-      description: 特定のユーザが在室しているか確認します。
+      summary: 特定ユーザ1名のユーザ情報を取得
+      description: 指定されたユーザのユーザ情報もしくは NO CONTENT を返す
       parameters:
         - name: user_id
-          in: query
-          description: ユーザIDを送信する
+          in: path
+          description: 取得したいユーザの学籍番号
           required: true
           schema:
             type: integer
-            items:
-              style: form
             example: 1
 
       responses:
         200:
-          description: 在室する場合、学籍番号と入室時間をJSONで出力する。
+          description: 在室する場合、学籍番号と入室時間をJSONで返す
           content:
             application/json:
               schema:
@@ -133,12 +98,40 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/User"
-                example:
-                  data:
-                    - user_id: 1
-                      entered_at: "2021-02-23T16:57:39.000Z"
+              example:
+                data:
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
         204:
-          description: 不在の場合、NO CONTENTを出力する。
+          description: 不在の場合、 NO CONTENT を返す
+
+  /room/:
+    post:
+      summary: 入室、退室イベントを知らせる
+      description: 入室、退室した瞬間にブリッジから送られてくるPOSTを受け取るためのパス
+      requestBody:
+        description: ブリッジ(=カードリーダ)のステータスと学籍番号
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  description: ブリッジのステータス
+                  required: true
+                  type: string
+                  format: string
+                user_id:
+                  description: 学籍番号
+                  required: true
+                  type: integer
+            example:
+              status: success
+              user_id: 1
+
+      responses:
+        204:
+          description: NO CONTENT を返す
 
 components:
   schemas:
@@ -146,12 +139,14 @@ components:
       type: object
       properties:
         user_id:
+          description: 学籍番号
           type: integer
-          format: int64
         entered_at:
+          description: 入室時間
           type: string
           format: date-time
         exited_at:
+          description: 退室時間
           type: string
           format: date-time
 
@@ -159,9 +154,10 @@ components:
       type: object
       properties:
         user_id:
+          description: 学籍番号
           type: integer
-          format: int64
         entered_at:
+          description: 入室時間
           type: string
           format: date-time
 
@@ -169,21 +165,22 @@ components:
       type: object
       properties:
         meta:
+          description: ページネーションに必要なメタ情報
           type: object
           properties:
             page:
+              description: このページのページ番号
               type: integer
             next_page:
+              description: 次のページへのリンク
               type: string
             prev_page:
+              description: 前のページへのリンク
               type: string
             total_page:
+              description: 全体のページ数
               type: integer
         data:
           type: array
           items:
             $ref: "#/components/schemas/Log"
-
-tags:
-  - name: User
-    description: 学籍番号を主キーとするAPI(退室してなければ退室時間は記録されてない)
