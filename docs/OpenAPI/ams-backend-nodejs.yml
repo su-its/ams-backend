@@ -44,6 +44,8 @@ paths:
                   page: 2
                   next_page: "http://localhost:3000/v1/access_logs?page=3"
                   prev_page: "http://localhost:3000/v1/access_logs?page=1"
+                  contains: 10
+                  total: 147
                   total_page: 15
                 data:
                   - user_id: 1
@@ -177,6 +179,12 @@ components:
             prev_page:
               description: 前のページへのリンク
               type: string
+            contains:
+              description: このページが含むLogの件数
+              type: integer
+            total:
+              description: Logの総件数
+              type: integer
             total_page:
               description: 全体のページ数
               type: integer
