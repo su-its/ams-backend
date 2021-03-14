@@ -12,6 +12,7 @@ jobs:
   document_Redpen_CI:
     runs-on: ubuntu-latest
     steps:
+      - run: echo ${{ secrets.GITHUB_TOKEN }}
       - name: リポジトリをチェックアウト
         uses: actions/checkout@v2
         with:
@@ -37,12 +38,21 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 14.16.0
+      - name: キャッシュを使う
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: CIを回す
+        run: npm ci
       - name: textlintの実行
         uses: tsuyoshicho/action-textlint@v3.0.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
-          textlint_flags: "./**/**"
+          textlint_flags: "/**/**"
 
   # Alex
   # https://github.com/reviewdog/action-alex
@@ -59,4 +69,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
-          alex_flags: "./**/**"
+          alex_flags: "/**/**"
