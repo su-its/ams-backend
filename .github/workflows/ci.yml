@@ -12,8 +12,6 @@ jobs:
   document_Redpen_CI:
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ secrets.GITHUB_TOKEN }}
-      - run: echo ${{ secrets.github_token }}
       - name: リポジトリをチェックアウト
         uses: actions/checkout@v2
         with:
@@ -21,7 +19,6 @@ jobs:
       - name: Redpenを実行
         uses: tsuyoshicho/action-redpen@v1.4.2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
           targets: "*.md"
           config: docs/config/Redpen-config.xml
@@ -51,7 +48,6 @@ jobs:
       - name: textlintの実行
         uses: tsuyoshicho/action-textlint@v3.0.1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
           textlint_flags: "/**/**"
 
@@ -68,6 +64,5 @@ jobs:
       - name: alexによる査読
         uses: reviewdog/action-alex@v1.2.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
           alex_flags: "/**/**"
