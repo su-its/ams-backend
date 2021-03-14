@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo ${{ secrets.GITHUB_TOKEN }}
+      - run: echo ${{ secrets.github_token }}
       - name: リポジトリをチェックアウト
         uses: actions/checkout@v2
         with:
