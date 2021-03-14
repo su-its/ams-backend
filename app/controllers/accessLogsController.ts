@@ -51,6 +51,8 @@ async function listAccessLogs (req: Request, res: Response) {
         page: page,
         next_page: page < totalPage ? nextPage : null,
         prev_page: page > 1 ? prevPage : null,
+        contains: logs.length,
+        total: countOfRecords,
         total_page: totalPage
       },
       data: logs
