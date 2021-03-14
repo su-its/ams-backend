@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build": "tsc -p .",
-    "dev": "ts-node-dev --respawn --kill-child ams-backend-server.ts",
+    "dev": "ts-node-dev --respawn --exit-child ams-backend-server.ts",
     "lint": "eslint . --ext .js,.ts",
     "start": "npm run build && node dist/ams-backend-server.js",
     "test": "jest"
