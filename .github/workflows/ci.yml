@@ -42,7 +42,6 @@ jobs:
         uses: tsuyoshicho/action-textlint@v3.0.1
         with:
           reporter: github-pr-review
-          textlint_flags: "/**/**"
 
   # Alex
   # https://github.com/reviewdog/action-alex
@@ -58,4 +57,3 @@ jobs:
         uses: reviewdog/action-alex@v1.2.0
         with:
           reporter: github-pr-review
-          alex_flags: "/**/**"
