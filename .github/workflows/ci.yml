@@ -20,11 +20,8 @@ jobs:
         uses: tsuyoshicho/action-redpen@v1.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          level: error
           reporter: github-pr-review
           targets: "*.md"
-          reviewdog_flags: true
-          fail_on_error: true
           config: docs/config/Redpen-config.xml
 
   # Textlint
@@ -37,19 +34,15 @@ jobs:
         with:
           persist-credentials: false
       - name: nodejsの設定
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: 14.16.0
-          npm-version: 7.6.1
       - name: textlintの実行
         uses: tsuyoshicho/action-textlint@v3.0.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
-          level: error
-          reviewdog_flags: true
-          textlint_flags: "*.md"
-          fail_on_error: true
+          textlint_flags: "./**/**"
 
   # Alex
   # https://github.com/reviewdog/action-alex
@@ -66,7 +59,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
-          level: error
-          alex_flags: "*.md"
-          reviewdog_flags: true
-          fail_on_error: true
+          alex_flags: "./**/**"
