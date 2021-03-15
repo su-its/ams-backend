@@ -20,8 +20,10 @@ jobs:
         uses: tsuyoshicho/action-redpen@v1.4.2
         with:
           reporter: github-pr-review
+          fail_on_error: true
           targets: "*.md"
           config: docs/config/Redpen-config.xml
+          reviewdog_flags: -filter-mode=file -fail-on-error
 
   # Textlint
   # URL: https://github.com/tsuyoshicho/action-textlint
@@ -42,11 +44,12 @@ jobs:
         uses: tsuyoshicho/action-textlint@v3.0.1
         with:
           reporter: github-pr-review
+          fail_on_error: true
+          reviewdog_flags: -filter-mode=file -fail-on-error
 
   # Alex
   # https://github.com/reviewdog/action-alex
   alex_CI:
-    name: alex
     runs-on: ubuntu-latest
     steps:
       - name: リポジトリをチェックアウト
@@ -57,3 +60,5 @@ jobs:
         uses: reviewdog/action-alex@v1.2.0
         with:
           reporter: github-pr-review
+          fail_on_error: true
+          reviewdog_flags: -filter-mode=file -fail-on-error
