@@ -8,8 +8,6 @@ Node.js インストールまたは Docker 、 WSL 等使って、 node を利�
 
 ## インストール
 
-### インストールコマンド
-
 ```bash
 npm -g install redoc-cli
 ```
