@@ -2,7 +2,7 @@
 
 本リポジトリはこのような立ち位置になっています。
 
-![APIの立ち位置](docs/PJ_map/AMS_API.png)
+![APIの立ち位置](docs/PJ_map/AMS_MAP.png)
 
 ---
 
