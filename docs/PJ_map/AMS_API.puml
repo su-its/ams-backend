@@ -8,9 +8,9 @@ caption システム全体図
 
 node ITS室{
     node カードタッチからDBまで {
-        file カードリーダ部{
+        file カードリーダー部{
             interface 学生証
-            [カードリーダ]
+            [カードリーダー]
             [ブリッジ] #YellowGreen
         }
         node バックエンド {
@@ -37,9 +37,9 @@ ITS室 -[hidden]right-> インターネット
 MariaDB -[hidden]left-> Speaker
 [ITS_Slack] -[hidden]up-> bou_relay
 
-' カードリーダ&バックエンド部
-学生証 =^ [カードリーダ]: データ
-[カードリーダ] ==^ [ブリッジ]: データ
+' カードリーダー&バックエンド部
+学生証 =^ [カードリーダー]: データ
+[カードリーダー] ==^ [ブリッジ]: データ
 [ブリッジ] ==^ [AMS_バックエンド]: JSON
 [AMS_バックエンド] ^==^ MariaDB: SQL
 [AMS_バックエンド] --^ Speaker: 通知音
