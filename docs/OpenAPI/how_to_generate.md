@@ -2,7 +2,7 @@
 
 ## 要件
 
-Node.js インストールまたは Docker 、 WSL 等使って、 node を利用出来るようにしておく。
+Node.js インストールまたは Docker 、 WSL 等使って、 Node.js を利用出来るようにしておく。
 
 ---
 

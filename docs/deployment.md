@@ -15,36 +15,36 @@ pm2 startup
 pm2 save
 ```
 
-## pm2について
+## PM2 について
 
-pm2 は OS の起動時に本リポジトリ、 ams-backend-nodejs のプログラムを自動起動させ、落ちたら再起動させるなどの処理を担当しています。
+PM2 は OS の起動時に本リポジトリ、 ams-backend-nodejs のプログラムを自動起動させ、落ちたら再起動させるなどの処理を担当しています。
 
 詳しくは公式ドキュメントを読んでください。
 
-[pm2 - Single Page Doc](https://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/)
+[PM2 - Single Page Doc](https://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/)
 
 ### PM2でプログラムを自動起動させる流れ
 
 - `pm2 start <何か>` を使用して、 1 つ以上の自動起動させたいスクリプトを実行させた状態にしておきます。
 - `pm2 save` を実行します。すると現在のステータスが `~/.pm2/dump.pm2` に保存されます。
-- `pm2 startup` を実行すると pm2 が systemd のデーモンとして登録されます( Debian 系の OS の場合)。
+- `pm2 startup` を実行すると PM2 が systemd のデーモンとして登録されます( Debian 系の OS の場合)。
   - これは、 OS の起動時に `~/.pm2/dump.pm2` を読み込んで終了前の状態を復元するという仕組みになっています。
-  - `pm2 startup` は pm2 自体のインストール時に一度実行すれば大丈夫です。
+  - `pm2 startup` は PM2 自体のインストール時に一度実行すれば大丈夫です。
 
 ---
 
 ### 設定ファイル
 
-ams-backend のプログラムを実行させるため pm2 に読み込ませる使用する設定ファイルは `ecosystem.config.js` です。
+ams-backend のプログラムを実行させるため PM2 に読み込ませる使用する設定ファイルは `ecosystem.config.js` です。
 
-> pm2 そのものの設定ファイルではありません。プロジェクトごとに任意の設定ファイルを書いて pm2 に実行させることができます。
+> PM2 そのものの設定ファイルではありません。プロジェクトごとに任意の設定ファイルを書いて PM2 に実行させることができます。
 
 意味は次の通りです。
 
 ```javascript
 module.exports = {
   apps : [{
-    name: 'ams-backend', // pm2 内での識別名
+    name: 'ams-backend', // PM2 内での識別名
     script: 'npm',       // これと
     args: 'start',       // これのセットでpackage.jsonのnpm startが実行される
     watch: false,        // デーモンが起動しているときコードが更新されても再起動しない。再起動は手動でやる
@@ -106,7 +106,7 @@ cd /path/to/projectdir/
 npm run start
 ```
 
-pm2 の吐くログを監視する場合は次の手順です。
+PM2 の吐くログを監視する場合は次の手順です。
 
 ```bash
 tail -f --retry ~/.pm2/logs/ams-out.log
@@ -116,9 +116,9 @@ tail -f --retry ~/.pm2/logs/ams-error.log
 
 ---
 
-### pm2 自体のアップデート
+### PM2 自体のアップデート
 
-pm2 のアップデートは次のコマンドで実行できます。
+PM2 のアップデートは次のコマンドで実行できます。
 
 ```bash
 pm2 update
@@ -126,32 +126,32 @@ pm2 update
 
 ---
 
-### npm および node のアップデート時の注意
+### npm および Node.js のアップデート時の注意
 
-pm2 はグローバルインストールされているので npm あるいは node のバージョンを上げると pm2 は削除されます。
+PM2 はグローバルインストールされているので npm あるいは Node.js のバージョンを上げると PM2 は削除されます。
 
-この場合でも `~/.pm2/dump.pm2` は残るので古いバージョンの pm2 の設定で起動しようとして失敗します。
+この場合でも `~/.pm2/dump.pm2` は残るので古いバージョンの PM2 の設定で起動しようとして失敗します。
 
-> nvm 等の node のバージョン管理システムを利用しているとバージョンを上げると node の実行ファイルの参照先が変わります。そして `~/.pm2/dump.pm2` 内には絶対パスでnodeの実行ファイルの場所を記述してある箇所があるのでコケます。
+> nvm 等の Node.js のバージョン管理システムを利用しているとバージョンを上げると Node.js の実行ファイルの参照先が変わります。そして `~/.pm2/dump.pm2` 内には絶対パスで Node.js の実行ファイルの場所を記述してある箇所があるのでコケます。
 
-もしそうなっても古いバージョンの npm にインストールされている pm2 で作成された `dump.pm2` ファイルが新しい npm 環境で読めなくなるわけではありません。
+もしそうなっても古いバージョンの npm にインストールされている PM2 で作成された `dump.pm2` ファイルが新しい npm 環境で読めなくなるわけではありません。
 
 `pm2 status` で必要な状態を確認できます。
 
 npm または Node.js のアップデートに伴って必要な操作を示していますので、下記の手順を実行してください。
 
 ```bash
-# npm または node のバージョンを上げる前に行う操作
+# npm または Node.js のバージョンを上げる前に行う操作
 pm2 status # 現在自動起動するように登録されているスクリプトの一覧が出るので確認してメモしておく
 
 pm2 delete all # この操作を行うと現在自動起動するように登録されているスクリプトの情報が消える
 pm2 save --force # ~/.pm2/dump.pm2 が空になる
 cat ~/.pm2/dump.pm2 # 空の配列が記入されていることを確認する
-pm2 unstartup # pm2 のデーモンを止める。 sudo で始まるコマンドをコピペするように指示されるので指示に従う
+pm2 unstartup # PM2 のデーモンを止める。 sudo で始まるコマンドをコピペするように指示されるので指示に従う
 
-# ここで npm または node のバージョンを上げる(割愛)
+# ここで npm または Node.js のバージョンを上げる(割愛)
 
-# npm または node のバージョンを上げた後に行う操作
+# npm または Node.js のバージョンを上げた後に行う操作
 npm install -g pm2 # PM2の再インストール。~/.pm2/ディレクトリには古いファイルが残っているがそのまま残しておく
 pm2 start ecosystem.config.js # ams-backend はこれで再び使えるようになる
 # 他にも自動起動させたいスクリプトがあれば start を繰り返す
