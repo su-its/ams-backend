@@ -19,31 +19,24 @@ function parsePositiveInteger (s: string | undefined): number | null {
 const DEFAULT_PER_PAGE = 10
 
 async function listAccessLogs (req: Request, res: Response) {
-  // TODO: countからselectまでトランザクションを張る? (件数が変わると困る)
-  const [countOfRecords, error] = await table.getCountOfAccessLogs()
+  try {
+    // TODO: countからselectまでトランザクションを張る? (件数が変わると困る)
+    const countOfRecords = await table.getCountOfAccessLogs()
 
-  if (error) {
-    res.status(500).json({ message: error.message || 'internal server error' })
-    return
-  }
+    const pageStr = req.query.page?.toString()
+    const page = parsePositiveInteger(pageStr) ?? 1
 
-  const pageStr = req.query.page?.toString()
-  const page = parsePositiveInteger(pageStr) ?? 1
+    const perPageStr = req.query.per_page?.toString()
+    const perPage = parsePositiveInteger(perPageStr) ?? DEFAULT_PER_PAGE
 
-  const perPageStr = req.query.per_page?.toString()
-  const perPage = parsePositiveInteger(perPageStr) ?? DEFAULT_PER_PAGE
+    // page, perPageは正の整数であることが保証されている
+    const logs = await table.listAccessLogs(
+      undefined,
+      undefined,
+      undefined,
+      perPage,
+      perPage * (page - 1))
 
-  // page, perPageは正の整数であることが保証されている
-  const [logs, error2] = await table.listAccessLogs(
-    undefined,
-    undefined,
-    undefined,
-    perPage,
-    perPage * (page - 1))
-
-  if (error2) {
-    res.status(500).json({ message: error2?.message || 'internal server error' })
-  } else {
     const urlOfEndpoint = req.protocol + '://' + req.hostname + ':' + amsOptions.port + req.baseUrl + req.path
     const baseUrl = urlOfEndpoint + '?per_page=' + perPage
 
@@ -64,6 +57,9 @@ async function listAccessLogs (req: Request, res: Response) {
       data: logs
     }
     res.status(200).json(json)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ message: err.message || 'internal server error' })
   }
 }
 

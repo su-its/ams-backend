@@ -96,11 +96,7 @@ async function handleReaderInput (req: Request, res: Response) {
     await mysql.beginTransaction()
     if (isExit) {
       // 退室
-      const [_caResult, caErr] = await logsTable.createAccessLog(user.user_id, user.entered_at)
-      // エラーがnullでなかったらthrowする
-      if (caErr) {
-        throw caErr
-      }
+      await logsTable.createAccessLog(user.user_id, user.entered_at)
       const [_duResult, duErr] = await roomTable.deleteUser(user.user_id)
       if (duErr) {
         throw duErr
