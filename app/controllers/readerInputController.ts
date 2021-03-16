@@ -15,7 +15,12 @@ const Status = {
   FATAL: 'fatal'
 } as const
 
-function playWav (fileName: string) {
+/**
+ * `WAV_FILE_DIR`ディレクトリ以下にある音声ファイルを再生する。
+ *
+ * @param fileName 再生したい音声ファイル
+ */
+function playWav (fileName: string): void {
   // stdio: 'inherit'だとnodeのstdioに流れてしまって後で使えないので'pipe'
   // asyncなspawnだとChildProcessが返ってきて世話するのが面倒くさいので、spawnSyncを使う
   // 順番通りに最後まで再生したいのでspawnSyncを使う
@@ -31,18 +36,58 @@ function playWav (fileName: string) {
   }
 }
 
-function greet (isExit: boolean, now: Date) {
+/**
+ * 入室/退室と時間によって挨拶のセリフを決定し、音声再生用関数を実行する。
+ *
+ * @param isExit 今回のタッチが退室であるか否か
+ * @param now 現在時刻
+ */
+// TODO
+// 必要な音声ファイルを用意する
+function greet (isExit: boolean, now: Date): void {
+  const h = now.getHours()
   if (isExit) {
     // 退室の時の挨拶
+    if (h >= 5 && h < 17) {
+      playWav('matakitene')
+    } else if (h >= 17 && h < 20) {
+      playWav('otsukare')
+    } else {
+      playWav('oyasumi')
+    }
   } else {
     // 入室の時の挨拶
+    if (h >= 4 && h < 9) {
+      playWav('ohayou')
+    } else if (h >= 9 && h < 17) {
+      playWav('konnichiha')
+    } else {
+      playWav('konbanha')
+    }
   }
 }
 
-async function handleReaderInput (req: Request, res: Response) {
+/**
+ * ルーターのコールバックとして呼ばれ、rdr-bridgeからのPOSTを処理する。
+ *
+ * @async
+ * @see リクエストを投げてくるプログラムはこちら {@link https://github.com/su-its/rdr-bridge rdr-bridgeのリポジトリ}
+ * @see expressのルーターについてはここを参照 {@link http://expressjs.com/en/4x/api.html#router Express 4.x - API Reference}
+ * @param req リクエスト
+ * @param res レスポンス
+ */
+async function handleReaderInput (req: Request, res: Response): Promise<void> {
+  /** リクエストボディをJSONとしてパースしたときの`status`というプロパティの値 */
   const readerStatus = req.body.status
+  /** リクエストをJSONとしてパースしたときの`user_id`というプロパティの値 */
   const receivedUserId = req.body.user_id
 
+  /**
+   * `status`が適切かどうかを判定する。
+   *
+   * @param status 判定したいstatus
+   * @returns 適切ならtrue、そうでないならfalse
+   */
   function isValidStatus (status: any) {
     // statusがtruthyであることを確認する
     if (!status) {
@@ -131,6 +176,14 @@ async function handleReaderInput (req: Request, res: Response) {
 
   // 処理が一通り終わったので音を鳴らす
   playWav(isExit ? 'out' : 'in')
+
+  // TODO
+  // 別にフラグは無くてもいい。要るならconfigに追加。要らないなら消す。
+  const greetingNeeded = true
+  if (greetingNeeded) {
+    // 挨拶をする
+    greet(isExit, new Date())
+  }
 
   // イベントの発火
   emitter.emit('usersUpdated')
