@@ -21,10 +21,10 @@ function playWav (fileName: string) {
   // 順番通りに最後まで再生したいのでspawnSyncを使う
   const aplay = spawnSync('aplay', [fileName + '.wav'], { cwd: WAV_FILE_DIR, stdio: 'pipe' })
 
-  // spawnSync().errorはコマンドを実行できなかった際にErrorオブジェクトが入る
+  // errorはコマンドを実行できなかった際にErrorオブジェクトが入る
   if (aplay.error) {
     console.error('[!] spawnSync error:', aplay.error)
-  // spawnSync().statusは実行したコマンドの終了コードが入る
+  // statusは実行したコマンドの終了コードが入る
   // errorではないのでnullではないはずだが一応確認
   } else if (aplay.status !== null && aplay.status !== 0) {
     console.error('[!] aplay error:', aplay.stderr)
@@ -39,7 +39,7 @@ async function handleReaderInput (req: Request, res: Response) {
     // statusがtruthyであることを確認する
     if (!status) {
       return false
-    // statusが正しいStatusかであることを確認する
+    // statusが正しいStatusであることを確認する
     } else if (!Object.values(Status).includes(status)) {
       return false
     }
