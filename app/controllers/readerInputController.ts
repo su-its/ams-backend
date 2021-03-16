@@ -31,6 +31,14 @@ function playWav (fileName: string) {
   }
 }
 
+function greet (isExit: boolean, now: Date) {
+  if (isExit) {
+    // 退室の時の挨拶
+  } else {
+    // 入室の時の挨拶
+  }
+}
+
 async function handleReaderInput (req: Request, res: Response) {
   const readerStatus = req.body.status
   const receivedUserId = req.body.user_id
