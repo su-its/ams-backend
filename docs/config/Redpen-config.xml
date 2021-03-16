@@ -14,7 +14,7 @@
         <validator name="SuccessiveWord" />
 
         <!-- カタカナ単語末尾の長音検査します -->
-        <validator name="KatakanaEndHyphen"/>
+        <!-- <validator name="KatakanaEndHyphen"/> -->
 
         <!-- カタカナ単語のゆらぎ検査します -->
         <validator name="KatakanaSpellCheck"/>
