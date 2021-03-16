@@ -83,7 +83,7 @@ function greet (isExit: boolean, now: Date): void {
 async function handleReaderInput (req: Request, res: Response): Promise<void> {
   /** リクエストボディをJSONとしてパースしたときの`status`というプロパティの値 */
   const readerStatus = req.body.status
-  /** リクエストをJSONとしてパースしたときの`user_id`というプロパティの値 */
+  /** リクエストボディをJSONとしてパースしたときの`user_id`というプロパティの値 */
   const receivedUserId = req.body.user_id
 
   /**
