@@ -9,6 +9,7 @@ import mysql from '../database/db'
 
 const WAV_FILE_DIR = join(process.cwd(), 'sound')
 
+/** {@link https://github.com/su-its/rdr-bridge rdr-bridge} から送られてくるであろうステータスの一覧 */
 const Status = {
   SUCCESS: 'success',
   ERROR: 'error',
@@ -16,14 +17,17 @@ const Status = {
 } as const
 
 /**
- * `WAV_FILE_DIR`ディレクトリ以下にある音声ファイルを再生する。
+ * `WAV_FILE_DIR`ディレクトリ以下にある音声ファイルをaplayコマンドで再生する。
+ *
+ * @remarks
+ * stdio: 'inherit'だとnodeのstdioに流れてしまって後で使えないので'pipe'を設定する。
+ * asyncなspawnだとChildProcessが返ってきて世話するのが面倒くさいので、spawnSyncを使う。
+ * 順番通りに最後まで再生したいのでspawnSyncを使う。
  *
  * @param fileName 再生したい音声ファイル
  */
 function playWav (fileName: string): void {
-  // stdio: 'inherit'だとnodeのstdioに流れてしまって後で使えないので'pipe'
-  // asyncなspawnだとChildProcessが返ってきて世話するのが面倒くさいので、spawnSyncを使う
-  // 順番通りに最後まで再生したいのでspawnSyncを使う
+  // aplay(Linux限定)コマンドを実行する
   const aplay = spawnSync('aplay', [fileName + '.wav'], { cwd: WAV_FILE_DIR, stdio: 'pipe' })
 
   // errorはコマンドを実行できなかった際にErrorオブジェクトが入る
@@ -130,7 +134,7 @@ async function handleReaderInput (req: Request, res: Response): Promise<void> {
       res.status(204).send()
       return
     default:
-      /* isValidStatus()でチェックするので多分ここには来ない */
+      // isValidStatus()でチェックするので多分ここには来ない
       console.error('[!] 日本はもう終わりよ～ん')
       res.status(500).send()
       return
