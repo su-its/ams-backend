@@ -1,4 +1,4 @@
-@startuml AMS_API
+@startuml AMS_MAP
 
 skinparam DefaultFontName メイリオ
 skinparam DefaultFontSize 22
