@@ -88,7 +88,7 @@ async function handleReaderInput (req: Request, res: Response) {
     await mysql.beginTransaction()
     if (user) {
       // 退室
-      await logsTable.createAccessLog(user.user_id, String(user.entered_at))
+      await logsTable.createAccessLog(user.user_id, user.entered_at)
       await roomTable.deleteUser(user.user_id)
     } else {
       // 入室

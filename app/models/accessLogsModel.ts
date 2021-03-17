@@ -9,7 +9,7 @@ type AccessLog = {
   'exited_at': Date
 }
 
-async function createAccessLog (userId: number, enteredAt: string) {
+async function createAccessLog (userId: number, enteredAt: Date) {
   // INSERT すると [ResultSetHeader, undefined] が返ってくる
   await mysql.query(`INSERT INTO ${TABLENAME} (user_id, entered_at) VALUES (?, ?)`,
     [userId, enteredAt])
