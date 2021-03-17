@@ -29,7 +29,7 @@ async function getUser (userId: number) {
     }
   }
 
-  throw new Error('response from DB is malformed')
+  throw new Error('response from DB is invalid')
 }
 
 async function listUsers () {

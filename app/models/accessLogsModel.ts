@@ -43,7 +43,7 @@ async function listAccessLogs (
     return rows
   }
 
-  throw new Error('response from DB is malformed')
+  throw new Error('response from DB is not an array')
 }
 
 export { createAccessLog, getCountOfAccessLogs, listAccessLogs }

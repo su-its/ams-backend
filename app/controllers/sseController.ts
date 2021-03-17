@@ -33,41 +33,34 @@ let clients: {
  * クライアントに対して投げる関数。`emitter`(events.EventEmitter)の発火する
  * `usersUpdated`イベントのコールバック関数として使用する。111行目あたりを参照。
  *
- * Server-Sent eventsについて
- * https://html.spec.whatwg.org/multipage/server-sent-events.html
+ * @see Server-Sent events の仕様 {@link https://html.spec.whatwg.org/multipage/server-sent-events.html HTML Standard}
  *
- * Server-Sent eventsについて2
- * https://stackoverflow.com/questions/7636165/how-do-server-sent-events-actually-work/11998868
+ * @see Server-Sent events の使い方 {@link https://stackoverflow.com/questions/7636165/how-do-server-sent-events-actually-work/11998868 How do server-sent events actually work?}
  */
 async function sendUsersUpdatedEvent () {
-  const [users, err] = await roomTable.listUsers()
-  if (err) {
-    // listUsers()でエラーがあったら一旦全クライアントとのコネクションを閉じる。
-    for (const client of clients) {
-      // コネクションが(サーバー側から)閉じられた時にクライアント側ではEventSourceのerrorイベントが
-      // 発火し、数秒後に再接続をトライしてくる。だからここは迷わずコネクションを切ってよし。
-      // ただし何度もリトライされても困るのでクライアントには3回トライしたら止めるなど配慮してほしい。
-      client.res.end()
-    }
-  } else {
-    for (const user of users as NamedInRoomUser[]) {
+  try {
+    // TODO
+    // できれば型エイリアス(type alias)をmodelsに書くようにして
+    // 呼び出す側では自動的に型が決まるようにしたい
+    const users: NamedInRoomUser[] = await roomTable.listUsers()
+    for (const user of users) {
       // TODO まだ名前をDBに登録していないので表示させられないが、将来的につけたい
       user.user_name = null
     }
-
-    try {
-      const json = JSON.stringify({
-        data: users
-      })
-      // イベント名は任意。全て小文字の方がいいのかな?
-      for (const client of clients) {
-        client.res.write(`event: usersUpdated\ndata: ${json}\n\n`, 'utf-8')
-      }
-    } catch (err) {
-      console.error(err)
-      for (const client of clients) {
-        client.res.end()
-      }
+    const json = JSON.stringify({
+      data: users
+    })
+    // イベント名は任意。全て小文字の方がいいのかな?
+    for (const client of clients) {
+      client.res.write(`event: usersUpdated\ndata: ${json}\n\n`, 'utf-8')
+    }
+  } catch (err) {
+    console.error('[!] Error', err)
+    // コネクションが(サーバー側から)閉じられた時にクライアント側ではEventSourceのerrorイベントが
+    // 発火し、数秒後に再接続をトライしてくる。だからここは迷わずコネクションを切ってよし。
+    // ただし何度もリトライされても困るのでクライアントには3回トライしたら止めるなど配慮してほしい。
+    for (const client of clients) {
+      client.res.end()
     }
   }
 }

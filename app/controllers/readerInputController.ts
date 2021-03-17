@@ -48,9 +48,7 @@ async function handleReaderInput (req: Request, res: Response) {
 
   // statusが適切かチェック
   if (!isValidStatus(readerStatus)) {
-    res.status(400).json({
-      message: 'Invalid status in body'
-    })
+    res.status(400).json({ message: 'Invalid status in body' })
     console.error('[!] Received a request including invalid status')
     return
   }
@@ -59,9 +57,7 @@ async function handleReaderInput (req: Request, res: Response) {
     case Status.SUCCESS:
       // ちゃんとしたIDが来ているかチェック
       if (!Number.isInteger(receivedUserId)) {
-        res.status(400).json({
-          message: 'Invalid user_id in body'
-        })
+        res.status(400).json({ message: 'Invalid user_id in body' })
         console.error('[!] Received a request including invalid user_id')
         return
       }
@@ -84,29 +80,19 @@ async function handleReaderInput (req: Request, res: Response) {
   }
 
   // 入室or退室処理
-  const [user, err] = await roomTable.getUser(receivedUserId)
-  if (err) {
-    console.error('[!] Error:', err)
-    res.status(500).json({ message: err.message || 'internal server error' })
-    return
-  }
-
-  const isExit = !!user
+  let isExit = false
   try {
+    const user = await roomTable.getUser(receivedUserId)
+    isExit = !!user
+
     await mysql.beginTransaction()
-    if (isExit) {
+    if (user) {
       // 退室
-      await logsTable.createAccessLog(user.user_id, user.entered_at)
-      const [_duResult, duErr] = await roomTable.deleteUser(user.user_id)
-      if (duErr) {
-        throw duErr
-      }
+      await logsTable.createAccessLog((user as any).user_id, (user as any).entered_at)
+      await roomTable.deleteUser((user as any).user_id)
     } else {
       // 入室
-      const [_cuResult, cuErr] = await roomTable.createUser(receivedUserId)
-      if (cuErr) {
-        throw cuErr
-      }
+      await roomTable.createUser(receivedUserId)
     }
     await mysql.commit()
   } catch (err) {
