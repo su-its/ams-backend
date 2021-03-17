@@ -3,7 +3,7 @@ import mysql from '../database/db'
 
 const TABLENAME = 'in_room_users'
 
-type InRoomUsers = {
+type InRoomUser = {
   'user_id': number,
   'entered_at': Date
 }
@@ -30,7 +30,7 @@ async function getUser (userId: number) {
       throw new Error('response from DB is invalid')
     // user_idはこのテーブルの主キーなので0でないとすれば必ず1なのだが一応。
     } else if (row.length === 1) {
-      return row[0]
+      return row[0] as InRoomUser
     }
   }
 
@@ -40,7 +40,7 @@ async function getUser (userId: number) {
 async function listUsers () {
   const [rows, _] = await mysql.query(`SELECT * FROM ${TABLENAME}`)
   if (Array.isArray(rows)) {
-    return rows as []
+    return rows as InRoomUser[]
   }
 
   throw new Error('response from DB is not an array')
