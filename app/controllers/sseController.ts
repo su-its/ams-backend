@@ -3,21 +3,10 @@ import { EventEmitter } from 'events'
 import { Request, Response } from 'express'
 import * as roomTable from '../models/inRoomUsersModel'
 
-// TODO あとでmodelsかどこかのファイルに移動する
-/**
- * クライアントに返すデータの構造のもと
- */
-interface InRoomUser {
+type NamedInRoomUser = {
   'user_id': number,
+  'user_name'?: string | null,
   'entered_at': Date
-}
-
-// TODO あとでmodelsかどこかのファイルに移動する
-/**
- * クライアントに返すデータの構造
- */
-interface NamedInRoomUser extends InRoomUser {
-  'user_name': string | null
 }
 
 /**
@@ -39,9 +28,6 @@ let clients: {
  */
 async function sendUsersUpdatedEvent () {
   try {
-    // TODO
-    // できれば型エイリアス(type alias)をmodelsに書くようにして
-    // 呼び出す側では自動的に型が決まるようにしたい
     const users: NamedInRoomUser[] = await roomTable.listUsers()
     for (const user of users) {
       // TODO まだ名前をDBに登録していないので表示させられないが、将来的につけたい
