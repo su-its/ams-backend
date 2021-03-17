@@ -14,4 +14,5 @@ jobs:
         with:
           eslint_flags: '. --ext .js,.ts'
           fail_on_error: true
+          level: info
           reporter: github-pr-review
