@@ -3,11 +3,7 @@ import { EventEmitter } from 'events'
 import { Request, Response } from 'express'
 import * as roomTable from '../models/inRoomUsersModel'
 
-type NamedInRoomUser = {
-  'user_id': number,
-  'user_name'?: string | null,
-  'entered_at': Date
-}
+type NamedInRoomUser = roomTable.InRoomUser & { 'user_name'?: string | null }
 
 /**
  * SSEの送り先リスト

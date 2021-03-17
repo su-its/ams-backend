@@ -3,7 +3,7 @@ import mysql from '../database/db'
 
 const TABLENAME = 'in_room_users'
 
-type InRoomUser = {
+export type InRoomUser = {
   'user_id': number,
   'entered_at': Date
 }
