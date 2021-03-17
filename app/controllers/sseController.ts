@@ -122,6 +122,7 @@ emitter.on('error', () => {
   console.error('[!] Some error related to "emitter(node:events.EventEmitter)" has occured')
   // さいきょうのえらーはんどりんぐ
 })
+// 最初に実行される部分終わり
 
 /**
  * デバッグ用の関数。現在の`clients`と`emitter`の状態を表示する。
