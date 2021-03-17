@@ -3,6 +3,12 @@ import mysql from '../database/db'
 
 const TABLENAME = 'access_logs'
 
+type AccessLog = {
+  'user_id': number,
+  'entered_at': Date,
+  'exited_at': Date
+}
+
 async function createAccessLog (userId: number, enteredAt: string) {
   // INSERT すると [ResultSetHeader, undefined] が返ってくる
   await mysql.query(`INSERT INTO ${TABLENAME} (user_id, entered_at) VALUES (?, ?)`,

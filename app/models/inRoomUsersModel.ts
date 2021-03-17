@@ -3,6 +3,11 @@ import mysql from '../database/db'
 
 const TABLENAME = 'in_room_users'
 
+type InRoomUsers = {
+  'user_id': number,
+  'entered_at': Date
+}
+
 async function createUser (userId: number) {
   // INSERT すると [ResultSetHeader, undefined] が返ってくる
   await mysql.query(`INSERT INTO ${TABLENAME} (user_id) VALUES (?)`, userId)
