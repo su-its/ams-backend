@@ -9,10 +9,16 @@ import mysql from '../database/db'
 
 const WAV_FILE_DIR = join(process.cwd(), 'sound')
 
-/** {@link https://github.com/su-its/rdr-bridge rdr-bridge} から送られてくるであろうステータスの一覧 */
+/**
+ * {@link https://github.com/su-its/rdr-bridge rdr-bridge} から送られてくるであろうステータスの一覧を格納する定数。
+ *
+ */
 const Status = {
+  /** カードから番号が読み取れた */
   SUCCESS: 'success',
+  /** カードとの通信時に何らかのエラーが発生した */
   ERROR: 'error',
+  /** (rdr-bridge自身の)プロセスを終了する程度の深刻なエラーが発生した */
   FATAL: 'fatal'
 } as const
 
@@ -87,7 +93,10 @@ async function handleReaderInput (req: Request, res: Response): Promise<void> {
   const receivedUserId = req.body.user_id
 
   /**
-   * `status`が適切かどうかを判定する。
+   * rdr-bridgeから受け取った`status`が適切かどうかを判定する。
+   * 具体的には以下の両方が満たされていることをもって適切と判定する。
+   * - `status`がtruthyであること
+   * - `status`が `"success"`, `"error"`, `"fatal"`のいずれかであること
    *
    * @param status 判定したいstatus
    * @returns 適切ならtrue、そうでないならfalse
