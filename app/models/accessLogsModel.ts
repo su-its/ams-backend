@@ -46,7 +46,7 @@ async function listAccessLogs (
     [since, until, limit, offset])
 
   if (Array.isArray(rows)) {
-    return rows
+    return rows as AccessLog[]
   }
 
   throw new Error('response from DB is not an array')
