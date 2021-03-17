@@ -8,4 +8,4 @@
 
 - ルーティングの変更
 - 一部の API を削除
-- eslint をインストールした．規則として JavaScript Standard Style を使用する
+- eslint をインストールした。規則として JavaScript Standard Style を使用する

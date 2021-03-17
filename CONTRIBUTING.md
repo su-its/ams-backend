@@ -6,24 +6,30 @@
 ## 1. 必要なファイルのリネーム
 
 - config.ts ファイルの生成
- `cp config.ts.sample config.ts`
+
+```bash
+cp config.ts.sample config.ts
+```
 
 - .env ファイルの生成
- `cp .env.sample .env`
+
+```bash
+cp .env.sample .env
+```
 
 ---
 
 ## 2. mount してある log ファイル等を local で生成する
 
-docker_init ファイルは， docker フォルダ直下にあります
+- docker_init ファイルは， docker フォルダ直下にあります
 
 ---
 
-### windows の方
+### Windows の方
 
-docker_init.bat を実行してください
+docker_init.bat を実行してください。
 
-文字化け等が発生する場合
+文字化け等が発生する場合。
 
 - UTF-8 → shift-jis
 - LF → CRLF
@@ -32,13 +38,13 @@ docker_init.bat を実行してください
 
 ### mac ，linux の方
 
-```[bash]
+```bash
 sh docker_init.sh
 ```
 
 ## 3. config.ts の DB に関する記述を変更する
 
-```[ts]
+```ts
 const dbOptions: ConnectionOptions = {
   host: 'db',
   port: 3306,
@@ -53,38 +59,44 @@ const dbOptions: ConnectionOptions = {
 
 ## 4. **docker で動かす**
 
-例： `docker-compose up -d --build`
+```bash
+docker-compose up -d --build
+```
 
 ---
 
 ## 5. database の初期化とテストデータ挿入
 
-パスワードは表示されます
+パスワードは表示されます。
 
-- `docker-compose exec db bash`
-- `sh init_migrate_db.sh`
+```bash
+docker-compose exec db bash
+sh init_migrate_db.sh
+```
 
 ---
 
 ## 6. Redpen の実行
 
-- `docker start redpen`
+```bash
+docker start redpen
+```
 
-`Redpen` というフォルダに結果が出力されます
+`Redpen` というフォルダに結果が出力されます。
 
 ---
 
 ## 7. Textlint の実行
 
-- `sh textlint.sh`
+```bash
+sh textlint.sh
+```
 
-`Textlint` というフォルダに結果が出力されます
+`Textlint` というフォルダに結果が出力されます。
 
-自動で修正する場合は `textlint --fix ファイル名` で直す事が出来ますが
+自動で修正する場合は `textlint --fix ファイル名` で直す事が出来ますが、 textlint が自動修正できるモノに限られます。
 
-textlint が自動修正できるモノに限られます
-
-詳細はログを参照してください
+詳細はログを参照してください。
 
 ---
 </details>
@@ -94,13 +106,16 @@ textlint が自動修正できるモノに限られます
 ## 1. config.ts を変更
 
 - config.ts ファイルの生成
- `cp config.ts.sample config.ts`
+
+```bash
+cp config.ts.sample config.ts
+```
 
 ---
 
 ## 2. config.ts に MySQL の情報を書く
 
-```[bash]
+```ts
 const dbOptions: ConnectionOptions = {
   host: 127.0.0.1,
   port: 3306,
@@ -115,7 +130,7 @@ const dbOptions: ConnectionOptions = {
 
 ## 3. DB をマイグレート
 
-```[bash]
+```bash
 # スキーマフォルダに移動
 cd schema
 
@@ -134,17 +149,17 @@ mysql -u {ユーザ名} -p {DB名} < insert_test_data.sql
 
 ---
 
-## 4. node.js を動かす
+## 4. Node.js を動かす
 
-必要な module をインストール
+- 必要な module をインストール
 
-```[bash]
+```bash
 npm install
 ```
 
-dev モードで実行
+- dev モードで実行
 
-```[bash]
+```bash
 npm run dev
 ```
 

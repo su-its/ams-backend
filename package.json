@@ -8,6 +8,7 @@
     "build": "tsc -p .",
     "dev": "ts-node-dev --respawn --exit-child ams-backend-server.ts",
     "lint": "eslint . --ext .js,.ts",
+    "textlint": "textlint --fix",
     "start": "npm run build && node dist/ams-backend-server.js",
     "test": "jest"
   },

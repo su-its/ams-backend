@@ -1,22 +1,22 @@
 # ams-backend-nodejs
 
-本リポジトリはこのような立ち位置になっています．
+本リポジトリはこのような立ち位置になっています。
 
-![APIの立ち位置](docs/PJ_map/AMS_API.png)
+![APIの立ち位置](docs/PJ_map/AMS_MAP.png)
 
 ---
 
 ## 関係のあるリポジトリ一覧
 
-## 議論したり，作業の優先順位を付けるリポジトリ
+## 議論したり、作業の優先順位を付けるリポジトリ
 
 [ams-project](https://github.com/su-its/ams-project)
 
 ---
 
-## カードリーダ部
+## カードリーダー部
 
-[カードリーダ部のブリッジ](https://github.com/su-its/rdr-bridge)
+[カードリーダー部のブリッジ](https://github.com/su-its/rdr-bridge)
 
 ---
 

@@ -1,4 +1,4 @@
-<redpen-conf lang="ja" variant="zenkaku2">
+<redpen-conf lang="ja">
     <validators>
 
         <!-- 文の長さ自体を検査する機能 -->
@@ -14,7 +14,7 @@
         <validator name="SuccessiveWord" />
 
         <!-- カタカナ単語末尾の長音検査します -->
-        <validator name="KatakanaEndHyphen"/>
+        <!-- <validator name="KatakanaEndHyphen"/> -->
 
         <!-- カタカナ単語のゆらぎ検査します -->
         <validator name="KatakanaSpellCheck"/>
@@ -63,7 +63,7 @@
         <validator name="SectionLevel" />
 
         <!-- 不正なシンボルを発見するとエラーを出力します -->
-        <validator name="InvalidSymbol" />
+        <!-- <validator name="InvalidSymbol" /> -->
 
         <!-- 括弧に関する規約を検査します -->
         <validator name="ParenthesizedSentence">
