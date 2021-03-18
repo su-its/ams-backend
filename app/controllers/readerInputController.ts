@@ -68,11 +68,11 @@ function greet (isExit: boolean, now: Date): void {
   } else {
     // 入室の時の挨拶
     if (h >= 4 && h < 9) {
-      playWav('ohayou')
+      playWav('ohayo')
     } else if (h >= 9 && h < 17) {
-      playWav('konnichiha')
+      playWav('konnichiwa')
     } else {
-      playWav('konbanha')
+      playWav('konbanwa')
     }
   }
 }
