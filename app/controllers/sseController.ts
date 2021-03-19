@@ -37,7 +37,8 @@ async function sendUsersUpdatedEvent () {
       client.res.write(`event: usersUpdated\ndata: ${json}\n\n`, 'utf-8')
     }
   } catch (err) {
-    console.error('[!] Error', err)
+    // DBのエラーかもしれないしJSON.stringifyのエラーかもしれない
+    console.error('[!] Error:', err)
     // コネクションが(サーバー側から)閉じられた時にクライアント側ではEventSourceのerrorイベントが
     // 発火し、数秒後に再接続をトライしてくる。だからここは迷わずコネクションを切ってよし。
     // ただし何度もリトライされても困るのでクライアントには3回トライしたら止めるなど配慮してほしい。

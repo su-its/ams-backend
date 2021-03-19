@@ -58,7 +58,7 @@ async function listAccessLogs (req: Request, res: Response) {
     }
     res.status(200).json(json)
   } catch (err) {
-    console.error(err)
+    console.error('[!] DB Error:', err)
     res.status(500).json({ message: err.message || 'internal server error' })
   }
 }

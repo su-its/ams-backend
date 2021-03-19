@@ -97,7 +97,7 @@ async function handleReaderInput (req: Request, res: Response) {
     await mysql.commit()
   } catch (err) {
     playWav('error')
-    console.error('[!] Error:', err)
+    console.error('[!] DB Error:', err)
     await mysql.rollback()
     res.status(500).json({ message: err.message || 'internal server error' })
     return
