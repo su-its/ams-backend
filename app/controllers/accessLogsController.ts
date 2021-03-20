@@ -1,6 +1,8 @@
 import { Request, Response } from 'express'
 import * as table from '../models/accessLogsModel'
 import { amsOptions } from '../../config'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/CustomParseFormat'
 
 /**
  * 文字列を整数にパースする
@@ -63,4 +65,60 @@ async function listAccessLogs (req: Request, res: Response) {
   }
 }
 
-export { listAccessLogs }
+async function listAccessLogsBulk (req: Request, res: Response) {
+  const fmtStr = 'YYYY-MM-DD'
+  dayjs.extend(customParseFormat)
+  dayjs.locale('ja')
+  try {
+    const sinceStr = req.query.since?.toString()
+    const untilStr = req.query.until?.toString()
+
+    let since
+    if (sinceStr === undefined) {
+      // sinceのデフォルトは「今日の90日前」
+      since = dayjs().startOf('day').subtract(90, 'd').format(fmtStr)
+    } else {
+      const dayjsSince = dayjs(sinceStr, fmtStr, true)
+      if (!dayjsSince.isValid()) {
+        console.error('[!] \'since\' is malformed:', since)
+        res.status(400).json({ message: '\'since\' is malformed' })
+        return
+      }
+      since = dayjsSince.format(fmtStr)
+    }
+
+    let until
+    if (untilStr === undefined) {
+      // untilのデフォルトは「今日」
+      until = dayjs().startOf('day').format(fmtStr)
+    } else {
+      const dayjsUntil = dayjs(untilStr, fmtStr, true)
+      if (!dayjsUntil.isValid()) {
+        console.error('[!] \'until\' is malformed:', until)
+        res.status(400).json({ message: '\'until\' is malformed' })
+      }
+      until = dayjsUntil.format(fmtStr)
+    }
+
+    // LIMITに十分大きい数字を渡すことで(実質上)全レコードを取得する
+    const logs = await table.listAccessLogs(
+      since,
+      until,
+      undefined,
+      (1 << 30))
+
+    const json = {
+      meta: {
+        since: since,
+        until: until
+      },
+      data: logs
+    }
+    res.status(200).json(json)
+  } catch (err) {
+    console.error('[!] DB Error:', err)
+    res.status(500).json({ message: err.message || 'internal server error' })
+  }
+}
+
+export { listAccessLogs, listAccessLogsBulk }
