@@ -96,6 +96,7 @@ async function listAccessLogsBulk (req: Request, res: Response) {
       if (!dayjsUntil.isValid()) {
         console.error('[!] \'until\' is malformed:', untilStr)
         res.status(400).json({ message: '\'until\' is malformed' })
+        return
       }
       until = dayjsUntil.format(fmtStr)
     }
