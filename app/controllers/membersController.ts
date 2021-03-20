@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import Member from '../models/membersModel'
-import mysql from '../database/db'
+import { Member } from '../models/membersModel'
+import { connection as mysql } from '../database/db'
 
 // Create and Save a new Member
 export async function createMember (req: Request, res: Response) {

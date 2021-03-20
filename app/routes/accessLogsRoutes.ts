@@ -6,4 +6,4 @@ const router = Router()
 // Retrieve AccessLog
 router.get('/access_logs', listAccessLogs)
 
-export default router
+export { router }

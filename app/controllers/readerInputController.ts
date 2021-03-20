@@ -5,7 +5,7 @@ import { join } from 'path'
 import { emitter } from './sseController'
 import * as roomTable from '../models/inRoomUsersModel'
 import * as logsTable from '../models/accessLogsModel'
-import mysql from '../database/db'
+import { connection as mysql } from '../database/db'
 
 const WAV_FILE_DIR = join(process.cwd(), 'sound')
 

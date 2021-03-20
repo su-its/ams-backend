@@ -1,9 +1,9 @@
 import cors from 'cors'
 import express from 'express'
-import accesslogsRoutes from './app/routes/accessLogsRoutes'
-import inRoomUsersRoutes from './app/routes/inRoomUsersRoutes'
-import readerInputRoutes from './app/routes/readerInputRoutes'
-import sseRoutes from './app/routes/sseRoutes'
+import { router as accesslogsRoutes } from './app/routes/accessLogsRoutes'
+import { router as inRoomUsersRoutes } from './app/routes/inRoomUsersRoutes'
+import { router as readerInputRoutes } from './app/routes/readerInputRoutes'
+import { router as sseRoutes } from './app/routes/sseRoutes'
 import { amsOptions } from './config'
 
 const app: express.Express = express()

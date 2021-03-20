@@ -10,4 +10,4 @@ const router = Router()
 // router.post('/reader_input', handleReaderInput)
 router.post('/room', handleReaderInput)
 
-export default router
+export { router }
