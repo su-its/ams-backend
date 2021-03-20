@@ -52,8 +52,6 @@ function playWav (fileName: string): void {
  * @param isExit 今回のタッチが退室であるか否か
  * @param now 現在時刻
  */
-// TODO
-// 必要な音声ファイルを用意する
 function greet (isExit: boolean, now: Date): void {
   const h = now.getHours()
   if (isExit) {

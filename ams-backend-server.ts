@@ -15,7 +15,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // CORS
-// TODO 今は全てのパスに対してCORSが有効だが将来的には特定のパス以下(/v1など)のみに限定したい
 app.use(cors())
 
 // simple route
