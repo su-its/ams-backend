@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import * as table from '../models/accessLogsModel'
 import { amsOptions } from '../../config'
 import dayjs from 'dayjs'
-import customParseFormat from 'dayjs/plugin/CustomParseFormat'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 
 /**
  * 文字列を整数にパースする
@@ -73,28 +73,28 @@ async function listAccessLogsBulk (req: Request, res: Response) {
     const sinceStr = req.query.since?.toString()
     const untilStr = req.query.until?.toString()
 
-    let since
+    let since: string
     if (sinceStr === undefined) {
       // sinceのデフォルトは「今日の90日前」
       since = dayjs().startOf('day').subtract(90, 'd').format(fmtStr)
     } else {
       const dayjsSince = dayjs(sinceStr, fmtStr, true)
       if (!dayjsSince.isValid()) {
-        console.error('[!] \'since\' is malformed:', since)
+        console.error('[!] \'since\' is malformed:', sinceStr)
         res.status(400).json({ message: '\'since\' is malformed' })
         return
       }
       since = dayjsSince.format(fmtStr)
     }
 
-    let until
+    let until: string
     if (untilStr === undefined) {
       // untilのデフォルトは「今日」
       until = dayjs().startOf('day').format(fmtStr)
     } else {
       const dayjsUntil = dayjs(untilStr, fmtStr, true)
       if (!dayjsUntil.isValid()) {
-        console.error('[!] \'until\' is malformed:', until)
+        console.error('[!] \'until\' is malformed:', untilStr)
         res.status(400).json({ message: '\'until\' is malformed' })
       }
       until = dayjsUntil.format(fmtStr)
