@@ -2,7 +2,7 @@ openapi: "3.1.0"
 
 info:
   version: "1.0.0"
-  title: AMS_BACKEND_NODEJS
+  title: AMS_BACKEND
   summary: 入退室記録API
 
   description: 学生の部屋の入退室を記録、参照するAPI
@@ -10,7 +10,7 @@ info:
 
   contact:
     name: Githubのリポジトリ
-    url: https://github.com/su-its/ams-backend-nodejs
+    url: https://github.com/su-its/ams-backend
     email: example_team@shizuoka.com #存在しません
 
 servers:
@@ -63,7 +63,15 @@ paths:
   /access_logs/bulk:
     get:
       summary: 指定期間の入退室記録一覧を取得
-      description: 在室していた人の学籍番号、入室時間、退室時間の一覧を入室時間の降順で返す
+      description: |
+        在室していた人の学籍番号、入室時間、退室時間の一覧を入室時間の降順で返す。
+
+        `/access_logs`との相違点は以下の通り：
+          - 入室時間の期間を指定してレコードを取得できる
+          - ページネーションを行わない
+
+        クエリパラメータはヴァリデーションされ、異常時にはステータスコード`400`とJSONメッセージが返される。
+
       parameters:
         - name: since
           in: query
@@ -81,6 +89,7 @@ paths:
             default: 現在の日付
       responses:
         200:
+          description: 成功
           content:
             application/json:
               schema:
@@ -107,6 +116,17 @@ paths:
                   - user_id: 1
                     entered_at: "2021-02-23T16:57:39.000Z"
                     exited_at: "2021-02-23T17:32:50.000Z"
+        400:
+          description: クエリパラメータのヴァリデーション失敗
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "'since' is malformed"
 
   /users_in_room/:
     get:
