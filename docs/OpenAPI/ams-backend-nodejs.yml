@@ -60,6 +60,54 @@ paths:
                     entered_at: "2021-02-23T16:57:39.000Z"
                     exited_at: "2021-02-23T17:32:50.000Z"
 
+  /access_logs/bulk:
+    get:
+      summary: 指定期間の入退室記録一覧を取得
+      description: 在室していた人の学籍番号、入室時間、退室時間の一覧を入室時間の降順で返す
+      parameters:
+        - name: since
+          in: query
+          description: "`YYYY-MM-DD`で表された、取得する期間の開始日"
+          required: false
+          schema:
+            type: string
+            default: 現在の日付から90日前
+        - name: until
+          in: query
+          description: "`YYYY-MM-DD`で表された、取得する期間の終了日"
+          required: false
+          schema:
+            type: string
+            default: 現在の日付
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      since:
+                        description: 取得する期間の開始日
+                        type: string
+                      until:
+                        description: 取得する期間の終了日
+                        type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Log"
+              example:
+                meta:
+                  since: "2020-12-20"
+                  until: "2021-03-20"
+                data:
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
+                    exited_at: "2021-02-23T17:32:50.000Z"
+
   /users_in_room/:
     get:
       summary: ユーザ情報一覧を取得
