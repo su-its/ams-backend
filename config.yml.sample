@@ -1,0 +1,11 @@
+---
+amsOptions:
+  port: 3000
+  acceptGuest: true
+
+dbOptions:
+  host: localhost
+  user: username
+  password: userpass
+  database: dbnametoconnect
+  waitForConnections: true
