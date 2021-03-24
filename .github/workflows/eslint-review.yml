@@ -1,15 +1,15 @@
-name: reviewdog
+name: Review eslint
 on: [pull_request]
 jobs:
   eslint:
-    name: runner / eslint
+    name: eslint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: チェックアウト
+        uses: actions/checkout@v2
         with:
           persist-credentials: false
-
-      - name: eslint
+      - name: eslintによるレビュー
         uses: reviewdog/action-eslint@v1
         with:
           eslint_flags: '. --ext .js,.ts'
