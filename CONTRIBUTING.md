@@ -137,7 +137,7 @@ mysql -u {ユーザ名} -p {DB名} < create_table_access_logs.sql
 mysql -u {ユーザ名} -p {DB名} < create_table_in_room_users.sql
 
 # メンバのテーブル
-mysql -u {ユーザ名} -p {DB名} < create_table_member_list.sql
+mysql -u {ユーザ名} -p {DB名} < create_table_members.sql
 
 # スタブデータの注入
 mysql -u {ユーザ名} -p {DB名} < insert_test_data.sql
