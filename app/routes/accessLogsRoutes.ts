@@ -9,4 +9,4 @@ router.get('/access_logs', listAccessLogs)
 // Bulk retrieve
 router.get('/access_logs/bulk', listAccessLogsBulk)
 
-export default router
+export { router }

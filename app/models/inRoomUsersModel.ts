@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import mysql from '../database/db'
+import { connection as mysql } from '../database/db'
 
 const TABLENAME = 'in_room_users'
 

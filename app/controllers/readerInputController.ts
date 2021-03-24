@@ -5,7 +5,7 @@ import { join } from 'path'
 import { emitter } from './sseController'
 import * as roomTable from '../models/inRoomUsersModel'
 import * as logsTable from '../models/accessLogsModel'
-import mysql from '../database/db'
+import { connection as mysql } from '../database/db'
 
 const WAV_FILE_DIR = join(process.cwd(), 'sound')
 
@@ -52,8 +52,6 @@ function playWav (fileName: string): void {
  * @param isExit 今回のタッチが退室であるか否か
  * @param now 現在時刻
  */
-// TODO
-// 必要な音声ファイルを用意する
 function greet (isExit: boolean, now: Date): void {
   const h = now.getHours()
   if (isExit) {
