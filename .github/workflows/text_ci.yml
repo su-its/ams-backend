@@ -24,7 +24,7 @@ jobs:
           filter_mode: file # [added,diff_context,file,nofilter]5つモードがあるが、fileにすると全て最初から検証してくれる
           fail_on_error: true # PRにerrorを表示させるフラグ
           targets: "*.md" # 全てのmdが対象
-          config: conf/Redpen-config.xml # configファイルの場所を定義
+          config: docs/config/Redpen-config.xml # configファイルの場所を定義
 
 
   # 参考URL https://github.com/tsuyoshicho/action-redpen
@@ -43,7 +43,7 @@ jobs:
           filter_mode: file # [added,diff_context,file,nofilter]5つモードがあるが、fileにすると全て最初から検証してくれる
           fail_on_error: true # PRにerrorを表示させるフラグ
           targets: "*.adoc" # 全てのadocが対象
-          config: conf/Redpen-config.xml # configファイルの場所を定義
+          config: docs/config/Redpen-config.xml # configファイルの場所を定義
 
 
   # 参考URL https://github.com/tsuyoshicho/action-textlint
