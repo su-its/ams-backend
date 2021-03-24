@@ -1,35 +1,74 @@
-name: CI
+name: Text_CI
 
+# mainとdevは直接pushが出来ないので、onトリガーとして記載していません
 on:
   pull_request:
-    branches: 
-      - develop
+    branches:
       - main
+      - develop
 
 jobs:
-  document_Redpen_CI:
+  # 参考URL https://github.com/tsuyoshicho/action-redpen
+  Redpen_MarkDown:
+    name: Redpen for Markdown
     runs-on: ubuntu-latest
-
     steps:
-      - name: リポジトリをチェックアウト
+      - name: チェックアウト
         uses: actions/checkout@v2
         with:
           persist-credentials: false
-      - name: javaをダウンロードしてくる
-        uses: actions/setup-java@v1
+      - name: Redpenのレビュー
+        uses: tsuyoshicho/action-redpen@v1.4.2 # 最新にしておくと良い
         with:
-          java-version: '15'
-          java-package: 'jre'
-          architecture: x64
-      - name: Redpenのインストール
-        env:
-          Redpen_ver: 1.10.4
-        run: |
-          wget https://github.com/redpen-cc/redpen/releases/download/redpen-${Redpen_ver}/redpen-${Redpen_ver}.tar.gz
-          tar xvf redpen-${Redpen_ver}.tar.gz
-          sudo cp -av redpen-distribution-${Redpen_ver}/* /usr/local/
-          rm -rf redpen-distribution-${Redpen_ver}
-      - name: pathに追加
-        run: export PATH=$PATH:/usr/local/bin
-      - name: Redpenの実行
-        run: sh docker/redpen/docker-entrypoint.sh
+          level: info # [info,warning,error]3つモードの一番厳しいモノに設定
+          filter_mode: file # [added,diff_context,file,nofilter]5つモードがあるが、fileにすると全て最初から検証してくれる
+          fail_on_error: true # PRにerrorを表示させるフラグ
+          targets: "*.md" # 全てのmdが対象
+          config: conf/Redpen-config.xml # configファイルの場所を定義
+
+
+  # 参考URL https://github.com/tsuyoshicho/action-redpen
+  Redpen_adoc:
+    name: Redpen for adoc
+    runs-on: ubuntu-latest
+    steps:
+      - name: チェックアウト
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Redpenのレビュー
+        uses: tsuyoshicho/action-redpen@v1.4.2 # 最新にしておくと良い
+        with:
+          level: info # [info,warning,error]3つモードの一番厳しいモノに設定
+          filter_mode: file # [added,diff_context,file,nofilter]5つモードがあるが、fileにすると全て最初から検証してくれる
+          fail_on_error: true # PRにerrorを表示させるフラグ
+          targets: "*.adoc" # 全てのadocが対象
+          config: conf/Redpen-config.xml # configファイルの場所を定義
+
+
+  # 参考URL https://github.com/tsuyoshicho/action-textlint
+  # 前提条件 1. textlintがインストールされている事(package.jsonにあるという事)
+  #         2. .textlintrcが定義されている事
+  Textlint:
+    name: Textlint
+    runs-on: ubuntu-latest
+    steps:
+      - name: チェックアウト
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Node.jsを用意
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+      - name: Textlintのレビュー
+        uses: tsuyoshicho/action-textlint@v3.0.1 # 最新にしておくと良い
+        with:
+          level: info # [info,warning,error]3つモードがあるが、一番厳しいinfoに設定
+          filter_mode: file # [added,diff_context,file,nofilter]5つモードがあるが、fileにすると全て最初から検証してくれる
+          fail_on_error: true # PRにerrorを表示させるフラグ
+          textlint_flags: "./**" # 全てのファイルを指定したが、.textlintrcのpluginに指定されたモノのみ検査される
+
+  
+  # Reviewというpluginについて
+  # 参考URL https://gihyo.jp/admin/serial/01/ubuntu-recipe/0548
