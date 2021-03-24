@@ -1,11 +1,14 @@
 ---
+# 詳細は別ファイルのconfig.tsを参照
+# このプログラムの設定
 amsOptions:
   port: 3000
   acceptGuest: true
 
+# mysqlに渡す接続情報
 dbOptions:
-  host: localhost
-  user: username
-  password: userpass
-  database: dbnametoconnect
+  host: "localhost"
+  user: "username"
+  password: "userpass"
+  database: "dbnametoconnect"
   waitForConnections: true
