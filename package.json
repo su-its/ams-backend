@@ -1,15 +1,15 @@
 {
-  "name": "ams-backend-nodejs",
+  "name": "ams-backend",
   "version": "2.0.1",
-  "main": "ams-backend-server.js",
+  "main": "ams-backend.js",
   "license": "MIT",
   "private": true,
   "scripts": {
     "build": "tsc -p .",
-    "dev": "ts-node-dev --respawn --exit-child ams-backend-server.ts",
+    "dev": "ts-node-dev --respawn --exit-child ams-backend.ts",
     "lint": "eslint . --ext .js,.ts",
     "textlint": "textlint --fix",
-    "start": "npm run build && node dist/ams-backend-server.js",
+    "start": "npm run build && node dist/ams-backend.js",
     "test": "jest"
   },
   "engines": {
