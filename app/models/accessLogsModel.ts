@@ -40,7 +40,7 @@ async function listAccessLogs (
   const [rows, _] = await mysql.query(
     `SELECT * FROM ${TABLENAME} ` +
     "WHERE exited_at >= IFNULL(?, '1970-01-01') " +
-    'AND entered_at < IFNULL(?, ADDDATE(CURDATE(), 1)) ' +
+    'AND entered_at < ADDDATE(IFNULL(?, CURDATE()), 1) ' +
     `ORDER BY entered_at ${['ASC', 'DESC'].includes(order) ? order : 'DESC'} ` +
     'LIMIT ? OFFSET ?',
     [since, until, limit, offset])

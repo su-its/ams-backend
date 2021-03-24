@@ -17,7 +17,7 @@ pm2 save
 
 ## PM2 について
 
-PM2 は OS の起動時に本リポジトリ、 ams-backend-nodejs のプログラムを自動起動させ、落ちたら再起動させるなどの処理を担当しています。
+PM2 は OS の起動時に本リポジトリ、 ams-backend のプログラムを自動起動させ、落ちたら再起動させるなどの処理を担当しています。
 
 詳しくは公式ドキュメントを読んでください。
 
@@ -70,7 +70,7 @@ module.exports = {
 - ams-backend-out.log
 
 ```plain
-2021-03-13 10:48 +09:00: > ams-backend-nodejs@2.0.1 build /home/pi/ams-projects/ams-backend-nodejs
+2021-03-13 10:48 +09:00: > ams-backend@2.0.1 build /home/pi/ams-projects/ams-backend
 2021-03-13 10:48 +09:00: > tsc -p .
 2021-03-13 10:48 +09:00:
 2021-03-13 10:48 +09:00: [*] Server is running on port 3000.
@@ -80,12 +80,12 @@ module.exports = {
 
 ```plain
 2021-03-13 10:48 +09:00: Error: Connection lost: The server closed the connection.
-2021-03-13 10:48 +09:00:     at Socket.<anonymous> (/home/pi/ams-projects/ams-backend-nodejs/node_modules/mysql2/lib/connection.js:91:31)
+2021-03-13 10:48 +09:00:     at Socket.<anonymous> (/home/pi/ams-projects/ams-backend/node_modules/mysql2/lib/connection.js:91:31)
 2021-03-13 10:48 +09:00:     at Socket.emit (events.js:315:20)
 2021-03-13 10:48 +09:00:     at TCP.<anonymous> (net.js:673:12)
 2021-03-13 10:48 +09:00: Emitted 'error' event on Connection instance at:
-2021-03-13 10:48 +09:00:     at Connection._notifyError (/home/pi/ams-projects/ams-backend-nodejs/node_modules/mysql2/lib/connection.js:225:12)
-2021-03-13 10:48 +09:00:     at Socket.<anonymous> (/home/pi/ams-projects/ams-backend-nodejs/node_modules/mysql2/lib/connection.js:97:12)
+2021-03-13 10:48 +09:00:     at Connection._notifyError (/home/pi/ams-projects/ams-backend/node_modules/mysql2/lib/connection.js:225:12)
+2021-03-13 10:48 +09:00:     at Socket.<anonymous> (/home/pi/ams-projects/ams-backend/node_modules/mysql2/lib/connection.js:97:12)
 2021-03-13 10:48 +09:00:     at Socket.emit (events.js:315:20)
 2021-03-13 10:48 +09:00:     at TCP.<anonymous> (net.js:673:12) {
 2021-03-13 10:48 +09:00:   fatal: true,

@@ -1,4 +1,4 @@
-# ams-backend-nodejs
+# ams-backend
 
 本リポジトリはこのような立ち位置になっています。
 
