@@ -30,11 +30,10 @@ interface AmsOptions {
  */
 interface DBOptions {
   host: string,
-  port?: number,
+  port: number,
   user: string,
   password: string,
-  database: string,
-  waitForConnections?: boolean
+  database: string
 }
 
 /**
@@ -64,11 +63,10 @@ function implementsDBOptions (arg: any): arg is DBOptions {
   return arg !== null &&
     typeof arg === 'object' &&
     typeof arg.host === 'string' &&
-    (typeof arg.port === 'number' || typeof arg.port === 'undefined') &&
+    typeof arg.port === 'number' &&
     typeof arg.user === 'string' &&
     typeof arg.password === 'string' &&
-    typeof arg.database === 'string' &&
-    (typeof arg.waitForConnections === 'boolean' || typeof arg.waitForConnections === 'undefined')
+    typeof arg.database === 'string'
 }
 
 // import { xxOptions } from 'config' されると、ここから下が実行される

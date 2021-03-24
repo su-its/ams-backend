@@ -11,4 +11,3 @@ dbOptions:
   user: "username"
   password: "userpass"
   database: "dbnametoconnect"
-  waitForConnections: true
