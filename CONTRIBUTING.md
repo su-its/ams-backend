@@ -5,10 +5,10 @@
 
 ## 1. 必要なファイルのリネーム
 
-- config.ts ファイルの生成
+- config.yml ファイルの生成
 
 ```bash
-cp config.ts.sample config.ts
+cp config.yml.sample config.yml
 ```
 
 - .env ファイルの生成
@@ -42,17 +42,15 @@ docker_init.bat を実行してください。
 sh docker_init.sh
 ```
 
-## 3. config.ts の DB に関する記述を変更する
+## 3. config.yml の DB に関する記述を変更する
 
-```ts
-const dbOptions: ConnectionOptions = {
-  host: 'db',
-  port: 3306,
-  user: 'user',
-  password: 'pass',
-  database: 'Entering_And_Leaving_The_Room',
-  waitForConnections: true // set true
-}
+```yaml
+dbOptions:
+  host: 'db'
+  port: 3306
+  user: 'user'
+  password: 'pass'
+  database: 'Entering_And_Leaving_The_Room'
 ```
 
 ---
@@ -108,22 +106,20 @@ sh textlint.sh
 - config.ts ファイルの生成
 
 ```bash
-cp config.ts.sample config.ts
+cp config.yml.sample config.yml
 ```
 
 ---
 
-## 2. config.ts に MySQL の情報を書く
+## 2. config.yml に MySQL の情報を書く
 
-```ts
-const dbOptions: ConnectionOptions = {
-  host: 127.0.0.1,
-  port: 3306,
-  user: {ユーザ名},
-  password: {パスワード},
-  database: {DB名},
-  waitForConnections: true // set true
-}
+```yaml
+dbOptions:
+  host: '127.0.0.1'
+  port: 3306
+  user: {ユーザ名}
+  password: {パスワード}
+  database: {DB名}
 ```
 
 ---
