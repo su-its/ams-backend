@@ -1,7 +1,7 @@
 rules:
   preset-japanese: true
   preset-ja-spacing:
-    ja-space-between-half-and-full-width":
+    ja-space-between-half-and-full-width:
       space: always
       exceptPunctuation: true
     ja-space-around-code:
@@ -14,10 +14,7 @@ rules:
       - ./docs/config/WEB+DB_PRESS.yml
 filters:
   comments: true
-  allowlist:
-    allow:
-      - ":icons: font"
 plugins:
   "@textlint/markdown":
     extensions: .md
-  "asciidoctor":
+  asciidoctor:
