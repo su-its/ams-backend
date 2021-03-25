@@ -26,7 +26,9 @@
 
 ---
 
-## レスポンスを受け取るリポジトリ
+## 独自機能(上記の表に記載はありません)
+
+### レスポンスを受け取るリポジトリ
 
 [bou_responder](https://github.com/su-its/bou-responder)
 
