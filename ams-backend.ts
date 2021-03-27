@@ -16,12 +16,21 @@ function prepareMorgan () {
   morgan.token('localdate', () => dayjs().locale('ja').format())
 
   // ログを吐くフォルダを作る
-  const logFolder = path.join(__dirname, '/logs')
-  fs.mkdirSync(logFolder)
+  try {
+    fs.mkdirSync(amsOptions.logPath)
+  } catch (err) {
+    if (err.code === 'EEXIST') {
+      // EEXISTの場合は既にフォルダがあるので無視する
+    } else {
+      // それ以外の場合はエラーを出力して死ぬ
+      console.error('Could not create folder:', err)
+      process.exit(1)
+    }
+  }
 
   // ログファイルのストリームを開く
   const wStream = fs.createWriteStream(
-    path.join(logFolder, '/access.log'),
+    path.join(path.join(amsOptions.logPath, '/access.log')),
     {
       flags: 'a'
     }

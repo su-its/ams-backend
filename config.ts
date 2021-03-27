@@ -21,6 +21,11 @@ interface AmsOptions {
    * 使ってません
    */
   acceptGuest: boolean,
+
+  /**
+   * ログファイルの出力先フォルダ
+   */
+  logPath: string,
 }
 
 /**
@@ -48,7 +53,8 @@ function implementsAmsOptions (arg: any): arg is AmsOptions {
   return arg !== null &&
     typeof arg === 'object' &&
     typeof arg.port === 'number' &&
-    typeof arg.acceptGuest === 'boolean'
+    typeof arg.acceptGuest === 'boolean' &&
+    typeof arg.logPath === 'string'
 }
 
 /**
