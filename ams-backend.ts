@@ -1,5 +1,8 @@
 import cors from 'cors'
 import express from 'express'
+import morgan from 'morgan'
+import dayjs from 'dayjs'
+import 'dayjs/locale/ja'
 import * as accesslogsRoutes from './app/routes/accessLogsRoutes'
 import * as inRoomUsersRoutes from './app/routes/inRoomUsersRoutes'
 import * as readerInputRoutes from './app/routes/readerInputRoutes'
@@ -16,6 +19,12 @@ app.use(express.urlencoded({ extended: true }))
 
 // CORS
 app.use(cors())
+
+// logging
+app.use(morgan(':remote-addr - :remote-user [:localdate] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'))
+
+// morganの:dateはUTCなので、日本時間のものを作る
+morgan.token('localdate', () => dayjs().locale('ja').format())
 
 // simple route
 app.get('/', (_req, res) => {
