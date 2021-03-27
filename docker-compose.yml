@@ -34,3 +34,5 @@ services:
     build: ./docker/redpen
     volumes:
       - .:/redpen
+    profiles:
+      - lint
