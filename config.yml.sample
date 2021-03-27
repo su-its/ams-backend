@@ -2,13 +2,14 @@
 # 詳細は別ファイルのconfig.tsを参照
 # このプログラムの設定
 amsOptions:
-  port: 3000
-  acceptGuest: true
+  port: 3000         # このサーバのポート
+  acceptGuest: true  # 未実装
+  logPath: 'logs'    # サーバのアクセスログ出力先フォルダ
 
 # mysqlに渡す接続情報
 dbOptions:
-  host: "localhost"
-  port: 3306
-  user: "username"
-  password: "userpass"
-  database: "dbnametoconnect"
+  host: "localhost"     # SQLサーバのホスト名
+  port: 3306            # SQLサーバのポート名
+  user: "username"      # SQLユーザのユーザ名
+  password: "userpass"  # SQLユーザのパスワード
+  database: "dbnametoconnect"  # DB名

@@ -3,8 +3,8 @@
 # npmを7系に上げる
 npm i -g npm@7
 
-# nodeをインストール
+# 依存パッケージをインストール
 npm install
 
-# 更新し続ける
+# devサーバを起動
 npm run dev
