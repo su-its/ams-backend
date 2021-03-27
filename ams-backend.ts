@@ -30,7 +30,7 @@ function prepareMorgan () {
 
   // ログファイルのストリームを開く
   const wStream = fs.createWriteStream(
-    path.join(path.join(amsOptions.logPath, '/access.log')),
+    path.join(amsOptions.logPath, '/access.log'),
     {
       flags: 'a'
     }
