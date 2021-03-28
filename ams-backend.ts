@@ -10,6 +10,7 @@ import * as inRoomUsersRoutes from './app/routes/inRoomUsersRoutes'
 import * as readerInputRoutes from './app/routes/readerInputRoutes'
 import * as sseRoutes from './app/routes/sseRoutes'
 import { amsOptions } from './config'
+import * as packageJson from './package.json'
 
 function prepareMorgan () {
   // morganの:dateはUTCなので、日本時間を表示するものを作る
@@ -57,9 +58,13 @@ app.use(express.urlencoded({ extended: true }))
 // CORS
 app.use(cors())
 
-// simple route
-app.get('/', (_req, res) => {
-  res.json({ message: 'This is backend server.' })
+// `/`, `/v1`, `/v1/`のいずれかに"完全に"マッチした場合に
+// このサーバーのメタ情報を返すパス
+app.get(/^\/$|^\/v1\/?$/, (_req, res) => {
+  res.json({
+    message: 'This is backend server.',
+    version: packageJson.version
+  })
 })
 
 // set middlewares
