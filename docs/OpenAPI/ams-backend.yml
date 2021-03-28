@@ -211,6 +211,22 @@ paths:
         204:
           description: NO CONTENT を返す
 
+  /version/:
+    get:
+      summary: バックエンドのバージョンを取得
+      responses:
+        200:
+          description: バックエンド実装のバージョンを返す
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+              example:
+                version: '2.0.0'
+
 components:
   schemas:
     Log:
