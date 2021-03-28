@@ -9,7 +9,8 @@ import * as accesslogsRoutes from './app/routes/accessLogsRoutes'
 import * as inRoomUsersRoutes from './app/routes/inRoomUsersRoutes'
 import * as readerInputRoutes from './app/routes/readerInputRoutes'
 import * as sseRoutes from './app/routes/sseRoutes'
-import * as versionRoutes from './app/routes/versionRoutes'
+// import * as versionRoutes from './app/routes/versionRoutes'
+import * as packageJson from './package.json'
 import { amsOptions } from './config'
 
 function prepareMorgan () {
@@ -58,9 +59,13 @@ app.use(express.urlencoded({ extended: true }))
 // CORS
 app.use(cors())
 
-// simple route
-app.get('/', (_req, res) => {
-  res.json({ message: 'This is backend server.' })
+// `/`, `/v1`, `/v1/`のいずれかに"完全に"マッチした場合に
+// このサーバーのメタ情報を返すパス
+app.get(/^\/$|^\/v1\/?$/, (_req, res) => {
+  res.json({
+    message: 'This is backend server.',
+    version: packageJson.version
+  })
 })
 
 // set middlewares
@@ -69,8 +74,8 @@ app.use(
   accesslogsRoutes.router,
   inRoomUsersRoutes.router,
   readerInputRoutes.router,
-  sseRoutes.router,
-  versionRoutes.router
+  sseRoutes.router
+  // versionRoutes.router
 )
 
 // set port, listen for requests
