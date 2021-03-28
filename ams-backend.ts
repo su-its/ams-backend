@@ -9,6 +9,7 @@ import * as accesslogsRoutes from './app/routes/accessLogsRoutes'
 import * as inRoomUsersRoutes from './app/routes/inRoomUsersRoutes'
 import * as readerInputRoutes from './app/routes/readerInputRoutes'
 import * as sseRoutes from './app/routes/sseRoutes'
+import * as versionRoutes from './app/routes/versionRoutes'
 import { amsOptions } from './config'
 
 function prepareMorgan () {
@@ -63,7 +64,14 @@ app.get('/', (_req, res) => {
 })
 
 // set middlewares
-app.use('/v1', accesslogsRoutes.router, inRoomUsersRoutes.router, readerInputRoutes.router, sseRoutes.router)
+app.use(
+  '/v1',
+  accesslogsRoutes.router,
+  inRoomUsersRoutes.router,
+  readerInputRoutes.router,
+  sseRoutes.router,
+  versionRoutes.router
+)
 
 // set port, listen for requests
 const PORT = amsOptions.port
