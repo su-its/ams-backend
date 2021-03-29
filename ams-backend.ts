@@ -37,7 +37,7 @@ function prepareMorgan () {
     }
   )
 
-  const formatStr = ':remote-addr - :remote-user [:localdate] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'
+  const formatStr = ':remote-addr (fwd :req[x-forwarded-for]) [:localdate] ":method :url" :status :res[content-length] ":referrer" ":user-agent"'
 
   return morgan(formatStr, {
     stream: wStream
