@@ -1,3 +1,4 @@
+---
 openapi: "3.1.0"
 
 info:
@@ -11,7 +12,7 @@ info:
   contact:
     name: Githubのリポジトリ
     url: https://github.com/su-its/ams-backend
-    email: example_team@shizuoka.com #存在しません
+    email: example_team@shizuoka.com  # 存在しません
 
 servers:
   - url: http://localhost:3000/v1
@@ -20,6 +21,26 @@ servers:
     description: ITS室の本番環境のAPI
 
 paths:
+  /:
+    get:
+      summary: サーバに関する情報を取得
+      responses:
+        200:
+          description: サーバ情報を持つオブジェクトを返す
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    description: 実装依存の任意の文字列
+                  version:
+                    type: string
+                    description: 実装のバージョン
+              example:
+                message: This is backend server.
+                version: 2.0.1
+
   /access_logs/:
     get:
       summary: 入退室記録一覧を取得
