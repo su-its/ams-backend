@@ -1,0 +1,20 @@
+rules:
+  preset-japanese: true
+  preset-ja-spacing:
+    ja-space-between-half-and-full-width:
+      space: always
+      exceptPunctuation: true
+    ja-space-around-code:
+      before: true
+      after: true
+  preset-ja-technical-writing: true
+  spellcheck-tech-word: true
+  prh:
+    rulePaths:
+      - ./docs/config/WEB+DB_PRESS.yml
+filters:
+  comments: true
+plugins:
+  "@textlint/markdown":
+    extensions: .md
+  asciidoctor:

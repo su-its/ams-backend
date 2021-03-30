@@ -1,4 +1,4 @@
-export default interface Member {
+export interface Member {
   id: number
   name: string
 }

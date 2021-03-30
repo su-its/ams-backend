@@ -1,0 +1,82 @@
+<redpen-conf lang="ja">
+    <validators>
+
+        <!-- 文の長さ自体を検査する機能 -->
+        <validator name="SentenceLength">
+            <property name="max_len" value="100"/>
+        </validator>
+
+        <!-- 文中のコンマの数を検査
+             デフォルトでは最大四つ -->
+        <validator name="CommaNumber" />
+
+        <!-- 同一の単語が連続して使用されていないかを検査する -->
+        <validator name="SuccessiveWord" />
+
+        <!-- カタカナ単語末尾の長音検査します -->
+        <!-- <validator name="KatakanaEndHyphen"/> -->
+
+        <!-- カタカナ単語のゆらぎ検査します -->
+        <validator name="KatakanaSpellCheck"/>
+
+        <!-- 顔文字や感情的な表現など技術文書で利用するべきでない句の使用を検査します -->
+        <validator name="InvalidExpression"/>
+
+        <!-- ですます調、である調が混じっていないかを検査します -->
+        <validator name="JapaneseStyle"/>
+
+        <!-- 二重否定を検知します -->
+        <validator name="DoubleNegative" />
+
+        <!-- 同じ文頭表現が過度に利用されていないか検査
+             たとえばどの文も”私は〜〜”からはじまるなど -->
+        <validator name="FrequentSentenceStart" />
+
+        <!-- 格助詞の「の」+名詞連続+格助詞の「の」というパターンを発見するとエラーを出力します -->
+        <validator name="JapaneseAmbiguousNounConjunction" />
+
+        <!-- 日本語の数値表現を検査する機能です
+            「ひとつ、ふたつ」、「１つ、２つ」などのゆらぎを検知します -->
+        <validator name="JapaneseNumberExpression" />
+
+        <!-- 長過ぎる漢字の連続をみつけるとエラーを出力します -->
+        <validator name="LongKanjiChain" />
+
+        <!--  同一内容の文が連続して出現するとエラーを出力します -->
+        <validator name="SuccessiveSentence" />
+
+        <!-- 一文に二回以上、接続助詞の「が」が出現するとエラーを出力します -->
+        <validator name="DoubledConjunctiveParticleGa" />
+
+        <!-- 節内のパラグラフ数が指定した値よりも多いとエラーを出力します -->
+        <validator name="ParagraphNumber" />
+
+        <!-- 節の長さが指定した値よりも多いとエラーを出力します -->
+        <validator name="SectionLength" />
+
+        <!-- 類似した節が存在するかを検査
+             節の場所を移動させた際に、元の場所の節の削除を忘れた場合にエラーを出力します -->
+        <validator name="DuplicatedSection" />
+
+        <!-- 環境によっては小さな小節を利用できないことがあります
+             SectionLevelは節が細かすぎるとエラーを出力します -->
+        <validator name="SectionLevel" />
+
+        <!-- 不正なシンボルを発見するとエラーを出力します -->
+        <!-- <validator name="InvalidSymbol" /> -->
+
+        <!-- 括弧に関する規約を検査します -->
+        <validator name="ParenthesizedSentence">
+            <property name="max_count" value="3"/>
+            <property name="max_nesting_level" value="1"/>
+            <property name="max_length" value="10"/>
+        </validator>
+
+        <!-- アルファベット単語の前後にスペースを加えているか検査する -->
+        <validator name="SpaceBetweenAlphabeticalWord" />
+    </validators>
+
+    <symbols>
+        <symbol name="EXCLAMATION_MARK" value="!" invalid-chars="！" after-space="true" />
+    </symbols>
+</redpen-conf>

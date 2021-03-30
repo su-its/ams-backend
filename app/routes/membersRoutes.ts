@@ -23,4 +23,4 @@ router.delete('/members/:memberId', deleteMember)
 // Create a new Member
 router.delete('/members', deleteAllMembers)
 
-export default router
+export { router }

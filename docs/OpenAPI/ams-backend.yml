@@ -1,0 +1,294 @@
+---
+openapi: "3.1.0"
+
+info:
+  version: "1.0.0"
+  title: AMS_BACKEND
+  summary: 入退室記録API
+
+  description: 学生の部屋の入退室を記録、参照するAPI
+  termsOfService: https://github.com/su-its/ams-project
+
+  contact:
+    name: Githubのリポジトリ
+    url: https://github.com/su-its/ams-backend
+    email: example_team@shizuoka.com  # 存在しません
+
+servers:
+  - url: http://localhost:3000/v1
+    description: (Dockerを使用した場合の)ローカル環境のAPI
+  - url: http://localhost:3000/v1
+    description: ITS室の本番環境のAPI
+
+paths:
+  /:
+    get:
+      summary: サーバに関する情報を取得
+      responses:
+        200:
+          description: サーバ情報を持つオブジェクトを返す
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    description: 実装依存の任意の文字列
+                  version:
+                    type: string
+                    description: 実装のバージョン
+              example:
+                message: This is backend server.
+                version: 2.0.1
+
+  /access_logs/:
+    get:
+      summary: 入退室記録一覧を取得
+      description: 在室していた人の学籍番号、入室時間、退室時間の一覧を入室時間の降順で返す
+      parameters:
+        - name: page
+          in: query
+          description: 取得したいページ番号
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: per_page
+          in: query
+          description: 1ページあたりの最大レコード数
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        200:
+          description: 指定されたページに対応するPageオブジェクト(JSON)を返す
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Page"
+              example:
+                meta:
+                  page: 2
+                  next_page: "http://localhost:3000/v1/access_logs?per_page=10&page=3"
+                  prev_page: "http://localhost:3000/v1/access_logs?per_page=10&page=1"
+                  contains: 10
+                  total: 147
+                  total_page: 15
+                  per_page: 10
+                data:
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
+                    exited_at: "2021-02-23T17:32:50.000Z"
+
+  /access_logs/bulk:
+    get:
+      summary: 指定期間の入退室記録一覧を取得
+      description: |
+        在室していた人の学籍番号、入室時間、退室時間の一覧を入室時間の降順で返す。
+
+        `/access_logs`との相違点は以下の通り：
+          - 入室時間の期間を指定してレコードを取得できる
+          - ページネーションを行わない
+
+        クエリパラメータはヴァリデーションされ、異常時にはステータスコード`400`とJSONメッセージが返される。
+
+      parameters:
+        - name: since
+          in: query
+          description: "`YYYY-MM-DD`で表された、取得する期間の開始日"
+          required: false
+          schema:
+            type: string
+            default: 現在の日付から90日前
+        - name: until
+          in: query
+          description: "`YYYY-MM-DD`で表された、取得する期間の終了日"
+          required: false
+          schema:
+            type: string
+            default: 現在の日付
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      since:
+                        description: 取得する期間の開始日
+                        type: string
+                      until:
+                        description: 取得する期間の終了日
+                        type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Log"
+              example:
+                meta:
+                  since: "2020-12-20"
+                  until: "2021-03-20"
+                data:
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
+                    exited_at: "2021-02-23T17:32:50.000Z"
+        400:
+          description: クエリパラメータのヴァリデーション失敗
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "'since' is malformed"
+
+  /users_in_room/:
+    get:
+      summary: ユーザ情報一覧を取得
+      description: ユーザのユーザ情報のArrayをJSONで返す
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
+              example:
+                data:
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
+                  - user_id: 2
+                    entered_at: "2021-02-23T18:03:41.000Z"
+
+  /users_in_room/{user_id}:
+    get:
+      summary: 特定ユーザ1名のユーザ情報を取得
+      description: 指定されたユーザのユーザ情報もしくは NO CONTENT を返す
+      parameters:
+        - name: user_id
+          in: path
+          description: 取得したいユーザの学籍番号
+          required: true
+          schema:
+            type: integer
+            example: 1
+
+      responses:
+        200:
+          description: 在室する場合、学籍番号と入室時間をJSONで返す
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
+              example:
+                data:
+                  - user_id: 1
+                    entered_at: "2021-02-23T16:57:39.000Z"
+        204:
+          description: 不在の場合、 NO CONTENT を返す
+
+  /room/:
+    post:
+      summary: 入室、退室イベントを知らせる
+      description: 入室、退室した瞬間にブリッジから送られてくるPOSTを受け取るためのパス
+      requestBody:
+        description: ブリッジ(=カードリーダ)のステータスと学籍番号
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  description: ブリッジのステータス
+                  required: true
+                  type: string
+                  format: string
+                user_id:
+                  description: 学籍番号
+                  required: true
+                  type: integer
+            example:
+              status: success
+              user_id: 1
+
+      responses:
+        204:
+          description: NO CONTENT を返す
+
+components:
+  schemas:
+    Log:
+      type: object
+      properties:
+        user_id:
+          description: 学籍番号
+          type: integer
+        entered_at:
+          description: 入室時間
+          type: string
+          format: date-time
+        exited_at:
+          description: 退室時間
+          type: string
+          format: date-time
+
+    User:
+      type: object
+      properties:
+        user_id:
+          description: 学籍番号
+          type: integer
+        entered_at:
+          description: 入室時間
+          type: string
+          format: date-time
+
+    Page:
+      type: object
+      properties:
+        meta:
+          description: ページネーションに必要なメタ情報
+          type: object
+          properties:
+            page:
+              description: このページのページ番号
+              type: integer
+            next_page:
+              description: 次のページへのリンク
+              type: string
+            prev_page:
+              description: 前のページへのリンク
+              type: string
+            contains:
+              description: このページが含むLogの件数
+              type: integer
+            total:
+              description: Logの総件数
+              type: integer
+            total_page:
+              description: 全体のページ数
+              type: integer
+            per_page:
+              description: 1ページあたりの最大レコード数
+              type: integer
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Log"

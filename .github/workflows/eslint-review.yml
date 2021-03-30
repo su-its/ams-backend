@@ -1,0 +1,18 @@
+name: Review eslint
+on: [pull_request]
+jobs:
+  eslint:
+    name: eslint
+    runs-on: ubuntu-latest
+    steps:
+      - name: チェックアウト
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: eslintによるレビュー
+        uses: reviewdog/action-eslint@v1
+        with:
+          eslint_flags: '. --ext .js,.ts'
+          fail_on_error: true
+          level: info
+          reporter: github-pr-review
