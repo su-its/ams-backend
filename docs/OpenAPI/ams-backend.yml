@@ -210,19 +210,21 @@ paths:
       description: 入室、退室した瞬間にブリッジから送られてくるPOSTを受け取るためのパス
       requestBody:
         description: ブリッジ(=カードリーダ)のステータスと学籍番号
+        required: true
         content:
           application/json:
             schema:
               type: object
+              required:
+                - status
+                - user_id
               properties:
                 status:
                   description: ブリッジのステータス
-                  required: true
                   type: string
                   format: string
                 user_id:
                   description: 学籍番号
-                  required: true
                   type: integer
             example:
               status: success
