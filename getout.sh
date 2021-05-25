@@ -1,10 +1,12 @@
-#! /usr/bin/sh
-
 #echo "[`date '+%F %T'`] Batch script started"
 
 # jqとcurlの存在確認
 # https://stackoverflow.com/questions/592620/how-can-i-check-if-a-program-exists-from-a-bash-script
-if !(command -v jq 1> /dev/null) -o !(command -v curl 1> /dev/null)
+command -v jq 1> /dev/null
+JQ=${?}
+command -v curl 1> /dev/null
+CURL=${?}
+if [ ${JQ} -ne 0 -o ${CURL} -ne 0 ]
 then
   echo "The required command(s) is not installed"
   exit 1
