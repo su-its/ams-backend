@@ -175,8 +175,9 @@ pm2 startup # unstartup のときと同じようにコマンドをコピペし�
 2. `crontab -e` を実行し設定ファイルを開く(ここに定時実行したいコマンドを書きます)
 3. 以下の内容を追記する
   ```plain
-  0 0 * * * $HOME/ams-project/ams-backend/getout.sh
+  0 0 * * * sh /home/pi/ams-project/ams-backend/getout.sh
   ```
 4. ファイルを保存して終了する
 
 このように設定すると、毎日 0:00 時点で退室処理がされていない人の退室処理が行われます。
+
