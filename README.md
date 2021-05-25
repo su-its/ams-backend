@@ -32,6 +32,10 @@
 
 [bou_responder](https://github.com/su-its/bou-responder)
 
+### 音声
+
+システム音声に[プロ生ちゃん](https://kei.pronama.jp/)のものを使用しています。詳細に関して[こちら](docs/pronama.md)もお読みください
+
 ---
 
 ## API の動作はこちらに記載しています
