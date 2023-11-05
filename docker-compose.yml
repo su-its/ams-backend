@@ -20,13 +20,16 @@ services:
   nodejs:
     container_name: nodejs
     env_file: .env
-    build: ./docker/nodejs
+    image: node:20.9.0
     links:
       - db
+    working_dir: /var/www/html
     volumes:
       - .:/var/www/html
     ports:
       - 3000:3000
+    command: >
+      bash -c "npm install -g npm && npm install && npm run dev"
 
   #ドキュメントの校正
   redpen:
