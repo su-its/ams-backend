@@ -59,7 +59,7 @@ async function listAccessLogs (req: Request, res: Response) {
       data: logs
     }
     res.status(200).json(json)
-  } catch (err) {
+  } catch (err: any) {
     console.error('[!] DB Error:', err)
     res.status(500).json({ message: err.message || 'internal server error' })
   }
@@ -116,7 +116,7 @@ async function listAccessLogsBulk (req: Request, res: Response) {
       data: logs
     }
     res.status(200).json(json)
-  } catch (err) {
+  } catch (err: any) {
     console.error('[!] DB Error:', err)
     res.status(500).json({ message: err.message || 'internal server error' })
   }

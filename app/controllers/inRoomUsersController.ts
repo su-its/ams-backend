@@ -12,7 +12,7 @@ async function getUser (req: Request, res: Response) {
       }
       res.status(200).json(toBeSent)
     }
-  } catch (err) {
+  } catch (err: any) {
     console.error('[!] DB Error:', err)
     res.status(500).json({ message: err.message || 'internal server error' })
   }
@@ -25,7 +25,7 @@ async function listUsers (_req: Request, res: Response) {
       data: users
     }
     res.status(200).json(toBeSent)
-  } catch (err) {
+  } catch (err: any) {
     console.error('[!] DB Error:', err)
     res.status(500).json({ message: err.message || 'internal server error' })
   }

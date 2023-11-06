@@ -159,7 +159,7 @@ async function handleReaderInput (req: Request, res: Response): Promise<void> {
       await roomTable.createUser(receivedUserId)
     }
     await mysql.commit()
-  } catch (err) {
+  } catch (err: any) {
     playWav('error')
     console.error('[!] DB Error:', err)
     await mysql.rollback()
