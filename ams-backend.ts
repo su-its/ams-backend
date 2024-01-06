@@ -19,7 +19,7 @@ function prepareMorgan () {
   // ログを吐くフォルダを作る
   try {
     fs.mkdirSync(amsOptions.logPath)
-  } catch (err) {
+  } catch (err: any) {
     if (err.code === 'EEXIST') {
       // EEXISTの場合は既にフォルダがあるので無視する
     } else {

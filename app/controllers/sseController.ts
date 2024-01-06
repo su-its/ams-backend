@@ -36,7 +36,7 @@ async function sendUsersUpdatedEvent () {
     for (const client of clients) {
       client.res.write(`event: usersUpdated\ndata: ${json}\n\n`, 'utf-8')
     }
-  } catch (err) {
+  } catch (err: any) {
     // DBのエラーかもしれないしJSON.stringifyのエラーかもしれない
     console.error('[!] Error:', err)
     // コネクションが(サーバー側から)閉じられた時にクライアント側ではEventSourceのerrorイベントが

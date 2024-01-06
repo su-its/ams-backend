@@ -91,7 +91,7 @@ try {
 
   amsOptions = loaded.amsOptions
   dbOptions = loaded.dbOptions
-} catch (err) {
+} catch (err: any) {
   // YAML.parse()のエラーをハンドリング
   console.error('[!] Error:', err)
   process.exit(-1) // kill process

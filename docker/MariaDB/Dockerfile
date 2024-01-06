@@ -1,4 +1,4 @@
-FROM mariadb:10.1.48
+FROM mariadb:10.4
 
 LABEL maintainer="Satake Ryota <satake00157@gmail.com>" \
     description="MariaDB10.1.48のDockerfile"
